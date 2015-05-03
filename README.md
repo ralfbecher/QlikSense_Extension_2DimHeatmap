@@ -34,3 +34,5 @@ Sample Application:
 -------------------
 Qlik Hackathon 2015 Start.qvf - Uses data from WHO to analyse Ebola Outbreak in Sierra Leone.
 
+This app uses also Qlik Sense Extension VriableButton: https://github.com/asierfer/QlikSense-Ext-VariableButton
+
