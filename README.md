@@ -18,6 +18,8 @@ After that I've added a bit more responsiveness for the grid layout, labels, fon
 
 ![QlikSense Extension 2DimHeatmap](Screenshot1.PNG)
 
+You can make a selection by one dimension by clicking on a dimension label (row or column) or a selection by two dimensions by clicking on a tile.
+
 ![QlikSense Extension 2DimHeatmap](Screenshot2.PNG)
 
 Additional Properties:
