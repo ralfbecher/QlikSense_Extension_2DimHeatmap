@@ -7,7 +7,9 @@ For best adoption use a numerical dimension for the 2nd dimension (columns) with
 
 Based on: d3 day/hour heatmap for Qlik Sense
 Source  : http://branch.qlik.com/projects/showthread.php?348-d3-day-hour-heatmap-for-Qlik-Sense
+
 GitHub  : https://github.com/borodri/Sense_d3calendarheatmap
+
 Author  : https://github.com/borodri
 
 The extension and example app was created during the Qonnections 2015 Hackathon (Team Sixth Sense: Torben Seebach, Matthieu Burel, Ralf Becher)
