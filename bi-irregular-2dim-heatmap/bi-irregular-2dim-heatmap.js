@@ -185,8 +185,6 @@ var viz = function(_this,app,data,qFields,width,height,id,colorpalette,dimension
 		}
 	});
 
-	console.log(maxGridColums);
-
 	var marginLeft = function(){ return (dim1LabelSize * 8) + 12; };
 	var margingRight = 10, marginTop = 50, marginButton = 10;
 	var gridDivider = Math.max(maxGridColums * 1, dim2keys.length); 
@@ -207,13 +205,13 @@ var viz = function(_this,app,data,qFields,width,height,id,colorpalette,dimension
 		width = width - margin.left - margin.right,
 		height = height - margin.top - margin.bottom;
 
-	gridSize = Math.floor(width / gridDivider);
-	legendElementWidth = (gridSize * 2) + 4;
-  
 	var colorScale = d3.scale.quantile()
 		.domain([0, d3.mean(data,function(d) { return +d.Metric1}), d3.max(data, function (d) { return d.Metric1; })])
 		.range(colors);
 
+	gridSize = Math.floor(width / gridDivider);
+	legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length +1));
+ 
 	var svg = d3.select("#"+id).append("svg")
 		.attr("width", width + margin.left + margin.right -8) // 8px for scrollbar
 		.attr("height", Math.max(height, 28 + (dim1keys.length * (gridSize + 2))))
