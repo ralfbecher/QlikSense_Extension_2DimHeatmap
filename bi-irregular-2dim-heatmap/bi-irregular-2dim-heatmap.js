@@ -117,7 +117,7 @@ define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scri
 			// get qMatrix data array
 			var qMatrix = layout.qHyperCube.qDataPages[0].qMatrix;
 			
-console.log(_this);		
+console.log(qMatrix);		
 	
 			// create a new array that contains the dimension labels
 			var dimensionLabels = layout.qHyperCube.qDimensionInfo.map(function(d) {
@@ -128,11 +128,15 @@ console.log(_this);
 			var measureLabels = layout.qHyperCube.qMeasureInfo.map(function(d) {
 				return d.qFallbackTitle;
 			});
-
-			var qFields = layout.qHyperCube.qDimensionInfo.map(function(d) {
-				return d.qGroupFieldDefs[0];
-			});
+console.log(layout.qHyperCube.qDimensionInfo);
+			// var qFields = layout.qHyperCube.qDimensionInfo.map(function(d) {
+				// return d.qGroupFieldDefs[0];
+			// });
 			
+			var qDimSort = layout.qHyperCube.qDimensionInfo.map(function(d) {
+				return d.qSortIndicator;
+			});
+
 			// Create a new array for our extension with a row for each row in the qMatrix
 			var data = qMatrix.map(function(d) {
 				// for each element in the matrix, create a new object that has a property
@@ -140,6 +144,7 @@ console.log(_this);
 				return {
 					"Dim1":d[0].qText,
 					"Dim2":d[1].qText,
+					"Dim2Num":d[1].qNum,
 					"Element1":d[0].qElemNumber,
 					"Element2":d[1].qElemNumber,
 					"Metric1":d[2].qNum
@@ -162,12 +167,12 @@ console.log(_this);
 			$element.html("");
 			$element.append($('<div />').attr("id", id).css({ height: height, width: width, overflow: 'auto' }))
 			
-			viz(_this,app,data,qFields,width,height,id,colorpalette,dimensionLabels,measureLabels,dim1LabelSize,dim2LabelSize,maxGridColums,showCondition);				
+			viz(_this,app,data,qDimSort,width,height,id,colorpalette,dimensionLabels,measureLabels,dim1LabelSize,dim2LabelSize,maxGridColums,showCondition);				
 		}
 	}
 });
 
-var viz = function(_this,app,data,qFields,width,height,id,colorpalette,dimensionLabels,measureLabels,dim1LabelSize,dim2LabelSize,maxGridColums,showCondition) {
+var viz = function(_this,app,data,qDimSort,width,height,id,colorpalette,dimensionLabels,measureLabels,dim1LabelSize,dim2LabelSize,maxGridColums,showCondition) {
 
 	var gridSize = -1,
 		legendElementWidth = -1,
@@ -176,14 +181,29 @@ var viz = function(_this,app,data,qFields,width,height,id,colorpalette,dimension
 		dots = "..",
 		smallSize = 15;
 	  
-	var dim1keys = [], dim2keys = [], dim1LabelsShort = [], dim2LabelsShort = [], dim1Elements = [], dim2Elements = [];
+	var dim1keys = [], dim2keys = [], dim1LabelsShort = [], dim2Obj = [], dim2LabelsShort = [], dim1Elements = [], dim2Elements = [];
 	$.each(data, function( index, row ) {
-		if ($.inArray(row.Dim2, dim2keys) === -1) {
-				dim2keys.push(row.Dim2);
-				dim2LabelsShort.push(row.Dim2.substr(row.Dim2.length -dim2LabelSize));
-				dim2Elements.push(row.Element2);
+		var filtered = $(dim2Obj).filter(function(){
+							return this.dim2keys == row.Dim2;
+						});
+		if(filtered.length == 0){
+				dim2Obj.push({
+					"dim2keys": row.Dim2,
+					"dim2LabelsShort": row.Dim2.substr(row.Dim2.length -dim2LabelSize),
+					"dim2Elements": row.Element2,
+					"dim2Num": row.Dim2Num
+				});
 		}
 	});
+	if (qDimSort[1] == "A") {
+		dim2Obj = dim2Obj.sort(function(o1,o2){ return o1.dim2Num - o2.dim2Num; });
+	} else {
+		dim2Obj = dim2Obj.sort(function(o1,o2){ return o2.dim2Num - o1.dim2Num; });
+	}
+	dim2keys = dim2Obj.map(function(e){return e.dim2keys;});
+	dim2LabelsShort = dim2Obj.map(function(e){return e.dim2LabelsShort;});
+	dim2Elements = dim2Obj.map(function(e){return e.dim2Elements;});
+console.log(dim2keys);
 
 	var marginLeft = function(){ return (dim1LabelSize * 8) + 12; };
 	var margingRight = 10, marginTop = 50, marginButton = 10;
@@ -200,6 +220,7 @@ var viz = function(_this,app,data,qFields,width,height,id,colorpalette,dimension
 				dim1Elements.push(row.Element1);
 		}
 	});
+	
 
 	var margin = { top: marginTop, right: margingRight, bottom: marginButton, left: marginLeft()};
 		//width = width - margin.left - margin.right,
