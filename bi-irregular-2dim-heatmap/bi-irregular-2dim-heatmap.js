@@ -201,20 +201,20 @@ var viz = function(_this,app,data,qFields,width,height,id,colorpalette,dimension
 		}
 	});
 
-	var margin = { top: marginTop, right: margingRight, bottom: marginButton, left: marginLeft()},
-		width = width - margin.left - margin.right,
-		height = height - margin.top - margin.bottom;
+	var margin = { top: marginTop, right: margingRight, bottom: marginButton, left: marginLeft()};
+		//width = width - margin.left - margin.right,
+		//height = height - margin.top - margin.bottom;
 
 	var colorScale = d3.scale.quantile()
 		.domain([0, d3.mean(data,function(d) { return +d.Metric1}), d3.max(data, function (d) { return d.Metric1; })])
 		.range(colors);
 
-	gridSize = Math.floor(width / gridDivider);
+	gridSize = Math.floor((width - margin.left - margin.right) / gridDivider);
 	legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length +1));
  
 	var svg = d3.select("#"+id).append("svg")
-		.attr("width", width + margin.left + margin.right -8) // 8px for scrollbar
-		.attr("height", Math.max(height, 28 + (dim1keys.length * (gridSize + 2))))
+		.attr("width", width -8) // 8px for scrollbar
+		.attr("height", Math.max(height -4, 38 + (dim1keys.length * (gridSize + 2))))
 		.append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
