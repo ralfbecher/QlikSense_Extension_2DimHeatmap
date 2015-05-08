@@ -225,7 +225,8 @@ console.log(dim2keys);
 	var margin = { top: marginTop, right: margingRight, bottom: marginButton, left: marginLeft()};
 		//width = width - margin.left - margin.right,
 		//height = height - margin.top - margin.bottom;
-
+	width = Math.max(150, width -8);  // space for scrollbar
+	
 	var colorScale = d3.scale.quantile()
 		.domain([0, d3.mean(data,function(d) { return +d.Metric1}), d3.max(data, function (d) { return d.Metric1; })])
 		.range(colors);
@@ -234,7 +235,7 @@ console.log(dim2keys);
 	legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length +1));
  
 	var svg = d3.select("#"+id).append("svg")
-		.attr("width", width -8) // 8px for scrollbar
+		.attr("width", width)
 		.attr("height", Math.max(height -4, 38 + (dim1keys.length * (gridSize + 2))))
 		.append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -249,7 +250,7 @@ console.log(dim2keys);
 		.attr("transform", "translate(-6," + gridSize / 1.5 + ")")
 		.attr("class", function (d, i) { return ("dim1Label mono" + (gridSize < smallSize ? "-small" : "") + " axis axis-dim1"); })
 		.on("click", function(d, i) {
-			_this.backendApi.selectValues(0, [dim1Elements[i]], false);
+			_this.backendApi.selectValues(0, [dim1Elements[i]], true);
 			})
 		.append("title").text(function(d, i) { return dimensionLabels[0] + ": " + dim1keys[i] });
 
@@ -263,7 +264,7 @@ console.log(dim2keys);
 		.attr("transform", "translate(" + gridSize / 2 + ", -6)")
 		.attr("class", function(d, i) { return ("dim2Label mono" + (gridSize < smallSize ? "-small" : "") + " axis axis-dim2"); })
 		.on("click", function(d, i) {
-			_this.backendApi.selectValues(1, [dim2Elements[i]], false);
+			_this.backendApi.selectValues(1, [dim2Elements[i]], true);
 			})
 		.append("title").text(function(d, i) { return dimensionLabels[1] + ": " + dim2keys[i] });
 
@@ -285,8 +286,8 @@ console.log(dim2keys);
 		.style("fill", function(d) { return colorScale(d.Metric1); });
 
 	heatMap.on("click", function(d, i) {
-			_this.backendApi.selectValues(0, [d.Element1], false);
-			_this.backendApi.selectValues(1, [d.Element2], false);
+			_this.backendApi.selectValues(0, [d.Element1], true);
+			_this.backendApi.selectValues(1, [d.Element2], true);
 		})
 		.append("title").text(function(d) { return dimensionLabels[0] + ": " + d.Dim1 + "\n" + dimensionLabels[1] + ": " + d.Dim2 + "\n" + measureLabels[0] + ": " + d.Metric1; });
 			  
