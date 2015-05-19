@@ -203,10 +203,8 @@ var viz = function(_this,app,data,qDimSort,width,height,id,colorpalette,dimensio
 	dim2keys = dim2Obj.map(function(e){return e.dim2keys;});
 	dim2LabelsShort = dim2Obj.map(function(e){return e.dim2LabelsShort;});
 	dim2Elements = dim2Obj.map(function(e){return e.dim2Elements;});
-console.log(dim2keys);
 
-	var marginLeft = function(){ return (dim1LabelSize * 8) + 12; };
-	var margingRight = 10, marginTop = 50, marginButton = 10;
+	var marginLeft = 10, margingRight = 10, marginTop = 50, marginButton = 10;
 	var gridDivider = Math.max(maxGridColums * 1, dim2keys.length); 
 
 	if (Math.floor((width -marginLeft() -margingRight)/ gridDivider) < smallSize) {
@@ -222,7 +220,7 @@ console.log(dim2keys);
 	});
 	
 
-	var margin = { top: marginTop, right: margingRight, bottom: marginButton, left: marginLeft()};
+	var margin = { top: marginTop, right: margingRight, bottom: marginButton, left: marginLeft};
 		//width = width - margin.left - margin.right,
 		//height = height - margin.top - margin.bottom;
 	width = Math.max(150, width -8);  // space for scrollbar
