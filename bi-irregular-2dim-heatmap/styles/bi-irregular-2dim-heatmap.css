@@ -1,24 +1,26 @@
 rect.bordered {
-        stroke: #E6E6E6;
-        stroke-width:1px;   
+        stroke: lightgrey;
+        stroke-width:.6px;   
       }
 
       text.mono {
-        font-size: 10pt;
-        font-family: Consolas, courier;
-        fill: #aaa;
+        font-size: 9pt;
+      	font-family: "QlikView Sans", sans-serif;
+        fill: #595959;
       }
 
       text.mono-small {
-        font-size: 7pt;
-        font-family: Consolas, courier;
-        fill: #aaa;
+        font-size: 6pt;
+      	font-family: "QlikView Sans", sans-serif;
+        fill: #595959;
       }
 
       text.axis-dim1 {
-        fill: #000;
+      	font-family: "QlikView Sans", sans-serif;
+        fill: #595959;
       }
 
       text.axis-dim2 {
-        fill: #000;
+      	font-family: "QlikView Sans", sans-serif;
+        fill: #595959;
       }
