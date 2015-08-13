@@ -28,7 +28,7 @@ Additional Properties:
 2. Dim1 label size (left) : max. amount characters shown of 1st dimension label (from left)
 2. Dim2 label size (right): max. amount characters shown of 2nd dimension label (from right)
 3. Max. columns for grid  : expression to get max. amount of values of 2nd dimension to have a more stable grid layout
-4. Least Tiles in Row     : filter rows (1st dimension) whith less than minimum amount of tiles (default = 1; no filtering) 
+4. Least Tiles in Row     : filter rows (1st dimension) with less than minimum amount of tiles (default=1; no filtering) 
 5. Show condition         : QlikView-like show condition; useful if you have a measure or selection which doesn't gives you values. If condition <> 1 at least the labels of 1st and 2nd dimension are shown but no tiles.
 
 Sample Application:
