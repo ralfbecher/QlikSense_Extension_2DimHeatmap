@@ -57,33 +57,35 @@ define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scri
 								  component: "dropdown",
 								  label: "Color and Legend",
 								  options: 
-									[ {
-										value: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506",
-										label: "Sequencial"
-									}, {
-										value: "#662506, #993404, #cc4c02, #ec7014, #fe9929, #fec44f, #fee391, #fff7bc, #ffffe5",
-										label: "Sequencial (Reverse)"
-									}, {
-										value: "#d73027, #f46d43, #fdae61, #fee090, #ffffbf, #e0f3f8, #abd9e9, #74add1, #4575b4",
-										label: "Diverging RdYlBu"
-									}, {
-										value: "#4575b4, #74add1, #abd9e9, #e0f3f8, #ffffbf, #fee090, #fdae61, #f46d43, #d73027",
-										label: "Diverging BuYlRd (Reverse)"
-									}, {
-										value: "#f7fbff, #deebf7, #c6dbef, #9ecae1, #6baed6, #4292c6, #2171b5, #08519c, #08306b",
-										label: "Blues"
-									}, {
-										value: "#fff5f0, #fee0d2, #fcbba1, #fc9272, #fb6a4a, #ef3b2c, #cb181d, #a50f15, #67000d",
-										label: "Reds"
-									}, {
-										value: "#ffffd9, #edf8b1, #c7e9b4, #7fcdbb, #41b6c4, #1d91c0, #225ea8, #253494, #081d58",
-										label: "YlGnBu"
-									}, {
-										value: "#4575b4, #abd9e9, #ffffbf, #fdae61, #d73027",
-										label: "Diverging BuYlRd 5 values (Reverse)"
-									}
-									
-									
+									[ 
+										{
+											value: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506",
+											label: "Sequencial"
+										}, {
+											value: "#662506, #993404, #cc4c02, #ec7014, #fe9929, #fec44f, #fee391, #fff7bc, #ffffe5",
+											label: "Sequencial (Reverse)"
+										}, {
+											value: "#d73027, #f46d43, #fdae61, #fee090, #ffffbf, #e0f3f8, #abd9e9, #74add1, #4575b4",
+											label: "Diverging RdYlBu"
+										}, {
+											value: "#4575b4, #74add1, #abd9e9, #e0f3f8, #ffffbf, #fee090, #fdae61, #f46d43, #d73027",
+											label: "Diverging BuYlRd (Reverse)"
+										}, {
+											value: "#d73027, #fdae61, #ffffbf, #abd9e9, #4575b4",
+											label: "Diverging BuYlRd 5 values"
+										}, {
+											value: "#4575b4, #abd9e9, #ffffbf, #fdae61, #d73027",
+											label: "Diverging BuYlRd 5 values (Reverse)"
+										}, {
+											value: "#f7fbff, #deebf7, #c6dbef, #9ecae1, #6baed6, #4292c6, #2171b5, #08519c, #08306b",
+											label: "Blues"
+										}, {
+											value: "#fff5f0, #fee0d2, #fcbba1, #fc9272, #fb6a4a, #ef3b2c, #cb181d, #a50f15, #67000d",
+											label: "Reds"
+										}, {
+											value: "#ffffd9, #edf8b1, #c7e9b4, #7fcdbb, #41b6c4, #1d91c0, #225ea8, #253494, #081d58",
+											label: "YlGnBu"
+										}
 									],
 								  defaultValue: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506"
 							   },
@@ -302,7 +304,7 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 	dim2Elements = dim2Obj.map(function(e){return e.dim2Element;});
 
 	var marginLeft = function(){ return (dim1LabelSize * 7) + 10; };
-	var margingRight = 10, marginTop = 50, marginButton = 10;
+	var margingRight = 10, marginTop = (showLegend ? 50 : 20), marginButton = 10;
 	var gridDivider = Math.max(maxGridColums * 1, dim2keys.length); 
 
 	if (Math.floor((width -marginLeft() -margingRight)/ gridDivider) < smallSize) {
@@ -334,7 +336,7 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
  
 	var svg = d3.select("#"+id).append("svg")
 		.attr("width", width)
-		.attr("height", Math.max(height -4, 38 + (dim1keys.length * (gridSize + 2))))
+		.attr("height", Math.max(height -4, (showLegend ? 38 : 8) + (dim1keys.length * (gridSize + 2))))
 		.append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
