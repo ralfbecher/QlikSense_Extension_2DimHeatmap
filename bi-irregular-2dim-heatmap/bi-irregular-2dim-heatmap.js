@@ -55,7 +55,7 @@ define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scri
 								  ref: "ColorSchema",
 								  type: "string",
 								  component: "dropdown",
-								  label: "Color and legend",
+								  label: "Color and Legend",
 								  options: 
 									[ {
 										value: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506",
