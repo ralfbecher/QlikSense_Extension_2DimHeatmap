@@ -1,6 +1,8 @@
 /*
 Created by Ralf Becher - ralf.becher@web.de - (c) 2015 irregular.bi, Leipzig, Germany
 Tested on Qlik Sense 1.1.0
+Modified by Loïc Formont and Xavier Le Pitre
+Tested on Qlik Sense 2.0.1
 
 Based on: d3 day/hour heatmap for Qlik Sense
 Source  : http://branch.qlik.com/projects/showthread.php?348-d3-day-hour-heatmap-for-Qlik-Sense
@@ -10,8 +12,13 @@ Author  : https://github.com/borodri
 irregular.bi takes no responsibility for any code.
 Use at your own risk. 
 */
-define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scripts/d3.min"], function($, qlik, cssContent) {'use strict';
+
+
+define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scripts/d3.min"], function($, qlik, cssContent) {
+	'use strict';
+	
 	$("<style>").html(cssContent).appendTo("head");
+	
 	return {
 		initialProperties : {
 			version: 1.0,
@@ -44,7 +51,7 @@ define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scri
 				settings : {
 					uses : "settings",
 					items : {						
-						 colors: {
+						colors: {
 								  ref: "ColorSchema",
 								  type: "string",
 								  component: "dropdown",
@@ -71,12 +78,31 @@ define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scri
 									}, {
 										value: "#ffffd9, #edf8b1, #c7e9b4, #7fcdbb, #41b6c4, #1d91c0, #225ea8, #253494, #081d58",
 										label: "YlGnBu"
+									}, {
+										value: "#4575b4, #abd9e9, #ffffbf, #fdae61, #d73027",
+										label: "Diverging BuYlRd 5 values (Reverse)"
 									}
 									
 									
 									],
 								  defaultValue: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506"
 							   },
+					   showLegend:{
+							type: "boolean",
+							component: "switch",
+							translation: "Show Legend?",
+							ref: "showLegend",
+							defaultValue: true,
+							trueOption: {
+							  value: true,
+							  translation: "properties.on"
+							},
+							falseOption: {
+							  value: false,
+							  translation: "properties.off"
+							},
+							show: true
+						  },
 						dim1LabelSize:{
 							ref: "dim1LabelSize",
 							type: "integer",
@@ -117,9 +143,10 @@ define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scri
 		snapshot : {
 			canTakeSnapshot : true
 		},
-		paint : function($element,layout) {
-			var _this = this,
-				app = qlik.currApp();
+		paint : function($element, layout) {
+			
+			var _this = this
+			var app = qlik.currApp();
 			
 			// get qMatrix data array
 			var qMatrix = layout.qHyperCube.qDataPages[0].qMatrix;
@@ -167,7 +194,8 @@ define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scri
 				dim2LabelSize = layout.dim2LabelSize,
 				maxGridColums = layout.maxGridColums,
 				leastTiles = layout.leastTiles,
-				showCondition = layout.showCondition;
+				showCondition = layout.showCondition,
+				showLegend = layout.showLegend;
 						
 			 // Chart object width
 			var width = $element.width(); // space left for scrollbar
@@ -179,12 +207,30 @@ define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scri
 			$element.html("");
 			$element.append($('<div />').attr("id", id).css({ height: height, width: width, overflow: 'auto' }))
 			
-			viz(_this,app,data,qDimensionType,qDimSort,width,height,id,colorpalette,dimensionLabels,measureLabels,dim1LabelSize,dim2LabelSize,maxGridColums,leastTiles,showCondition);				
+			viz(
+				_this,
+				app,
+				data,
+				qDimensionType,
+				qDimSort,
+				width,
+				height,
+				id,
+				colorpalette,
+				dimensionLabels,
+				measureLabels,
+				dim1LabelSize,
+				dim2LabelSize,
+				maxGridColums,
+				leastTiles,
+				showCondition,
+				showLegend
+			);				
 		}
 	}
 });
 
-var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorpalette,dimensionLabels,measureLabels,dim1LabelSize,dim2LabelSize,maxGridColums,leastTiles,showCondition) {
+var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorpalette,dimensionLabels,measureLabels,dim1LabelSize,dim2LabelSize,maxGridColums,leastTiles,showCondition,showLegend) {
 
     var formatLegend = d3.format("0,");
     var formatTitle = d3.format("0,.2f");
@@ -342,22 +388,26 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 			_this.backendApi.selectValues(1, [d.Element2], true);
 		})
 		.append("title").text(function(d) { return dimensionLabels[0] + ": " + d.Dim1 + "\n" + dimensionLabels[1] + ": " + d.Dim2 + "\n" + measureLabels[0] + ": " + formatTitle(d.Metric1); });
+		
+	if(showLegend) {
 	
-	var legend = svg.selectAll(".legend")
-		.data([0].concat(colorScale.quantiles()), function(d) { return d; })
-		.enter().append("g")
-		.attr("class", "legend");
+		var legend = svg.selectAll(".legend")
+			.data([0].concat(colorScale.quantiles()), function(d) { return d; })
+			.enter().append("g")
+			.attr("class", "legend");
 
-	legend.append("rect")
-		.attr("x", function(d, i) { return legendElementWidth * i; })
-		.attr("y", -38) //height
-		.attr("width", legendElementWidth)
-		.attr("height", 8)
-		.style("fill", function(d, i) { return colors[i]; });
+		legend.append("rect")
+			.attr("x", function(d, i) { return legendElementWidth * i; })
+			.attr("y", -38) //height
+			.attr("width", legendElementWidth)
+			.attr("height", 8)
+			.style("fill", function(d, i) { return colors[i]; });
 
-	legend.append("text")
-		.attr("class", "mono" + (gridSize < smallSize ? "-small" : ""))
-		.text(function(d) { return (gridSize < smallSize ? "" : "≥ ") + formatLegend(Math.round(d)); })
-		.attr("x", function(d, i) { return legendElementWidth * i; })
-		.attr("y", -40);  // height + gridSize
+		legend.append("text")
+			.attr("class", "mono" + (gridSize < smallSize ? "-small" : ""))
+			.text(function(d) { return (gridSize < smallSize ? "" : "≥ ") + formatLegend(Math.round(d)); })
+			.attr("x", function(d, i) { return legendElementWidth * i; })
+			.attr("y", -40);  // height + gridSize
+		
+	}
 };
