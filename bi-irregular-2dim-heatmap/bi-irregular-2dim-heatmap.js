@@ -1,6 +1,6 @@
 /*
 Created by Ralf Becher - ralf.becher@web.de - (c) 2015 irregular.bi, Leipzig, Germany
-Tested on Qlik Sense 1.1.0
+Tested on Qlik Sense 2.0.3
 Modified by Loïc Formont and Xavier Le Pitre
 Tested on Qlik Sense 2.0.1
 
@@ -14,7 +14,7 @@ Use at your own risk.
 */
 
 
-define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scripts/d3.min"], function($, qlik, cssContent) {
+define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scripts/d3.min","./scripts/lasso_adj"], function($, qlik, cssContent) {
 	'use strict';
 	
 	$("<style>").html(cssContent).appendTo("head");
@@ -27,7 +27,7 @@ define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scri
 				qMeasures : [],
 				qInitialDataFetch : [{
 					qWidth : 3,
-					qHeight : 500
+					qHeight : 3333
 				}]
 			}
 		},
@@ -205,9 +205,16 @@ define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scri
 			var height = $element.height();
 			// Chart object id
 			var id = "container_" + layout.qInfo.qId;
-		 
-			$element.html("");
-			$element.append($('<div />').attr("id", id).css({ height: height, width: width, overflow: 'auto' }))
+
+			// Check to see if the chart element has already been created
+			if (document.getElementById(id)) {
+				// if it has been created, empty it's contents so we can redraw it
+				$("#" + id).empty();
+			}
+			else {
+				// if it hasn't been created, create it with the appropriate id and size
+				$element.append($('<div />').attr({ "id": id, "class": "qv-object-TwoDimHeatmap" }).css({ height: height, width: width, overflow: 'auto' }))
+			}
 			
 			viz(
 				_this,
@@ -327,20 +334,80 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 		//height = height - margin.top - margin.bottom;
 	width = Math.max(150, width -8);  // space for scrollbar
 	
-	var colorScale = d3.scale.quantile()
-		.domain([0, d3.mean(data,function(d) { return +d.Metric1}), d3.max(data, function (d) { return d.Metric1; })])
-		.range(colors);
-
+	if (data.length == 1) {
+		var colorScale = d3.scale.quantile()
+			.domain([0, d3.max(data, function (d) { return d.Metric1; })])
+			.range(colors);
+	} else {
+		var colorScale = d3.scale.quantile()
+			.domain([0, d3.mean(data,function(d) { return +d.Metric1}), d3.max(data, function (d) { return d.Metric1; })])
+			.range(colors);
+	}
+	
 	gridSize = Math.floor((width - margin.left - margin.right) / gridDivider);
 	legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length +1));
  
-	var svg = d3.select("#"+id).append("svg")
+	$("#"+id).css('cursor','default');
+	
+	var svg = d3.select("#"+id).append("svg:svg")
 		.attr("width", width)
-		.attr("height", Math.max(height -4, (showLegend ? 38 : 8) + (dim1keys.length * (gridSize + 2))))
-		.append("g")
-		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		.attr("height", Math.max(height -4, (showLegend ? 38 : 8) + (dim1keys.length * (gridSize + 2))));
 
-	var dim1Labels = svg.selectAll(".dim1Label")
+
+	var svg_g = svg.append("g")
+		.attr("class", "lassoable")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+							
+	// Adding lasso area
+	svg_g.append("rect")
+		.attr("width", width)
+		.attr("height", height)
+		.attr("class", "lassoable")
+		.style("opacity",0);
+
+	svg_g = svg_g.append("g")
+		.attr("class", "lassoable")
+
+		// Lasso functions to execute while lassoing
+	var lasso_start = function() {
+		// keep mouse cursor arrow instead of text select (auto)
+		$("#"+id).css('cursor','default');
+
+		// clear all of the fills 
+		lasso.items()
+			.classed({"not_possible":true,"selected":false}); // style as not possible
+	};
+
+	var lasso_draw = function() {
+		// Style the possible dots
+		lasso.items().filter(function(d) {return d.possible===true})
+			.classed({"not_possible":false,"possible":true});
+
+		// Style the not possible dot
+		lasso.items().filter(function(d) {return d.possible===false})
+			.classed({"not_possible":true,"possible":false});
+	};
+
+	var lasso_end = function(data) {
+		var selectedItems = lasso.items().filter(function(d) {return d.selected===true});	
+		if (selectedItems[0].length > 0) {
+			
+			// Set up an array to store the data points of selected tiles
+			var selectarray1 = [], selectarray2 = [];
+			for (index = 0; index < selectedItems[0].length; index++) {
+				if ($.inArray(selectedItems[0][index].__data__.Element1, selectarray1) == -1) {
+					selectarray1.push(selectedItems[0][index].__data__.Element1);	
+				}		
+				if ($.inArray(selectedItems[0][index].__data__.Element2, selectarray2) == -1) {
+					selectarray2.push(selectedItems[0][index].__data__.Element2);
+				}
+			}
+			_this.backendApi.selectValues(0,selectarray1,false);
+			_this.backendApi.selectValues(1,selectarray2,false);
+		}
+	};
+		
+	var dim1Labels = svg_g.selectAll(".dim1Label")
 		.data(dim1LabelsShort)
 		.enter().append("text")
 		.text(function (d) { return d; })
@@ -354,7 +421,7 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 			})
 		.append("title").text(function(d, i) { return dimensionLabels[0] + ": " + dim1keys[i] });
 
-	var dim2Labels = svg.selectAll(".dim2Label")
+	var dim2Labels = svg_g.selectAll(".dim2Label")
 		.data(dim2LabelsShort)
 		.enter().append("text")
 		.text(function(d) { return d; })
@@ -370,14 +437,15 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 
 	if (showCondition == 0) return;
 
-	var heatMap = svg.selectAll(".dim2")
+	var heatMap = svg_g.selectAll(".dim2")
 		.data(data)
 		.enter().append("rect")
+		//.attr("id", function(d) {  return id + "_" + d.Dim1 + "_" + d.Dim2; })  // use id_Dim1_Dim2 as Path ID
 		.attr("x", function(d) { return $.inArray(d.Dim2, dim2keys) * gridSize; })
 		.attr("y", function(d) { return $.inArray(d.Dim1, dim1keys) * gridSize; })
 		.attr("rx", 4)
 		.attr("ry", 4)
-		.attr("class", "dim2 bordered")
+		.attr("class", "bordered")
 		.attr("width", gridSize)
 		.attr("height", gridSize)
 		.style("fill", colors[0]);
@@ -386,14 +454,14 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 		.style("fill", function(d) { return colorScale(d.Metric1); });
 
 	heatMap.on("click", function(d, i) {
-			_this.backendApi.selectValues(0, [d.Element1], true);
-			_this.backendApi.selectValues(1, [d.Element2], true);
+			if (dim1keys.length > 1) _this.backendApi.selectValues(0, [d.Element1], false);
+			if (dim2keys.length > 1) _this.backendApi.selectValues(1, [d.Element2], false);
 		})
 		.append("title").text(function(d) { return dimensionLabels[0] + ": " + d.Dim1 + "\n" + dimensionLabels[1] + ": " + d.Dim2 + "\n" + measureLabels[0] + ": " + formatTitle(d.Metric1); });
 		
 	if(showLegend) {
 	
-		var legend = svg.selectAll(".legend")
+		var legend = svg_g.selectAll(".legend")
 			.data([0].concat(colorScale.quantiles()), function(d) { return d; })
 			.enter().append("g")
 			.attr("class", "legend");
@@ -412,4 +480,24 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 			.attr("y", -40);  // height + gridSize
 		
 	}
+
+		// Create the area where the lasso event can be triggered
+	var lasso_area = d3.select("#"+id).selectAll(".lassoable");
+	//-----------------------------------------------------
+	// Define the lasso
+	var lasso = d3.lasso()
+		  .closePathDistance(75) // max distance for the lasso loop to be closed
+		  .closePathSelect(true) // can items be selected by closing the path?
+		  .hoverSelect(true) // can items by selected by hovering over them?
+		  .area(lasso_area) // area where the lasso can be started
+		  .on("start",lasso_start) // lasso start function
+		  .on("draw",lasso_draw) // lasso draw function
+		  .on("end",lasso_end); // lasso end function		  
+	//-----------------------------------------------------		
+	
+	// Init the lasso on the svg:g that contains the dots	
+	svg_g.call(lasso);	
+	lasso.items(d3.select("#"+id).selectAll(".bordered"));
+
+	
 };

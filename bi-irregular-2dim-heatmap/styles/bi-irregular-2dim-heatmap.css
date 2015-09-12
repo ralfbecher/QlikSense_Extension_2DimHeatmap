@@ -1,26 +1,61 @@
 rect.bordered {
-        stroke: lightgrey;
-        stroke-width:.6px;   
-      }
+	stroke: lightgrey;
+	stroke-width:.6px;   
+}
 
-      text.mono {
-        font-size: 9pt;
-      	font-family: "QlikView Sans", sans-serif;
-        fill: #595959;
-      }
+text.mono {
+	font-size: 9pt;
+	font-family: "QlikView Sans", sans-serif;
+	fill: #595959;
+}
 
-      text.mono-small {
-        font-size: 6pt;
-      	font-family: "QlikView Sans", sans-serif;
-        fill: #595959;
-      }
+text.mono-small {
+	font-size: 6pt;
+	font-family: "QlikView Sans", sans-serif;
+	fill: #595959;
+}
 
-      text.axis-dim1 {
-      	font-family: "QlikView Sans", sans-serif;
-        fill: #595959;
-      }
+text.axis-dim1 {
+	font-family: "QlikView Sans", sans-serif;
+	fill: #595959;
+}
 
-      text.axis-dim2 {
-      	font-family: "QlikView Sans", sans-serif;
-        fill: #595959;
-      }
+text.axis-dim2 {
+	font-family: "QlikView Sans", sans-serif;
+	fill: #595959;
+}
+
+/* Code for Lasso from here */
+
+.qv-object-TwoDimHeatmap .dot {
+  stroke: #000;
+}
+
+.qv-object-TwoDimHeatmap .lasso path {
+  stroke: rgb(80,80,80);
+  stroke-width:2px;
+}
+
+.qv-object-TwoDimHeatmap .lasso .drawn {
+  fill-opacity:.05 ;
+}
+
+.qv-object-TwoDimHeatmap .lasso .loop_close {
+  fill:none;
+  stroke-dasharray: 4,4;
+}
+
+.qv-object-TwoDimHeatmap .lasso .origin {
+  fill:#4DC04E;
+  fill-opacity:0.7;
+}
+
+.qv-object-TwoDimHeatmap .not_possible {
+  fill:rgb(200,200,200);
+}
+
+.qv-object-TwoDimHeatmap .possible {
+  fill:#EC888C;
+  stroke: black;
+  stroke-width: 2px;
+}
