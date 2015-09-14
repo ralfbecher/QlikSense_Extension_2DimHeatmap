@@ -92,7 +92,7 @@ define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scri
 					   showLegend:{
 							type: "boolean",
 							component: "switch",
-							translation: "Show Legend?",
+							translation: "Show Legend",
 							ref: "showLegend",
 							defaultValue: true,
 							trueOption: {
