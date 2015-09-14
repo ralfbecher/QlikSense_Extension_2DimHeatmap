@@ -353,19 +353,17 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 		.attr("width", width)
 		.attr("height", Math.max(height -4, (showLegend ? 38 : 8) + (dim1keys.length * (gridSize + 2))));
 
-
 	var svg_g = svg.append("g")
-		.attr("class", "lassoable")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 							
 	// Adding lasso area
 	svg_g.append("rect")
-		.attr("width", width)
-		.attr("height", height)
+		.attr("width", dim2keys.length * gridSize)
+		.attr("height", dim1keys.length * gridSize)
 		.attr("class", "lassoable")
 		.style("opacity",0);
 
-	svg_g = svg_g.append("g")
+	var svg_g_lasso = svg_g.append("g")
 		.attr("class", "lassoable")
 
 		// Lasso functions to execute while lassoing
@@ -420,7 +418,7 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 			_this.backendApi.selectValues(0, [dim1Elements[i]], true);
 			})
 		.append("title").text(function(d, i) { return dimensionLabels[0] + ": " + dim1keys[i] });
-
+	
 	var dim2Labels = svg_g.selectAll(".dim2Label")
 		.data(dim2LabelsShort)
 		.enter().append("text")
@@ -437,7 +435,7 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 
 	if (showCondition == 0) return;
 
-	var heatMap = svg_g.selectAll(".dim2")
+	var heatMap = svg_g_lasso.selectAll(".dim2")
 		.data(data)
 		.enter().append("rect")
 		//.attr("id", function(d) {  return id + "_" + d.Dim1 + "_" + d.Dim2; })  // use id_Dim1_Dim2 as Path ID
@@ -496,7 +494,7 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 	//-----------------------------------------------------		
 	
 	// Init the lasso on the svg:g that contains the dots	
-	svg_g.call(lasso);	
+	svg_g_lasso.call(lasso);	
 	lasso.items(d3.select("#"+id).selectAll(".bordered"));
 
 	
