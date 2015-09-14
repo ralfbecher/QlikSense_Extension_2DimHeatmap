@@ -22,6 +22,10 @@ You can make a selection by one dimension by clicking on a dimension label (row 
 
 ![QlikSense Extension 2DimHeatmap](Screenshot2.PNG)
 
+Also, you can use a lasso to make a two-dimensinal selection.
+
+![QlikSense Extension 2DimHeatmap](HeatmapSelection.gif)
+
 Additional Properties:
 ----------------------
 1. Color and legend       : color schema for measure visualization on tiles
