@@ -213,7 +213,7 @@ define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scri
 			}
 			else {
 				// if it hasn't been created, create it with the appropriate id and size
-				$element.append($('<div />').attr({ "id": id, "class": "qv-object-TwoDimHeatmap" }).css({ height: height, width: width, overflow: 'auto' }))
+				$element.append($('<div />').attr({ "id": id, "class": "qv-object-TwoDimHeatmap" }).css({ height: height, width: width, overflow: 'scroll' }))
 			}
 			
 			viz(
@@ -330,8 +330,6 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 	dim1Elements = dim1Obj.map(function(e){return e.dim1Element;});
 
 	var margin = { top: marginTop, right: margingRight, bottom: marginButton, left: marginLeft()};
-		//width = width - margin.left - margin.right,
-		//height = height - margin.top - margin.bottom;
 	width = Math.max(150, width -8);  // space for scrollbar
 	
 	if (data.length == 1) {
@@ -351,7 +349,7 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 	
 	var svg = d3.select("#"+id).append("svg:svg")
 		.attr("width", width)
-		.attr("height", Math.max(height -4, (showLegend ? 38 : 8) + (dim1keys.length * (gridSize + 2))));
+		.attr("height", (showLegend ? 50 : 20) + (dim1keys.length * gridSize) );
 
 	var svg_g = svg.append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
