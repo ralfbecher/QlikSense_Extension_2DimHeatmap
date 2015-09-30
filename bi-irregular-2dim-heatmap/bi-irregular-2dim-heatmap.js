@@ -13,9 +13,16 @@ irregular.bi takes no responsibility for any code.
 Use at your own risk. 
 */
 
-
-define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scripts/d3.min","./scripts/lasso_adj"], function($, qlik, cssContent) {
-	'use strict';
+requirejs.config({
+	shim : {
+		"extensions/bi-irregular-2dim-heatmap/scripts/lasso_adj" : {
+			"deps" : ["extensions/bi-irregular-2dim-heatmap/scripts/d3.min"]
+		}
+	}
+});
+define(["jquery", "qlik", "./scripts/lasso_adj", "text!./styles/bi-irregular-2dim-heatmap.css"], 
+function($, qlik, lasso, cssContent) {
+	//'use strict';
 	
 	$("<style>").html(cssContent).appendTo("head");
 	
@@ -147,6 +154,8 @@ define(["jquery", "qlik", "text!./styles/bi-irregular-2dim-heatmap.css", "./scri
 		},
 		paint : function($element, layout) {
 			
+			$element.html("");  
+
 			var _this = this
 			var app = qlik.currApp();
 			
@@ -254,7 +263,7 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 		.entries(data);
 
 	var dim1Lookup = [];
-	if (leastTiles > 1 && rollup_dim2.length > leastTiles) {
+	if (leastTiles > 1 && rollup_dim2.length >= leastTiles) {
 		// Filter rows with too few tiles:	
 		rollup_dim1 = rollup_dim1.filter(function(e){
 							return e.values.count >= leastTiles;
@@ -439,8 +448,8 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 		//.attr("id", function(d) {  return id + "_" + d.Dim1 + "_" + d.Dim2; })  // use id_Dim1_Dim2 as Path ID
 		.attr("x", function(d) { return $.inArray(d.Dim2, dim2keys) * gridSize; })
 		.attr("y", function(d) { return $.inArray(d.Dim1, dim1keys) * gridSize; })
-		.attr("rx", 4)
-		.attr("ry", 4)
+		.attr("rx", 0)
+		.attr("ry", 0)
 		.attr("class", "bordered")
 		.attr("width", gridSize)
 		.attr("height", gridSize)

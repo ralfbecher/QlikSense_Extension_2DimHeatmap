@@ -1,6 +1,6 @@
 rect.bordered {
-	stroke: lightgrey;
-	stroke-width:.6px;   
+	stroke: #F0F0F0;
+	stroke-width:.4px;   
 }
 
 text.mono {
