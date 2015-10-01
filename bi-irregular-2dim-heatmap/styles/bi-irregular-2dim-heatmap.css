@@ -1,6 +1,7 @@
 rect.bordered {
 	stroke: #F0F0F0;
-	stroke-width:.4px;   
+	stroke-width:.4px;
+	fill-opacity: 0.92;
 }
 
 text.mono {
@@ -56,6 +57,6 @@ text.axis-dim2 {
 
 .qv-object-TwoDimHeatmap .possible {
   fill:#EC888C;
-  stroke: black;
+  stroke: SlateGray;
   stroke-width: 2px;
 }

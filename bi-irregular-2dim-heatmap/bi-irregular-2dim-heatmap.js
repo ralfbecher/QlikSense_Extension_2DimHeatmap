@@ -66,6 +66,12 @@ function($, qlik, lasso, cssContent) {
 								  options: 
 									[ 
 										{
+											value: "#3C52A1, #3A82C4, #69ACDE, #9FD0F1, #CFEAFA, #EEDCC5, #F4AA73, #E67A56, #CD473E, #AE1C3E",
+											label: "Qlik Sense Diverging"
+										}, {
+											value: "#AE1C3E, #CD473E, #E67A56, #F4AA73, #EEDCC5, #CFEAFA, #9FD0F1, #69ACDE, #3A82C4, #3C52A1",
+											label: "Qlik Sense Diverging (Reverse)"
+										}, {
 											value: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506",
 											label: "Sequencial"
 										}, {
@@ -455,7 +461,7 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 		.attr("height", gridSize)
 		.style("fill", colors[0]);
 
-	heatMap.transition().duration(200)
+	heatMap.transition().duration(20)
 		.style("fill", function(d) { return colorScale(d.Metric1); });
 
 	heatMap.on("click", function(d, i) {
