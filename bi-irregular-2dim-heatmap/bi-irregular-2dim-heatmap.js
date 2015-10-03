@@ -1,6 +1,6 @@
 /*
 Created by Ralf Becher - ralf.becher@web.de - (c) 2015 irregular.bi, Leipzig, Germany
-Tested on Qlik Sense 2.0.3
+Tested on Qlik Sense 2.1.1
 Modified by Loïc Formont and Xavier Le Pitre
 Tested on Qlik Sense 2.0.1
 
@@ -102,7 +102,7 @@ function($, qlik, lasso, cssContent) {
 									],
 								  defaultValue: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506"
 							   },
-					   showLegend:{
+						showLegend:{
 							type: "boolean",
 							component: "switch",
 							translation: "Show Legend",
@@ -117,7 +117,7 @@ function($, qlik, lasso, cssContent) {
 							  translation: "properties.off"
 							},
 							show: true
-						  },
+						},
 						dim1LabelSize:{
 							ref: "dim1LabelSize",
 							type: "integer",
@@ -143,6 +143,22 @@ function($, qlik, lasso, cssContent) {
 							label: "Least Tiles in Row",
 							defaultValue: 1,
 							expression: "optional"
+						},
+						localizedNumbers:{
+							type: "boolean",
+							component: "switch",
+							translation: "Localized Number Format",
+							ref: "localizedNumbers",
+							defaultValue: true,
+							trueOption: {
+							  value: true,
+							  translation: "properties.on"
+							},
+							falseOption: {
+							  value: false,
+							  translation: "properties.off"
+							},
+							show: true
 						},
 						showCondition:{
 							ref: "showCondition",
@@ -212,7 +228,8 @@ function($, qlik, lasso, cssContent) {
 				maxGridColums = layout.maxGridColums,
 				leastTiles = layout.leastTiles,
 				showCondition = layout.showCondition,
-				showLegend = layout.showLegend;
+				showLegend = layout.showLegend,
+				localizedNumbers = layout.localizedNumbers;
 						
 			 // Chart object width
 			var width = $element.width(); // space left for scrollbar
@@ -254,11 +271,21 @@ function($, qlik, lasso, cssContent) {
 	}
 });
 
-var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorpalette,dimensionLabels,measureLabels,dim1LabelSize,dim2LabelSize,maxGridColums,leastTiles,showCondition,showLegend) {
+var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorpalette,dimensionLabels,
+	measureLabels,dim1LabelSize,dim2LabelSize,maxGridColums,leastTiles,showCondition,showLegend,localizedNumbers) {
 
-    var formatLegend = d3.format("0,");
-    var formatTitle = d3.format("0,.2f");
-
+	if (localizedNumbers) {
+		var formatLegend = function(n) {
+				return n.toLocaleString();
+			}
+		var formatTitle = function(n) {
+				return n.toLocaleString();
+			}	
+	} else {
+	   var formatLegend = d3.format("0,");
+	   var formatTitle = d3.format("0,.2f");		
+	}
+	
 	var rollup_dim1 = d3.nest()
 		.key(function(d) { return d.Dim1; })
 		.rollup(function(leaves) { return {element: leaves[0].Element1, count: leaves.length}; })
