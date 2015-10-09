@@ -160,6 +160,22 @@ function($, qlik, lasso, cssContent) {
 							},
 							show: true
 						},
+						showNumbers:{
+							type: "boolean",
+							component: "switch",
+							translation: "Show Number in Tiles",
+							ref: "showNumbers",
+							defaultValue: false,
+							trueOption: {
+							  value: true,
+							  translation: "properties.on"
+							},
+							falseOption: {
+							  value: false,
+							  translation: "properties.off"
+							},
+							show: true
+						},
 						showCondition:{
 							ref: "showCondition",
 							type: "integer",
@@ -229,7 +245,8 @@ function($, qlik, lasso, cssContent) {
 				leastTiles = layout.leastTiles,
 				showCondition = layout.showCondition,
 				showLegend = layout.showLegend,
-				localizedNumbers = layout.localizedNumbers;
+				localizedNumbers = layout.localizedNumbers,
+				showNumbers = layout.showNumbers;
 						
 			 // Chart object width
 			var width = $element.width(); // space left for scrollbar
@@ -265,14 +282,16 @@ function($, qlik, lasso, cssContent) {
 				maxGridColums,
 				leastTiles,
 				showCondition,
-				showLegend
+				showLegend,
+				localizedNumbers,
+				showNumbers
 			);				
 		}
 	}
 });
 
 var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorpalette,dimensionLabels,
-	measureLabels,dim1LabelSize,dim2LabelSize,maxGridColums,leastTiles,showCondition,showLegend,localizedNumbers) {
+	measureLabels,dim1LabelSize,dim2LabelSize,maxGridColums,leastTiles,showCondition,showLegend,localizedNumbers,showNumbers) {
 
 	if (localizedNumbers) {
 		var formatLegend = function(n) {
@@ -320,11 +339,12 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 	
 	dim2Obj = rollup_dim2.map(function(e){return {
 					"dim2key": e.key, 
-					"dim2LabelShort": e.key.substr(e.key.length -dim2LabelSize),
+					"dim2LabelShort": e.key.substr(-dim2LabelSize),
 					"dim2Element": e.values.element,
 					"dim2Num": e.values.num
 				};
 			});
+
 	// Sorting Dim2
 	if (qDimensionType[1] == "N") {
 		// Numeric
@@ -445,21 +465,22 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 		}
 	};
 		
-	var dim1Labels = svg_g.selectAll(".dim1Label")
+	var dim1Labels = svg_g.selectAll()
 		.data(dim1LabelsShort)
 		.enter().append("text")
 		.text(function (d) { return d; })
 		.attr("x", 0)
 		.attr("y", function (d, i) { return i * gridSize; })
+		.attr("dy", ".35em")
 		.style("text-anchor", "end")
-		.attr("transform", "translate(-6," + gridSize / 1.5 + ")")
-		.attr("class", function (d, i) { return ("dim1Label mono" + (gridSize < smallSize ? "-small" : "") + " axis axis-dim1"); })
+		.attr("transform", "translate(-6," + (gridSize / 2) + ")")
+		.attr("class", function (d, i) { return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-a"); })
 		.on("click", function(d, i) {
 			_this.backendApi.selectValues(0, [dim1Elements[i]], true);
 			})
 		.append("title").text(function(d, i) { return dimensionLabels[0] + ": " + dim1keys[i] });
 	
-	var dim2Labels = svg_g.selectAll(".dim2Label")
+	var dim2Labels = svg_g.selectAll()
 		.data(dim2LabelsShort)
 		.enter().append("text")
 		.text(function(d) { return d; })
@@ -467,7 +488,7 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 		.attr("y", 0)
 		.style("text-anchor", "middle")
 		.attr("transform", "translate(" + gridSize / 2 + ", -6)")
-		.attr("class", function(d, i) { return ("dim2Label mono" + (gridSize < smallSize ? "-small" : "") + " axis axis-dim2"); })
+		.attr("class", function(d, i) { return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b"); })
 		.on("click", function(d, i) {
 			_this.backendApi.selectValues(1, [dim2Elements[i]], true);
 			})
@@ -475,9 +496,11 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 
 	if (showCondition == 0) return;
 
-	var heatMap = svg_g_lasso.selectAll(".dim2")
+	// all rectangles
+	var heatMap = svg_g_lasso.selectAll()
 		.data(data)
-		.enter().append("rect")
+		.enter()
+		.append("rect")
 		//.attr("id", function(d) {  return id + "_" + d.Dim1 + "_" + d.Dim2; })  // use id_Dim1_Dim2 as Path ID
 		.attr("x", function(d) { return $.inArray(d.Dim2, dim2keys) * gridSize; })
 		.attr("y", function(d) { return $.inArray(d.Dim1, dim1keys) * gridSize; })
@@ -486,20 +509,36 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 		.attr("class", "bordered")
 		.attr("width", gridSize)
 		.attr("height", gridSize)
-		.style("fill", colors[0]);
-
-	heatMap.transition().duration(20)
-		.style("fill", function(d) { return colorScale(d.Metric1); });
-
-	heatMap.on("click", function(d, i) {
+		.style("fill", function(d) { return colorScale(d.Metric1); })
+		.on("click", function(d, i) {
 			if (dim1keys.length > 1) _this.backendApi.selectValues(0, [d.Element1], false);
 			if (dim2keys.length > 1) _this.backendApi.selectValues(1, [d.Element2], false);
 		})
 		.append("title").text(function(d) { return dimensionLabels[0] + ": " + d.Dim1 + "\n" + dimensionLabels[1] + ": " + d.Dim2 + "\n" + measureLabels[0] + ": " + formatTitle(d.Metric1); });
+	
+	if (showNumbers) {
+		// texts inside rectangles
+		heatMap = svg_g_lasso.selectAll()
+			.data(data)
+			.enter()
+			.append("text")
+			.attr("x", function(d) { return ($.inArray(d.Dim2, dim2keys) * gridSize); })
+			.attr("y", function(d) { return ($.inArray(d.Dim1, dim1keys) * gridSize) + gridSize/2; })
+			.attr("dy", ".35em")
+			.style("text-anchor", "middle")
+			.attr("transform", "translate(" + gridSize / 2 + ", 0)")
+			.attr("class", function(d, i) { return ("label label" + (d3.hsl(colorScale(d.Metric1)).brighter(1) == "#ffffff" ? "-darker" : "-brighter") + ((gridSize < (formatTitle(d.Metric1).length * 7)) ? "-small" : "")); })
+			.on("click", function(d, i) {
+				if (dim1keys.length > 1) _this.backendApi.selectValues(0, [d.Element1], false);
+				if (dim2keys.length > 1) _this.backendApi.selectValues(1, [d.Element2], false);
+			})
+			.text(function(d) { return formatTitle(d.Metric1); })
+			.append("title").text(function(d) { return dimensionLabels[0] + ": " + d.Dim1 + "\n" + dimensionLabels[1] + ": " + d.Dim2 + "\n" + measureLabels[0] + ": " + formatTitle(d.Metric1); });
+	}
 		
 	if(showLegend) {
 	
-		var legend = svg_g.selectAll(".legend")
+		var legend = svg_g.selectAll()
 			.data([0].concat(colorScale.quantiles()), function(d) { return d; })
 			.enter().append("g")
 			.attr("class", "legend");

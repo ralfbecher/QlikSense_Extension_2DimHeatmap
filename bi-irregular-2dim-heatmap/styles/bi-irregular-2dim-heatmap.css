@@ -4,6 +4,30 @@ rect.bordered {
 	fill-opacity: 0.92;
 }
 
+text.label-brighter {
+	font-size: 9pt;
+	font-family: "QlikView Sans", sans-serif;
+	fill: #F0F0F0;
+}
+
+text.label-brighter-small {
+	font-size: 6pt;
+	font-family: "QlikView Sans", sans-serif;
+	fill: #F0F0F0;
+}
+
+text.label-darker {
+	font-size: 9pt;
+	font-family: "QlikView Sans", sans-serif;
+	fill: #A0A0A0;
+}
+
+text.label-darker-small {
+	font-size: 6pt;
+	font-family: "QlikView Sans", sans-serif;
+	fill: #A0A0A0;
+}
+
 text.mono {
 	font-size: 9pt;
 	font-family: "QlikView Sans", sans-serif;
@@ -16,12 +40,12 @@ text.mono-small {
 	fill: #595959;
 }
 
-text.axis-dim1 {
+text.axis-dim-a {
 	font-family: "QlikView Sans", sans-serif;
 	fill: #595959;
 }
 
-text.axis-dim2 {
+text.axis-dim-b {
 	font-family: "QlikView Sans", sans-serif;
 	fill: #595959;
 }

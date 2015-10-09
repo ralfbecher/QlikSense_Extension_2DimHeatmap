@@ -28,16 +28,18 @@ Also, you can use a lasso to make a two-dimensional selection:
 
 Additional Properties:
 ----------------------
-1. Color and legend       : color schema for measure visualization on tiles
-2. Dim1 label size (left) : max. amount characters shown of 1st dimension label (from left)
-2. Dim2 label size (right): max. amount characters shown of 2nd dimension label (from right)
-3. Max. columns for grid  : expression to get max. amount of values of 2nd dimension to have a more stable grid layout
-4. Least Tiles in Row     : filter rows (1st dimension) with less than minimum amount of tiles (default=1; no filtering) 
-5. Show condition         : QlikView-like show condition; useful if you have a measure or selection which doesn't gives you values. If condition <> 1 at least the labels of 1st and 2nd dimension are shown but no tiles.
+1. Color and Legend : color schema for measure visualization on tiles
+2. Show Legend : show/hide legend
+3. Dim1 Label Size (left) : max. amount characters shown of 1st dimension label (from left)
+4. Dim2 Label Size (right) : max. amount characters shown of 2nd dimension label (from right)
+5. Max. Columns for Grid : expression to get max. amount of values of 2nd dimension to have a more stable grid layout
+6. Least Tiles in Row : filter rows (1st dimension) with less than minimum amount of tiles (default=1; no filtering) 
+7. Localized Number Format : use a localized number format for decimal and thousands separator
+8. Show Numbers in Tiles: shows the measure number in each tile (only useful for small numbers, depending on tile sizes)
+9. Show condition : QlikView-like show condition; useful if you have a measure or selection which doesn't gives you values. If condition <> 1 at least the labels of 1st and 2nd dimension are shown but no tiles.
 
 Sample Application:
 -------------------
 Qlik Hackathon 2015 Start.qvf - Uses data from Medair to analyse Ebola Outbreak in Sierra Leone.
 
 This app uses also Qlik Sense Extension VariableButton: https://github.com/asierfer/QlikSense-Ext-VariableButton
-
