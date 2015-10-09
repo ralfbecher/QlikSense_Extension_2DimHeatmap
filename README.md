@@ -43,3 +43,5 @@ Sample Application:
 Qlik Hackathon 2015 Start.qvf - Uses data from Medair to analyse Ebola Outbreak in Sierra Leone.
 
 This app uses also Qlik Sense Extension VariableButton: https://github.com/asierfer/QlikSense-Ext-VariableButton
+
+![QlikSense Extension 2DimHeatmap](Screenshot3.PNG)
