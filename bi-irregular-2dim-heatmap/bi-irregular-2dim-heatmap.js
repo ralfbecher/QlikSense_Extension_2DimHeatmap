@@ -495,6 +495,17 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 		.append("title").text(function(d, i) { return dimensionLabels[1] + ": " + dim2keys[i] });
 
 	if (showCondition == 0) return;
+	
+	var titleText = function(d) { 
+		return dimensionLabels[0] + ": " + d.Dim1 + "\n" + 
+			dimensionLabels[1] + ": " + d.Dim2 + "\n" + 
+			measureLabels[0] + ": " + formatTitle(d.Metric1); 
+	};
+	
+	var tileClick = function(d, i) {
+			if (dim1keys.length > 1) _this.backendApi.selectValues(0, [d.Element1], false);
+			if (dim2keys.length > 1) _this.backendApi.selectValues(1, [d.Element2], false);
+		};
 
 	// all rectangles
 	var heatMap = svg_g_lasso.selectAll()
@@ -510,11 +521,8 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 		.attr("width", gridSize)
 		.attr("height", gridSize)
 		.style("fill", function(d) { return colorScale(d.Metric1); })
-		.on("click", function(d, i) {
-			if (dim1keys.length > 1) _this.backendApi.selectValues(0, [d.Element1], false);
-			if (dim2keys.length > 1) _this.backendApi.selectValues(1, [d.Element2], false);
-		})
-		.append("title").text(function(d) { return dimensionLabels[0] + ": " + d.Dim1 + "\n" + dimensionLabels[1] + ": " + d.Dim2 + "\n" + measureLabels[0] + ": " + formatTitle(d.Metric1); });
+		.on("click", tileClick)
+		.append("title").text(titleText);
 	
 	if (showNumbers) {
 		// texts inside rectangles
@@ -527,17 +535,13 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 			.attr("dy", ".35em")
 			.style("text-anchor", "middle")
 			.attr("transform", "translate(" + gridSize / 2 + ", 0)")
-			.attr("class", function(d, i) { return ("label label" + (d3.hsl(colorScale(d.Metric1)).brighter(1) == "#ffffff" ? "-darker" : "-brighter") + ((gridSize < (formatTitle(d.Metric1).length * 7)) ? "-small" : "")); })
-			.on("click", function(d, i) {
-				if (dim1keys.length > 1) _this.backendApi.selectValues(0, [d.Element1], false);
-				if (dim2keys.length > 1) _this.backendApi.selectValues(1, [d.Element2], false);
-			})
+			.attr("class", function(d, i) { return ("label" + (d3.hsl(colorScale(d.Metric1)).brighter(1) == "#ffffff" ? "-darker" : "-brighter") + ((gridSize < (formatTitle(d.Metric1).length * 7)) ? "-small" : "")); })
+			.on("click", tileClick)
 			.text(function(d) { return formatTitle(d.Metric1); })
-			.append("title").text(function(d) { return dimensionLabels[0] + ": " + d.Dim1 + "\n" + dimensionLabels[1] + ": " + d.Dim2 + "\n" + measureLabels[0] + ": " + formatTitle(d.Metric1); });
+			.append("title").text(titleText);
 	}
 		
 	if(showLegend) {
-	
 		var legend = svg_g.selectAll()
 			.data([0].concat(colorScale.quantiles()), function(d) { return d; })
 			.enter().append("g")
@@ -555,7 +559,6 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 			.text(function(d) { return (gridSize < smallSize ? "" : "≥ ") + formatLegend(Math.round(d)); })
 			.attr("x", function(d, i) { return legendElementWidth * i; })
 			.attr("y", -40);  // height + gridSize
-		
 	}
 
 		// Create the area where the lasso event can be triggered
@@ -575,6 +578,5 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 	// Init the lasso on the svg:g that contains the dots	
 	svg_g_lasso.call(lasso);	
 	lasso.items(d3.select("#"+id).selectAll(".bordered"));
-
-	
 };
+
