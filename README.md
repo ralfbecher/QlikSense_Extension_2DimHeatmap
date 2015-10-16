@@ -45,3 +45,7 @@ Qlik Hackathon 2015 Start.qvf - Uses data from Medair to analyse Ebola Outbreak 
 This app uses also Qlik Sense Extension VariableButton: https://github.com/asierfer/QlikSense-Ext-VariableButton
 
 ![QlikSense Extension 2DimHeatmap](Screenshot3.PNG)
+
+With class() function as measure dimension you can have a awesome fast backend calculated binning!
+
+![QlikSense Extension 2DimHeatmap](Screenshot4.PNG)
