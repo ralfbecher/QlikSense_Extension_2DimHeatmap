@@ -33,8 +33,8 @@ function($, qlik, lasso, cssContent) {
 				qDimensions : [],
 				qMeasures : [],
 				qInitialDataFetch : [{
-					qWidth : 3,
-					qHeight : 3333
+					qWidth : 4,
+					qHeight : 2500
 				}]
 			}
 		},
@@ -49,8 +49,8 @@ function($, qlik, lasso, cssContent) {
 				},
 				measures : {
 					uses : "measures",
-					min : 1,
-					max : 1
+					min : 1, // 1st measure must be numeric
+					max : 2  // 2nd measure can be text (concat or else)
 				},
 				sorting : {
 					uses : "sorting"
@@ -228,16 +228,29 @@ function($, qlik, lasso, cssContent) {
 			var data = qMatrix.map(function(d) {
 				// for each element in the matrix, create a new object that has a property
 				// for the grouping dimension(s), and the metric(s)
-				return {
-					"Dim1": d[0].qText,
-					"Dim2": d[1].qText,
-					"Dim2Num": d[1].qNum,
-					"Element1": d[0].qElemNumber,
-					"Element2": d[1].qElemNumber,
-					"Metric1": d[2].qNum
+				if (d.length > 3) {
+					return {
+						"Dim1": d[0].qText,
+						"Dim2": d[1].qText,
+						"Dim2Num": d[1].qNum,
+						"Element1": d[0].qElemNumber,
+						"Element2": d[1].qElemNumber,
+						"Metric1": d[2].qNum,
+						"Metric2": d[3].qNum,
+						"Metric2Text": d[3].qText
+					}
+				} else {
+					return {
+						"Dim1": d[0].qText,
+						"Dim2": d[1].qText,
+						"Dim2Num": d[1].qNum,
+						"Element1": d[0].qElemNumber,
+						"Element2": d[1].qElemNumber,
+						"Metric1": d[2].qNum
+					}
 				}
 			});
-			
+console.log(data);			
 			var colorpalette = layout.ColorSchema.split(", "),
 				dim1LabelSize = layout.dim1LabelSize,
 				dim2LabelSize = layout.dim2LabelSize,
@@ -499,7 +512,8 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 	var titleText = function(d) { 
 		return dimensionLabels[0] + ": " + d.Dim1 + "\n" + 
 			dimensionLabels[1] + ": " + d.Dim2 + "\n" + 
-			measureLabels[0] + ": " + formatTitle(d.Metric1); 
+			measureLabels[0] + ": " + formatTitle(d.Metric1) + 
+			(d.hasOwnProperty('Metric2') ? "\n" + measureLabels[1] + ": " + (d.Metric2 ? d.Metric2Text : formatTitle(d.Metric2)) : "" ); 
 	};
 	
 	var tileClick = function(d, i) {
