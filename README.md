@@ -49,3 +49,7 @@ This app uses also Qlik Sense Extension VariableButton: https://github.com/asier
 With class() function as measure dimension you can have a awesome fast backend calculated binning!
 
 ![QlikSense Extension 2DimHeatmap](Screenshot4.PNG)
+
+Rotation of Dim2 Labels and proper measure formattings:
+
+![QlikSense Extension 2DimHeatmap](Screenshot5.PNG)

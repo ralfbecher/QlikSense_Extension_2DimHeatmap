@@ -127,8 +127,24 @@ function($, qlik, lasso, cssContent) {
 						dim2LabelSize:{
 							ref: "dim2LabelSize",
 							type: "integer",
-							label: "Dim2 Label Size (right)",
+							label: "Dim2 Label Size (right/rotate left)",
 							defaultValue: 2
+						},
+						dim2LabelRotation:{
+							type: "boolean",
+							component: "switch",
+							translation: "Rotate Dim2 Labels by -90°",
+							ref: "dim2LabelRotation",
+							defaultValue: false,
+							trueOption: {
+							  value: true,
+							  translation: "properties.on"
+							},
+							falseOption: {
+							  value: false,
+							  translation: "properties.off"
+							},
+							show: true
 						},
 						maxGridColums:{
 							ref: "maxGridColums",
@@ -143,22 +159,6 @@ function($, qlik, lasso, cssContent) {
 							label: "Least Tiles in Row",
 							defaultValue: 1,
 							expression: "optional"
-						},
-						localizedNumbers:{
-							type: "boolean",
-							component: "switch",
-							translation: "Localized Number Format",
-							ref: "localizedNumbers",
-							defaultValue: true,
-							trueOption: {
-							  value: true,
-							  translation: "properties.on"
-							},
-							falseOption: {
-							  value: false,
-							  translation: "properties.off"
-							},
-							show: true
 						},
 						showNumbers:{
 							type: "boolean",
@@ -200,8 +200,6 @@ function($, qlik, lasso, cssContent) {
 			// get qMatrix data array
 			var qMatrix = layout.qHyperCube.qDataPages[0].qMatrix;
 			
-//console.log(qMatrix);		
-	
 			// create a new array that contains the dimension labels
 			var dimensionLabels = layout.qHyperCube.qDimensionInfo.map(function(d) {
 				return d.qFallbackTitle;
@@ -211,10 +209,14 @@ function($, qlik, lasso, cssContent) {
 			var measureLabels = layout.qHyperCube.qMeasureInfo.map(function(d) {
 				return d.qFallbackTitle;
 			});
-//console.log(layout.qHyperCube.qDimensionInfo);
-			// var qFields = layout.qHyperCube.qDimensionInfo.map(function(d) {
-				// return d.qGroupFieldDefs[0];
-			// });
+
+			var measurePercentage = false;			
+			if (measureLabels.length > 0 && layout.qHyperCube.qMeasureInfo.length > 0) {
+				if (layout.qHyperCube.qMeasureInfo[0].qNumFormat.qFmt && 
+						layout.qHyperCube.qMeasureInfo[0].qNumFormat.qFmt.indexOf("%") != -1) {
+					measurePercentage = true;
+				}
+			}
 			
 			var qDimensionType = layout.qHyperCube.qDimensionInfo.map(function(d) {
 				return d.qDimensionType;
@@ -236,6 +238,7 @@ function($, qlik, lasso, cssContent) {
 						"Element1": d[0].qElemNumber,
 						"Element2": d[1].qElemNumber,
 						"Metric1": d[2].qNum,
+						"Metric1Text": d[2].qText,
 						"Metric2": d[3].qNum,
 						"Metric2Text": d[3].qText
 					}
@@ -246,14 +249,16 @@ function($, qlik, lasso, cssContent) {
 						"Dim2Num": d[1].qNum,
 						"Element1": d[0].qElemNumber,
 						"Element2": d[1].qElemNumber,
-						"Metric1": d[2].qNum
+						"Metric1": d[2].qNum,
+						"Metric1Text": d[2].qText
 					}
 				}
 			});
-console.log(data);			
+
 			var colorpalette = layout.ColorSchema.split(", "),
 				dim1LabelSize = layout.dim1LabelSize,
 				dim2LabelSize = layout.dim2LabelSize,
+				dim2LabelRotation = layout.dim2LabelRotation,
 				maxGridColums = layout.maxGridColums,
 				leastTiles = layout.leastTiles,
 				showCondition = layout.showCondition,
@@ -275,7 +280,7 @@ console.log(data);
 			}
 			else {
 				// if it hasn't been created, create it with the appropriate id and size
-				$element.append($('<div />').attr({ "id": id, "class": "qv-object-TwoDimHeatmap" }).css({ height: height, width: width, overflow: 'scroll' }))
+				$element.append($('<div />').attr({ "id": id, "class": "qv-object-TwoDimHeatmap" }).css({ height: height, width: width, overflow: 'auto' }))
 			}
 			
 			viz(
@@ -290,13 +295,14 @@ console.log(data);
 				colorpalette,
 				dimensionLabels,
 				measureLabels,
+				measurePercentage,
 				dim1LabelSize,
 				dim2LabelSize,
+				dim2LabelRotation,
 				maxGridColums,
 				leastTiles,
 				showCondition,
 				showLegend,
-				localizedNumbers,
 				showNumbers
 			);				
 		}
@@ -304,19 +310,15 @@ console.log(data);
 });
 
 var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorpalette,dimensionLabels,
-	measureLabels,dim1LabelSize,dim2LabelSize,maxGridColums,leastTiles,showCondition,showLegend,localizedNumbers,showNumbers) {
+	measureLabels,measurePercentage,dim1LabelSize,dim2LabelSize,dim2LabelRotation,
+	maxGridColums,leastTiles,showCondition,showLegend,showNumbers) {
 
-	if (localizedNumbers) {
-		var formatLegend = function(n) {
-				return n.toLocaleString();
-			}
-		var formatTitle = function(n) {
-				return n.toLocaleString();
-			}	
-	} else {
-	   var formatLegend = d3.format("0,");
-	   var formatTitle = d3.format("0,.2f");		
-	}
+	var formatLegend = function(n) {
+			return n.toLocaleString();
+		}
+	var formatTitle = function(n) {
+			return n.toLocaleString();
+		}	
 	
 	var rollup_dim1 = d3.nest()
 		.key(function(d) { return d.Dim1; })
@@ -352,7 +354,7 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 	
 	dim2Obj = rollup_dim2.map(function(e){return {
 					"dim2key": e.key, 
-					"dim2LabelShort": e.key.substr(-dim2LabelSize),
+					"dim2LabelShort": (dim2LabelRotation ? e.key.substr(0, dim2LabelSize) + (e.key.length > dim2LabelSize ? dots : "") : e.key.substr(-dim2LabelSize)),
 					"dim2Element": e.values.element,
 					"dim2Num": e.values.num
 				};
@@ -385,8 +387,9 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 	dim2LabelsShort = dim2Obj.map(function(e){return e.dim2LabelShort;});
 	dim2Elements = dim2Obj.map(function(e){return e.dim2Element;});
 
+	var dim2RotationOffset = (dim2LabelRotation ? (dim2LabelSize * 4) : 0);
 	var marginLeft = function(){ return (dim1LabelSize * 7) + 10; };
-	var margingRight = 10, marginTop = (showLegend ? 50 : 20), marginButton = 10;
+	var margingRight = 10, marginButton = 10;
 	var gridDivider = Math.max(maxGridColums * 1, dim2keys.length); 
 
 	if (Math.floor((width -marginLeft() -margingRight)/ gridDivider) < smallSize) {
@@ -404,8 +407,8 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 	dim1LabelsShort = dim1Obj.map(function(e){return e.dim1LabelShort;});
 	dim1Elements = dim1Obj.map(function(e){return e.dim1Element;});
 
-	var margin = { top: marginTop, right: margingRight, bottom: marginButton, left: marginLeft()};
-	width = Math.max(150, width -8);  // space for scrollbar
+	var margin = { top: 0, right: margingRight, bottom: marginButton, left: marginLeft()};
+	width = Math.max(150, width -20);  // space for scrollbar
 	
 	if (data.length == 1) {
 		var colorScale = d3.scale.quantile()
@@ -420,11 +423,16 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 	gridSize = Math.floor((width - margin.left - margin.right) / gridDivider);
 	legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length +1));
  
+	if (gridSize < smallSize && dim2LabelRotation) {
+		dim2RotationOffset = (dim2LabelSize * 2);
+	}
+	margin.top = (showLegend ? 50 : 20) + dim2RotationOffset;
+
 	$("#"+id).css('cursor','default');
 	
 	var svg = d3.select("#"+id).append("svg:svg")
 		.attr("width", width)
-		.attr("height", (showLegend ? 50 : 20) + (dim1keys.length * gridSize) );
+		.attr("height", (showLegend ? 50 : 20) + dim2RotationOffset + (dim1keys.length * gridSize) );
 
 	var svg_g = svg.append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -493,29 +501,44 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 			})
 		.append("title").text(function(d, i) { return dimensionLabels[0] + ": " + dim1keys[i] });
 	
-	var dim2Labels = svg_g.selectAll()
-		.data(dim2LabelsShort)
-		.enter().append("text")
-		.text(function(d) { return d; })
-		.attr("x", function(d, i) { return i * gridSize; })
-		.attr("y", 0)
-		.style("text-anchor", "middle")
-		.attr("transform", "translate(" + gridSize / 2 + ", -6)")
-		.attr("class", function(d, i) { return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b"); })
-		.on("click", function(d, i) {
-			_this.backendApi.selectValues(1, [dim2Elements[i]], true);
-			})
-		.append("title").text(function(d, i) { return dimensionLabels[1] + ": " + dim2keys[i] });
-
+	if (dim2LabelRotation) {		
+		var dim2Labels = svg_g.selectAll()
+			.data(dim2LabelsShort)
+			.enter().append("text")
+			.text(function(d) { return d; })
+			.attr("x", 0)
+			.attr("y", function (d, i) { return i * gridSize; })
+			.style("text-anchor", "left")
+			.attr("transform", "rotate(-90) translate(6, " + (4 + (gridSize / 2)) + ")")
+			.attr("class", function(d, i) { return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b"); })
+			.on("click", function(d, i) {
+				_this.backendApi.selectValues(1, [dim2Elements[i]], true);
+				})
+			.append("title").text(function(d, i) { return dimensionLabels[1] + ": " + dim2keys[i] });
+	} else {
+		var dim2Labels = svg_g.selectAll()
+			.data(dim2LabelsShort)
+			.enter().append("text")
+			.text(function(d) { return d; })
+			.attr("x", function(d, i) { return i * gridSize; })
+			.attr("y", 0)
+			.style("text-anchor", "middle")
+			.attr("transform", "translate(" + gridSize / 2 + ", -6)")
+			.attr("class", function(d, i) { return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b"); })
+			.on("click", function(d, i) {
+				_this.backendApi.selectValues(1, [dim2Elements[i]], true);
+				})
+			.append("title").text(function(d, i) { return dimensionLabels[1] + ": " + dim2keys[i] });
+	}
 	if (showCondition == 0) return;
 	
 	var titleText = function(d) { 
 		return dimensionLabels[0] + ": " + d.Dim1 + "\n" + 
 			dimensionLabels[1] + ": " + d.Dim2 + "\n" + 
-			measureLabels[0] + ": " + formatTitle(d.Metric1) + 
-			(d.hasOwnProperty('Metric2') ? "\n" + measureLabels[1] + ": " + (d.Metric2 ? d.Metric2Text : formatTitle(d.Metric2)) : "" ); 
+			measureLabels[0] + ": " + d.Metric1Text + 
+			(d.hasOwnProperty('Metric2') ? "\n" + measureLabels[1] + ": " + (d.Metric2 ? d.Metric2Text : d.Metric2Text) : "" ); 
 	};
-	
+
 	var tileClick = function(d, i) {
 			if (dim1keys.length > 1) _this.backendApi.selectValues(0, [d.Element1], false);
 			if (dim2keys.length > 1) _this.backendApi.selectValues(1, [d.Element2], false);
@@ -549,9 +572,9 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 			.attr("dy", ".35em")
 			.style("text-anchor", "middle")
 			.attr("transform", "translate(" + gridSize / 2 + ", 0)")
-			.attr("class", function(d, i) { return ("label" + (d3.hsl(colorScale(d.Metric1)).brighter(1) == "#ffffff" ? "-darker" : "-brighter") + ((gridSize < (formatTitle(d.Metric1).length * 7)) ? "-small" : "")); })
+			.attr("class", function(d, i) { return ("label" + (d3.hsl(colorScale(d.Metric1)).brighter(1) == "#ffffff" ? "-darker" : "-brighter") + ((gridSize < (d.Metric1Text.length * 7)) ? "-small" : "")); })
 			.on("click", tileClick)
-			.text(function(d) { return formatTitle(d.Metric1); })
+			.text(function(d) { return d.Metric1Text; })
 			.append("title").text(titleText);
 	}
 		
@@ -563,16 +586,16 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 
 		legend.append("rect")
 			.attr("x", function(d, i) { return legendElementWidth * i; })
-			.attr("y", -38) //height
+			.attr("y", - (38 + dim2RotationOffset) ) //height
 			.attr("width", legendElementWidth)
 			.attr("height", 8)
 			.style("fill", function(d, i) { return colors[i]; });
 
 		legend.append("text")
 			.attr("class", "mono" + (gridSize < smallSize ? "-small" : ""))
-			.text(function(d) { return (gridSize < smallSize ? "" : "≥ ") + formatLegend(Math.round(d)); })
+			.text(function(d) { return (gridSize < smallSize ? "" : "≥ ") + (measurePercentage ? formatLegend(Math.round(d * 1000)/10) + "%" : formatLegend(Math.round(d))); })
 			.attr("x", function(d, i) { return legendElementWidth * i; })
-			.attr("y", -40);  // height + gridSize
+			.attr("y", - (40 + dim2RotationOffset));  // height + gridSize
 	}
 
 		// Create the area where the lasso event can be triggered
