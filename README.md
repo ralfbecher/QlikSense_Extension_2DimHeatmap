@@ -31,12 +31,13 @@ Additional Properties:
 1. Color and Legend : color schema for measure visualization on tiles
 2. Show Legend : show/hide legend
 3. Dim1 Label Size (left) : max. amount characters shown of 1st dimension label (from left)
-4. Dim2 Label Size (right) : max. amount characters shown of 2nd dimension label (from right)
-5. Max. Columns for Grid : expression to get max. amount of values of 2nd dimension to have a more stable grid layout
-6. Least Tiles in Row : filter rows (1st dimension) with less than minimum amount of tiles (default=1; no filtering) 
-7. Localized Number Format : use a localized number format for decimal and thousands separator
-8. Show Numbers in Tiles: shows the measure number in each tile (only useful for small numbers, depending on tile sizes)
-9. Show condition : QlikView-like show condition; useful if you have a measure or selection which doesn't gives you values. If condition <> 1 at least the labels of 1st and 2nd dimension are shown but no tiles.
+4. Dim2 Label Size (right/rotate left) : max. amount characters shown of 2nd dimension label (from right, or from left if rotated)
+5. Rotate Dim2 Labels by -90° : rotate labels counterclockwise, better for more readable labels above small tiles
+6. Max. Columns for Grid : expression to get max. amount of values of 2nd dimension to have a more stable grid layout
+7. Least Tiles in Row : filter rows (1st dimension) with less than minimum amount of tiles (default=1; no filtering) 
+8. Localized Number Format : use a localized number format for decimal and thousands separator
+9. Show Numbers in Tiles: shows the measure number in each tile (only useful for small numbers, depending on tile sizes)
+10. Show condition : QlikView-like show condition; useful if you have a measure or selection which doesn't gives you values. If condition <> 1 at least the labels of 1st and 2nd dimension are shown but no tiles.
 
 Sample Application:
 -------------------
