@@ -55,6 +55,14 @@ function($, qlik, lasso, cssContent) {
 				sorting : {
 					uses : "sorting"
 				},
+				addons: { 
+					uses: "addons",
+					items: {
+						dataHandling: {
+							uses: "dataHandling"
+						}
+					}
+				}, 
 				settings : {
 					uses : "settings",
 					items : {						
@@ -210,8 +218,11 @@ function($, qlik, lasso, cssContent) {
 				return d.qFallbackTitle;
 			});
 
+			var measureMin = 0, measureMax = 0;
 			var measurePercentage = false;			
 			if (measureLabels.length > 0 && layout.qHyperCube.qMeasureInfo.length > 0) {
+				measureMin = layout.qHyperCube.qMeasureInfo[0].qMin;
+				measureMax = layout.qHyperCube.qMeasureInfo[0].qMax;
 				if (layout.qHyperCube.qMeasureInfo[0].qNumFormat.qFmt && 
 						layout.qHyperCube.qMeasureInfo[0].qNumFormat.qFmt.indexOf("%") != -1) {
 					measurePercentage = true;
@@ -225,7 +236,7 @@ function($, qlik, lasso, cssContent) {
 			var qDimSort = layout.qHyperCube.qDimensionInfo.map(function(d) {
 				return d.qSortIndicator;
 			});
-
+			
 			// Create a new array for our extension with a row for each row in the qMatrix
 			var data = qMatrix.map(function(d) {
 				// for each element in the matrix, create a new object that has a property
@@ -296,6 +307,8 @@ function($, qlik, lasso, cssContent) {
 				dimensionLabels,
 				measureLabels,
 				measurePercentage,
+				measureMin,
+				measureMax,
 				dim1LabelSize,
 				dim2LabelSize,
 				dim2LabelRotation,
@@ -310,7 +323,7 @@ function($, qlik, lasso, cssContent) {
 });
 
 var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorpalette,dimensionLabels,
-	measureLabels,measurePercentage,dim1LabelSize,dim2LabelSize,dim2LabelRotation,
+	measureLabels,measurePercentage,measureMin,measureMax,dim1LabelSize,dim2LabelSize,dim2LabelRotation,
 	maxGridColums,leastTiles,showCondition,showLegend,showNumbers) {
 
 	var formatLegend = function(n) {
@@ -412,14 +425,14 @@ var viz = function(_this,app,data,qDimensionType,qDimSort,width,height,id,colorp
 	
 	if (data.length == 1) {
 		var colorScale = d3.scale.quantile()
-			.domain([0, d3.max(data, function (d) { return d.Metric1; })])
+			.domain([measureMin, measureMax])
 			.range(colors);
 	} else {
 		var colorScale = d3.scale.quantile()
-			.domain([0, d3.mean(data,function(d) { return +d.Metric1}), d3.max(data, function (d) { return d.Metric1; })])
+			.domain([measureMin, d3.mean(data,function(d) { return +d.Metric1}), measureMax])
 			.range(colors);
 	}
-	
+
 	gridSize = Math.floor((width - margin.left - margin.right) / gridDivider);
 	legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length +1));
  
