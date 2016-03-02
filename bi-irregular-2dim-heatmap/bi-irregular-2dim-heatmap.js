@@ -565,10 +565,10 @@ var viz = function (_this, app, data, qDimensionType, qDimSort, width, height, i
             var selectarray1 = [],
                 selectarray2 = [];
             for (index = 0; index < selectedItems[0].length; index++) {
-                if ($.inArray(selectedItems[0][index].__data__.Element1, selectarray1) == -1) {
+                if ($.inArray(selectedItems[0][index].__data__.Element1, selectarray1) === -1 && selectedItems[0][index].__data__.Element1 > 0) {
                     selectarray1.push(selectedItems[0][index].__data__.Element1);
                 }
-                if ($.inArray(selectedItems[0][index].__data__.Element2, selectarray2) == -1) {
+                if ($.inArray(selectedItems[0][index].__data__.Element2, selectarray2) === -1 && selectedItems[0][index].__data__.Element2 > 0) {
                     selectarray2.push(selectedItems[0][index].__data__.Element2);
                 }
             }
@@ -594,7 +594,8 @@ var viz = function (_this, app, data, qDimensionType, qDimSort, width, height, i
             return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-a");
         })
         .on("click", function (d, i) {
-            _this.backendApi.selectValues(0, [dim1Elements[i]], true);
+            if (dim1Elements[i] > 0)
+                _this.backendApi.selectValues(0, [dim1Elements[i]], true);
         })
         .append("title").text(function (d, i) {
             return dimensionLabels[0] + ": " + dim1keys[i]
@@ -639,7 +640,8 @@ var viz = function (_this, app, data, qDimensionType, qDimSort, width, height, i
                 return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
             })
             .on("click", function (d, i) {
-                _this.backendApi.selectValues(1, [dim2Elements[i]], true);
+                if (dim2Elements[i] > 0)
+                    _this.backendApi.selectValues(1, [dim2Elements[i]], true);
             })
             .append("title").text(function (d, i) {
                 return dimensionLabels[1] + ": " + dim2keys[i]
@@ -655,8 +657,8 @@ var viz = function (_this, app, data, qDimensionType, qDimSort, width, height, i
     };
 
     var tileClick = function (d, i) {
-        if (dim1keys.length > 1) _this.backendApi.selectValues(0, [d.Element1], false);
-        if (dim2keys.length > 1) _this.backendApi.selectValues(1, [d.Element2], false);
+        if (dim1keys.length > 1 && d.Element1 > 0) _this.backendApi.selectValues(0, [d.Element1], false);
+        if (dim2keys.length > 1 && d.Element2 > 0) _this.backendApi.selectValues(1, [d.Element2], false);
     };
 
     // all rectangles
