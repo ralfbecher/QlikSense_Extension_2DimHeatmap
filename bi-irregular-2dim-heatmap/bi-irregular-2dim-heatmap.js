@@ -228,7 +228,7 @@ define(["jquery", "qlik", "./scripts/lasso_adj", "text!./styles/bi-irregular-2di
                         measurePercentage = true;
                     }
                 }
-                console.log(layout.qHyperCube);
+                //console.log(layout.qHyperCube);
                 var qDimensionType = layout.qHyperCube.qDimensionInfo.map(function (d) {
                     if (d.qGroupFieldDefs[0].toLowerCase().indexOf("valueloop") >= 0) {
                         return "N";
@@ -474,7 +474,6 @@ var viz = function (_this, app, data, qDimensionType, qDimSort, width, height, i
     dim1Elements = dim1Obj.map(function (e) {
         return e.dim1Element;
     });
-
     var margin = {
         top: 0,
         right: margingRight,
@@ -565,15 +564,15 @@ var viz = function (_this, app, data, qDimensionType, qDimSort, width, height, i
             var selectarray1 = [],
                 selectarray2 = [];
             for (index = 0; index < selectedItems[0].length; index++) {
-                if ($.inArray(selectedItems[0][index].__data__.Element1, selectarray1) === -1 && selectedItems[0][index].__data__.Element1 > 0) {
+                if ($.inArray(selectedItems[0][index].__data__.Element1, selectarray1) === -1 && selectedItems[0][index].__data__.Element1 >= 0) {
                     selectarray1.push(selectedItems[0][index].__data__.Element1);
                 }
-                if ($.inArray(selectedItems[0][index].__data__.Element2, selectarray2) === -1 && selectedItems[0][index].__data__.Element2 > 0) {
+                if ($.inArray(selectedItems[0][index].__data__.Element2, selectarray2) === -1 && selectedItems[0][index].__data__.Element2 >= 0) {
                     selectarray2.push(selectedItems[0][index].__data__.Element2);
                 }
             }
-            _this.backendApi.selectValues(0, selectarray1, false);
-            _this.backendApi.selectValues(1, selectarray2, false);
+            if (selectarray1.length > 0) _this.backendApi.selectValues(0, selectarray1, false);
+            if (selectarray2.length > 0) _this.backendApi.selectValues(1, selectarray2, false);
         }
     };
 
@@ -594,7 +593,7 @@ var viz = function (_this, app, data, qDimensionType, qDimSort, width, height, i
             return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-a");
         })
         .on("click", function (d, i) {
-            if (dim1Elements[i] > 0)
+            if (dim1Elements[i] >= 0)
                 _this.backendApi.selectValues(0, [dim1Elements[i]], true);
         })
         .append("title").text(function (d, i) {
@@ -618,7 +617,8 @@ var viz = function (_this, app, data, qDimensionType, qDimSort, width, height, i
                 return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
             })
             .on("click", function (d, i) {
-                _this.backendApi.selectValues(1, [dim2Elements[i]], true);
+                if (dim2Elements[i] >= 0)
+                    _this.backendApi.selectValues(1, [dim2Elements[i]], true);
             })
             .append("title").text(function (d, i) {
                 return dimensionLabels[1] + ": " + dim2keys[i]
@@ -640,7 +640,7 @@ var viz = function (_this, app, data, qDimensionType, qDimSort, width, height, i
                 return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
             })
             .on("click", function (d, i) {
-                if (dim2Elements[i] > 0)
+                if (dim2Elements[i] >= 0)
                     _this.backendApi.selectValues(1, [dim2Elements[i]], true);
             })
             .append("title").text(function (d, i) {
@@ -657,8 +657,8 @@ var viz = function (_this, app, data, qDimensionType, qDimSort, width, height, i
     };
 
     var tileClick = function (d, i) {
-        if (dim1keys.length > 1 && d.Element1 > 0) _this.backendApi.selectValues(0, [d.Element1], false);
-        if (dim2keys.length > 1 && d.Element2 > 0) _this.backendApi.selectValues(1, [d.Element2], false);
+        if (dim1keys.length > 1 && d.Element1 >= 0) _this.backendApi.selectValues(0, [d.Element1], false);
+        if (dim2keys.length > 1 && d.Element2 >= 0) _this.backendApi.selectValues(1, [d.Element2], false);
     };
 
     // all rectangles
