@@ -304,9 +304,10 @@ define(["jquery", "qlik", "./scripts/lasso_adj", "text!./styles/bi-irregular-2di
                     }))
                 }
 
-                viz(
+                viz2DimHeatmap(
                     _this,
                     app,
+                    id,
                     data,
                     qDimensionType,
                     qDimSort,
@@ -332,7 +333,7 @@ define(["jquery", "qlik", "./scripts/lasso_adj", "text!./styles/bi-irregular-2di
         }
     });
 
-var viz = function (_this, app, data, qDimensionType, qDimSort, width, height, id, colorpalette, dimensionLabels,
+var viz2DimHeatmap = function (_this, app, id, data, qDimensionType, qDimSort, width, height, id, colorpalette, dimensionLabels,
     measureLabels, measurePercentage, measureMin, measureMax, dim1LabelSize, dim2LabelSize, dim2LabelRotation,
     maxGridColums, leastTiles, showCondition, showLegend, showNumbers) {
 
@@ -710,24 +711,45 @@ var viz = function (_this, app, data, qDimensionType, qDimSort, width, height, i
     }
 
     if (showLegend) {
-        var legend = svg_g.selectAll()
-            .data([0].concat(colorScale.quantiles()), function (d) {
-                return d;
-            })
-            .enter().append("g")
-            .attr("class", "legend");
+        if (data.length > 1) {
+            var legend = svg_g.selectAll()
+                .data([0].concat(colorScale.quantiles()), function (d) {
+                    return d;
+                })
+                .enter().append("g")
+                .attr("class", "legend");
 
-        legend.append("rect")
-            .attr("x", function (d, i) {
-                return legendElementWidth * i;
-            })
-            .attr("y", -(38 + dim2RotationOffset)) //height
-            .attr("width", legendElementWidth)
-            .attr("height", 8)
-            .style("fill", function (d, i) {
-                return colors[i];
-            });
+            legend.append("rect")
+                .attr("x", function (d, i) {
+                    return legendElementWidth * i;
+                })
+                .attr("y", -(38 + dim2RotationOffset)) //height
+                .attr("width", legendElementWidth)
+                .attr("height", 8)
+                .style("fill", function (d, i) {
+                    return colors[i];
+                });
+        } else {
+            console.log(data);
+            var legend = svg_g.selectAll()
+                .data([colorScale.quantiles()[0]], function (d) {
+                    return d;
+                })
+                .enter().append("g")
+                .attr("class", "legend");
 
+            legend.append("rect")
+                .attr("x", function (d, i) {
+                    return legendElementWidth * i;
+                })
+                .attr("y", -(38 + dim2RotationOffset)) //height
+                .attr("width", legendElementWidth)
+                .attr("height", 8)
+                .style("fill", function (d, i) {
+                    return colors[colors.length - 1];
+                });
+
+        }
         legend.append("text")
             .attr("class", "mono" + (gridSize < smallSize ? "-small" : ""))
             .text(function (d) {
