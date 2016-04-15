@@ -1,5 +1,4 @@
-Qlik Sense Extension 2 Dimensional Heatmap
-==========================================
+## Qlik Sense Extension 2 Dimensional Heatmap
 
 This extension shows a matrix of colored tiles by two dimensions. The 1st dimension is used for the rows (variable, scrollbar if exceeds container element), 2nd dimension is used for the columns and should have a fixed maximum fitting to the container.
 
@@ -26,8 +25,8 @@ Also, you can use a lasso to make a two-dimensional selection:
 
 ![QlikSense Extension 2DimHeatmap](HeatmapSelection.gif)
 
-Additional Properties:
-----------------------
+## Additional Properties:
+
 1. Color and Legend : color schema for measure visualization on tiles
 2. Show Legend : show/hide legend
 3. Dim1 Label Size (left) : max. amount characters shown of 1st dimension label (from left)
@@ -39,8 +38,8 @@ Additional Properties:
 9. Show Numbers in Tiles: shows the measure number in each tile (only useful for small numbers, depending on tile sizes)
 10. Show condition : QlikView-like show condition; useful if you have a measure or selection which doesn't gives you values. If condition <> 1 at least the labels of 1st and 2nd dimension are shown but no tiles.
 
-Sample Application:
--------------------
+## Sample Application:
+
 Qlik Hackathon 2015 Start.qvf - Uses data from Medair to analyse Ebola Outbreak in Sierra Leone.
 
 This app uses also Qlik Sense Extension VariableButton: https://github.com/asierfer/QlikSense-Ext-VariableButton
@@ -54,3 +53,19 @@ With class() function as measure dimension you can have a awesome fast backend c
 Rotation of Dim2 Labels and proper measure formattings:
 
 ![QlikSense Extension 2DimHeatmap](Screenshot5.PNG)
+
+## Author
+
+**Ralf Becher**
+
++ [irregular.bi](http://irregular.bi)
+* [twitter/irregularbi](http://twitter.com/irregularbi)
+* [github.com/ralfbecher](http://github.com/ralfbecher)
+
+## License
+
+Copyright © 2015 Ralf Becher
+
+Released under the MIT license.
+
+***
