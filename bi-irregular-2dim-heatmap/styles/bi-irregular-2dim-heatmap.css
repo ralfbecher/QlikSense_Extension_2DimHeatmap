@@ -1,86 +1,87 @@
-rect.bordered {
-	stroke: #F0F0F0;
-	stroke-width:.4px;
-	fill-opacity: 0.92;
+.qv-object-bi-irregular-2dim-heatmap rect.bordered {
+    stroke: #F0F0F0;
+    stroke-width: .4px;
+    fill-opacity: 0.92;
 }
 
-text.label-brighter {
-	font-size: 9pt;
-	font-family: "QlikView Sans", sans-serif;
-	fill: #F0F0F0;
+.qv-object-bi-irregular-2dim-heatmap text.label-brighter {
+    font-size: 9pt;
+    font-family: "QlikView Sans", sans-serif;
+    fill: #F0F0F0;
 }
 
-text.label-brighter-small {
-	font-size: 6pt;
-	font-family: "QlikView Sans", sans-serif;
-	fill: #F0F0F0;
+.qv-object-bi-irregular-2dim-heatmap text.label-brighter-small {
+    font-size: 6pt;
+    font-family: "QlikView Sans", sans-serif;
+    fill: #F0F0F0;
 }
 
-text.label-darker {
-	font-size: 9pt;
-	font-family: "QlikView Sans", sans-serif;
-	fill: #A0A0A0;
+.qv-object-bi-irregular-2dim-heatmap text.label-darker {
+    font-size: 9pt;
+    font-family: "QlikView Sans", sans-serif;
+    fill: #A0A0A0;
 }
 
-text.label-darker-small {
-	font-size: 6pt;
-	font-family: "QlikView Sans", sans-serif;
-	fill: #A0A0A0;
+.qv-object-bi-irregular-2dim-heatmap text.label-darker-small {
+    font-size: 6pt;
+    font-family: "QlikView Sans", sans-serif;
+    fill: #A0A0A0;
 }
 
-text.mono {
-	font-size: 9pt;
-	font-family: "QlikView Sans", sans-serif;
-	fill: #595959;
+.qv-object-bi-irregular-2dim-heatmap text.mono {
+    font-size: 9pt;
+    font-family: "QlikView Sans", sans-serif;
+    fill: #595959;
 }
 
-text.mono-small {
-	font-size: 6pt;
-	font-family: "QlikView Sans", sans-serif;
-	fill: #595959;
+.qv-object-bi-irregular-2dim-heatmap text.mono-small {
+    font-size: 6pt;
+    font-family: "QlikView Sans", sans-serif;
+    fill: #595959;
 }
 
-text.axis-dim-a {
-	font-family: "QlikView Sans", sans-serif;
-	fill: #595959;
+.qv-object-bi-irregular-2dim-heatmap text.axis-dim-a {
+    font-family: "QlikView Sans", sans-serif;
+    fill: #595959;
 }
 
-text.axis-dim-b {
-	font-family: "QlikView Sans", sans-serif;
-	fill: #595959;
+.qv-object-bi-irregular-2dim-heatmap text.axis-dim-b {
+    font-family: "QlikView Sans", sans-serif;
+    fill: #595959;
 }
+
 
 /* Code for Lasso from here */
 
-.qv-object-TwoDimHeatmap .dot {
-  stroke: #000;
+.qv-object-bi-irregular-2dim-heatmap .dot {
+    stroke: #000;
 }
 
-.qv-object-TwoDimHeatmap .lasso path {
-  stroke: rgb(80,80,80);
-  stroke-width:2px;
+.qv-object-bi-irregular-2dim-heatmap .lasso path {
+    stroke: rgb(80, 80, 80);
+    stroke-width: 2px;
 }
 
-.qv-object-TwoDimHeatmap .lasso .drawn {
-  fill-opacity:.05 ;
+.qv-object-bi-irregular-2dim-heatmap .lasso .drawn {
+    fill-opacity: .05;
 }
 
-.qv-object-TwoDimHeatmap .lasso .loop_close {
-  fill:none;
-  stroke-dasharray: 4,4;
+.qv-object-bi-irregular-2dim-heatmap .lasso .loop_close {
+    fill: none;
+    stroke-dasharray: 4, 4;
 }
 
-.qv-object-TwoDimHeatmap .lasso .origin {
-  fill:#4DC04E;
-  fill-opacity:0.7;
+.qv-object-bi-irregular-2dim-heatmap .lasso .origin {
+    fill: #4DC04E;
+    fill-opacity: 0.7;
 }
 
-.qv-object-TwoDimHeatmap .not_possible {
-  fill:rgb(200,200,200);
+.qv-object-bi-irregular-2dim-heatmap .not_possible {
+    fill: rgb(200, 200, 200);
 }
 
-.qv-object-TwoDimHeatmap .possible {
-  fill:#EC888C;
-  stroke: SlateGray;
-  stroke-width: 2px;
+.qv-object-bi-irregular-2dim-heatmap .possible {
+    fill: #EC888C;
+    stroke: SlateGray;
+    stroke-width: 2px;
 }

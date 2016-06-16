@@ -294,8 +294,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                     } else {
                         // if it hasn't been created, create it with the appropriate id and size
                         $element.append($('<div />').attr({
-                            "id": id,
-                            "class": "qv-object-TwoDimHeatmap"
+                            "id": id
                         }).css({
                             height: height,
                             width: width,
