@@ -1,13 +1,146 @@
-/* 
-irregularUtils.js
+function dateFromQlikNumber(n) {
+    // return: Date from QlikView number
+    var d = new Date((n - 25569) * 86400 * 1000);
+    // since date was created in UTC shift it to the local timezone
+    d.setTime(d.getTime() + d.getTimezoneOffset() * 60 * 1000);
+    return d;
+}
 
-Created by Ralf Becher - ralf.becher@web.de - (c) 2016 irregular.bi, Leipzig, Germany
-Tested on Qlik Sense 2.2.4
+function qlikNumberFromDate(d) {
+    return d.getTime() / 86400000 + 25569;
+}
 
-irregular.bi takes no responsibility for any code.
-Use at your own risk. */
-function isEditMode(b){return b.$scope.$parent.$parent.editmode}function flattenPages(b){var a=[];$.each(b,function(){$.each(this.qMatrix,function(){a.push(this)})});return a}
-function pageExtensionData(b,a,e,h,g,d){console.log("maxDataPages:"+d);d=d||2;var c=0,f=e.qHyperCube.qSize.qcx;console.log(e.qHyperCube.qSize.qcy);var k=Math.floor(1E4/f);b.backendApi.eachDataRow(function(a,b){c=a});b.backendApi.getRowCount()>c+1&&e.qHyperCube.qDataPages.length<d?(f=[{qTop:c+1,qLeft:0,qWidth:f,qHeight:Math.min(k,b.backendApi.getRowCount()-c)}],console.log("requestPage",f),b.backendApi.getData(f).then(function(c){pageExtensionData(b,a,e,h,g,d)})):(f=[],f=flattenPages(e.qHyperCube.qDataPages.slice(0,
-d)),h(a,e,f,b,g))}function toLocalFixedUnPadded(b,a){return b.toLocaleString(void 0,{minimumFractionDigits:0,maximumFractionDigits:a})}function toLocalFixed(b,a){return b.toLocaleString(void 0,{minimumFractionDigits:a,maximumFractionDigits:a})}
-function dataToString(b){if(0<b.length){for(var a="data:text/csv;charset=utf-8,",e=b[0].length,h=b.length,g=encodeURIComponent("\t"),d=encodeURIComponent("\r\n"),c=0;c<e;c++)a+=encodeURIComponent(b[0][c]),a=c<e-1?a+g:a+d;for(var f=1;f<h;f++)for(c=0;c<e;c++)a+=encodeURIComponent(b[f][c]),a=c<e-1?a+g:a+d;console.log(a)}return a}
-function arrayToTable(b,a,e,h){a=$("<table />").attr({"class":a}).css({width:e});e=[];var g,d,c;for(d=0;d<b.length;d+=1){g=$("<tr />");for(c=0;c<b[d].length;c+=1)0===d?g.append($("<th />").css("text-align",h[c]).html(b[d][c])):g.append($("<td />").attr("align",h[c]).html(b[d][c]));e.push(g)}thead=e.shift();thead=$("<thead />").append(thead);a.append(thead);for(d=0;d<e.length;d+=1)a.append(e[d]);return a};
+function isEditMode(obj) {
+    return (obj.inEditState()) || (window.location.pathname.substring(window.location.pathname.length - 10) == "state/edit");
+}
+
+function flattenPages(data) { // function to flatten out the paginated qHyperCube data into one large qMatrix
+    var flat = [];
+    $.each(data, function () {
+        $.each(this.qMatrix, function () {
+            flat.push(this);
+        });
+    });
+    return flat;
+}
+
+function pageExtensionData(me, $el, layout, callback, ref, maxDataPages) { //(this, extension DOM element, layout object from Sense, your callback)
+    console.log("maxDataPages:" + maxDataPages);
+    maxDataPages = maxDataPages || 2;
+    var lastrow = 0
+        //get number of columns
+    var colNums = layout.qHyperCube.qSize.qcx;
+    //calculate how many rows to page. currently, you can't ask for more than 10,000 cells at a time, so the number of rows
+    //needs to be 10,000 divided by number of columns
+    console.log(layout.qHyperCube.qSize.qcy);
+    var calcHeight = Math.floor(10000 / colNums);
+    //loop through the rows we have and render
+    me.backendApi.eachDataRow(function (rownum, row) {
+        //simply by looping through each page, the qHyperCube is updated and will not have more than one page
+        lastrow = rownum;
+    });
+    if (me.backendApi.getRowCount() > lastrow + 1 && layout.qHyperCube.qDataPages.length < maxDataPages) { //if we're not at the last row...
+        //we havent got all the rows yet, so get some more.  we first create a new page request
+        var requestPage = [{
+            qTop: lastrow + 1,
+            qLeft: 0,
+            qWidth: colNums,
+            //should be # of columns
+            qHeight: Math.min(calcHeight, me.backendApi.getRowCount() - lastrow)
+        }];
+        console.log("requestPage", requestPage);
+        me.backendApi.getData(requestPage).then(function (dataPages) {
+            //when we get the result run the function again
+            //console.log("dataPages", dataPages);
+            pageExtensionData(me, $el, layout, callback, ref, maxDataPages);
+        });
+    } else { //if we are at the last row...
+        var bigMatrix = [];
+        //use flattenPages function to create large master qMatrix
+        bigMatrix = flattenPages(layout.qHyperCube.qDataPages.slice(0, maxDataPages));
+        //console.log("maxDataPages", maxDataPages);
+        //console.log("bigMatrix", bigMatrix);
+        //fire off the callback function
+        callback($el, layout, bigMatrix, me, ref);
+        //(DOM element, layout object, new flattened matrix, this)
+    }
+}
+
+function toLocalFixedUnPadded(n, d) {
+    return n.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: d
+    });
+}
+
+function toLocalFixed(n, d) {
+    return n.toLocaleString(undefined, {
+        minimumFractionDigits: d,
+        maximumFractionDigits: d
+    });
+}
+
+function dataToString(data) {
+    if (data.length > 0) {
+        var datastr = "data:text/csv;charset=utf-8,";
+        var noCols = data[0].length;
+        var noRows = data.length;
+        var encDelimiter = encodeURIComponent("\t");
+        var encNewline = encodeURIComponent("\r\n");
+
+        for (var c = 0; c < noCols; c++) {
+            datastr += encodeURIComponent(data[0][c]);
+            if (c < noCols - 1) {
+                datastr += encDelimiter;
+            } else {
+                datastr += encNewline;
+            }
+        }
+        for (var r = 1, noRows; r < noRows; r++) {
+            for (var c = 0; c < noCols; c++) {
+                datastr += encodeURIComponent(data[r][c]);
+                if (c < noCols - 1) {
+                    datastr += encDelimiter;
+                } else {
+                    datastr += encNewline;
+                }
+            }
+        }
+        console.log(datastr);
+    };
+    return datastr;
+}
+
+function arrayToTable(data, cssClass, width, align) {
+    var table = $('<table />').attr({
+            "class": cssClass
+        }).css({
+            "width": width
+        }),
+        rows = [],
+        row,
+        i,
+        j;
+
+    for (i = 0; i < data.length; i = i + 1) {
+        row = $('<tr />');
+        for (j = 0; j < data[i].length; j = j + 1) {
+            if (i === 0) {
+                row.append($('<th />').css("text-align", align[j]).html(data[i][j]));
+            } else {
+                row.append($('<td />').attr("align", align[j]).html(data[i][j]));
+            }
+        }
+        rows.push(row);
+    }
+
+    thead = rows.shift();
+    thead = $('<thead />').append(thead);
+    table.append(thead);
+
+    for (i = 0; i < rows.length; i = i + 1) {
+        table.append(rows[i]);
+    }
+
+    return table;
+}
