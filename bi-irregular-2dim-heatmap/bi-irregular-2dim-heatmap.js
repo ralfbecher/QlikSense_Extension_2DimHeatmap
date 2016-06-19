@@ -13,8 +13,8 @@ irregular.bi takes no responsibility for any code.
 Use at your own risk. 
 */
 define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styles/bi-irregular-2dim-heatmap.css", "./scripts/irregularUtils"],
-    function ($, qlik, d3, lasso, cssContent) {
-        //'use strict';
+    function ($, qlik, d3, lasso) {
+        'use strict';
 
         return {
             initialProperties: {
@@ -302,7 +302,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                         }))
                     }
 
-                    var viz2DimHeatmap = function (_this, app, id, data, qDimensionType, qDimSort, width, height, id, colorpalette, dimensionLabels,
+                    var viz2DimHeatmap = function (_this, app, id, data, qDimensionType, qDimSort, width, height, colorpalette, dimensionLabels,
                         measureLabels, measurePercentage, measureMin, measureMax, dim1LabelSize, dim2LabelSize, dim2LabelRotation,
                         maxGridColums, leastTiles, showCondition, showLegend, showNumbers) {
 
@@ -533,7 +533,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                 // Set up an array to store the data points of selected tiles
                                 var selectarray1 = [],
                                     selectarray2 = [];
-                                for (index = 0; index < selectedItems[0].length; index++) {
+                                for (var index = 0; index < selectedItems[0].length; index++) {
                                     if ($.inArray(selectedItems[0][index].__data__.Element1, selectarray1) === -1 && selectedItems[0][index].__data__.Element1 >= 0) {
                                         selectarray1.push(selectedItems[0][index].__data__.Element1);
                                     }
@@ -759,7 +759,6 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                         qDimSort,
                         width,
                         height,
-                        id,
                         colorpalette,
                         dimensionLabels,
                         measureLabels,
