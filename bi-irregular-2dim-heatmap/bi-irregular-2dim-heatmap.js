@@ -380,8 +380,8 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                         });
 
                         // Sorting Dim2
-                        if (qDimensionType[1] == "N" || qDimensionType[1] == "D") {
-                            // Numeric
+                        if (qDimensionType[1] == "N" || qDimensionType[1] == "T") {
+                            // Numeric or Timestamp
                             if (qDimSort[1] == "A") {
                                 dim2Obj.sort(function (o1, o2) {
                                     return o1.dim2Num - o2.dim2Num;
@@ -549,6 +549,27 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                             }
                         };
 
+
+                        if (isEditMode(_this)) {
+                            var dim1Click = function (d, i) {};
+                            var dim2Click = function (d, i) {};
+                            var tileClick = function (d, i) {};
+                        } else {
+                            var dim1Click = function (d, i) {
+                                if (dim1Elements[i] >= 0)
+                                    _this.backendApi.selectValues(0, [dim1Elements[i]], true);
+                            };
+                            var dim2Click = function (d, i) {
+                                if (dim2Elements[i] >= 0)
+                                    _this.backendApi.selectValues(1, [dim2Elements[i]], true);
+                            };
+
+                            var tileClick = function (d, i) {
+                                if (dim1keys.length > 1 && d.Element1 >= 0) _this.backendApi.selectValues(0, [d.Element1], false);
+                                if (dim2keys.length > 1 && d.Element2 >= 0) _this.backendApi.selectValues(1, [d.Element2], false);
+                            };
+                        }
+
                         var dim1Labels = svg_g.selectAll()
                             .data(dim1LabelsShort)
                             .enter().append("text")
@@ -565,10 +586,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                             .attr("class", function (d, i) {
                                 return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-a");
                             })
-                            .on("click", function (d, i) {
-                                if (dim1Elements[i] >= 0)
-                                    _this.backendApi.selectValues(0, [dim1Elements[i]], true);
-                            })
+                            .on("click", dim1Click)
                             .append("title").text(function (d, i) {
                                 return dimensionLabels[0] + ": " + dim1keys[i]
                             });
@@ -589,10 +607,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                 .attr("class", function (d, i) {
                                     return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
                                 })
-                                .on("click", function (d, i) {
-                                    if (dim2Elements[i] >= 0)
-                                        _this.backendApi.selectValues(1, [dim2Elements[i]], true);
-                                })
+                                .on("click", dim2Click)
                                 .append("title").text(function (d, i) {
                                     return dimensionLabels[1] + ": " + dim2keys[i]
                                 });
@@ -612,10 +627,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                 .attr("class", function (d, i) {
                                     return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
                                 })
-                                .on("click", function (d, i) {
-                                    if (dim2Elements[i] >= 0)
-                                        _this.backendApi.selectValues(1, [dim2Elements[i]], true);
-                                })
+                                .on("click", dim2Click)
                                 .append("title").text(function (d, i) {
                                     return dimensionLabels[1] + ": " + dim2keys[i]
                                 });
@@ -633,11 +645,6 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                 dimensionLabels[1] + ": " + d.Dim2 + "\n" +
                                 measureLabels[0] + ": " + d.Metric1Text +
                                 (d.hasOwnProperty('Metric2') ? "\n" + measureLabels[1] + ": " + (d.Metric2 ? d.Metric2Text : d.Metric2Text) : "");
-                        };
-
-                        var tileClick = function (d, i) {
-                            if (dim1keys.length > 1 && d.Element1 >= 0) _this.backendApi.selectValues(0, [d.Element1], false);
-                            if (dim2keys.length > 1 && d.Element2 >= 0) _this.backendApi.selectValues(1, [d.Element2], false);
                         };
 
                         // all rectangles
@@ -754,9 +761,11 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                             .on("end", lasso_end); // lasso end function		  
                         //-----------------------------------------------------		
 
-                        // Init the lasso on the svg:g that contains the dots	
-                        svg_g_lasso.call(lasso);
-                        lasso.items(d3.select("#" + id).selectAll(".bordered"));
+                        if (!isEditMode(_this)) {
+                            // Init the lasso on the svg:g that contains the dots	
+                            svg_g_lasso.call(lasso);
+                            lasso.items(d3.select("#" + id).selectAll(".bordered"));
+                        }
                     };
 
                     viz2DimHeatmap(
