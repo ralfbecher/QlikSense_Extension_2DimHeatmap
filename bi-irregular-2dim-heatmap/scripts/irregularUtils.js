@@ -10,10 +10,6 @@ function qlikNumberFromDate(d) {
     return d.getTime() / 86400000 + 25569;
 }
 
-function isEditMode(obj) {
-    return (obj.inEditState()) || (window.location.pathname.substring(window.location.pathname.length - 10) == "state/edit");
-}
-
 function flattenPages(data) { // function to flatten out the paginated qHyperCube data into one large qMatrix
     var flat = [];
     $.each(data, function () {

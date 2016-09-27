@@ -12,8 +12,8 @@ Author  : https://github.com/borodri
 irregular.bi takes no responsibility for any code.
 Use at your own risk. 
 */
-define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styles/bi-irregular-2dim-heatmap.css", "./scripts/irregularUtils"],
-    function ($, qlik, d3, lasso) {
+define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styles/bi-irregular-2dim-heatmap.css", "./scripts/irregularUtils"],
+    function ($, qlik, clientUtilsState, d3, lasso) {
         'use strict';
 
         return {
@@ -39,8 +39,8 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                     },
                     measures: {
                         uses: "measures",
-                        min: 1, // 1st measure must be numeric
-                        max: 2 // 2nd measure can be text (concat or else)
+                        min: 1,
+                        max: 2
                     },
                     sorting: {
                         uses: "sorting"
@@ -191,8 +191,8 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                 canTakeSnapshot: true
             },
             paint: function ($element, layout) {
-                // Call irregularUtils to page the data for > 10000 points
-                pageExtensionData(this, $element, layout, heatMap, [qlik, d3, lasso], isEditMode(this) ? 1 : 10);
+                console.log(layout); // Call irregularUtils to page the data for > 10000 points
+                pageExtensionData(this, $element, layout, heatMap, [qlik, d3, lasso], clientUtilsState.isInEditMode() ? 1 : 10);
 
                 function heatMap($element, layout, fullMatrix, _this, ref) {
 
@@ -242,14 +242,20 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                         return d.qSortIndicator;
                     });
 
+                    var qDimTags = layout.qHyperCube.qDimensionInfo.map(function (d) {
+                        return d.qTags.join();
+                    });
+
                     // Create a new array for our extension with a row for each row in the qMatrix
                     var data = qMatrix.map(function (d) {
-                        // for each element in the matrix, create a new object that has a property
-                        // for the grouping dimension(s), and the metric(s)
+                        console.log()
+                            // for each element in the matrix, create a new object that has a property
+                            // for the grouping dimension(s), and the metric(s)
                         if (d.length > 3) {
                             return {
                                 "Dim1": d[0].qText,
                                 "Dim2": d[1].qText,
+                                "Dim1Num": d[0].qNum,
                                 "Dim2Num": d[1].qNum,
                                 "Element1": d[0].qElemNumber,
                                 "Element2": d[1].qElemNumber,
@@ -262,6 +268,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                             return {
                                 "Dim1": d[0].qText,
                                 "Dim2": d[1].qText,
+                                "Dim1Num": d[0].qNum,
                                 "Dim2Num": d[1].qNum,
                                 "Element1": d[0].qElemNumber,
                                 "Element2": d[1].qElemNumber,
@@ -309,6 +316,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                         measureLabels, measurePercentage, measureMin, measureMax, dim1LabelSize, dim2LabelSize, dim2LabelRotation,
                         maxGridColums, leastTiles, showCondition, showLegend, showNumbers) {
 
+                        console.log(data);
                         var formatLegend = function (n) {
                             return n.toLocaleString();
                         }
@@ -323,7 +331,8 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                             .rollup(function (leaves) {
                                 return {
                                     element: leaves[0].Element1,
-                                    count: leaves.length
+                                    count: leaves.length,
+                                    num: leaves[0].Dim1Num
                                 };
                             })
                             .entries(data);
@@ -379,8 +388,10 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                             };
                         });
 
+                        console.log("qDimensionType", qDimensionType);
+
                         // Sorting Dim2
-                        if (qDimensionType[1] == "N" || qDimensionType[1] == "T") {
+                        if (qDimensionType[1] == "N" || qDimensionType[1] == "T" || qDimTags[1].indexOf("$numeric") >= 0) {
                             // Numeric or Timestamp
                             if (qDimSort[1] == "A") {
                                 dim2Obj.sort(function (o1, o2) {
@@ -550,7 +561,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                         };
 
 
-                        if (isEditMode(_this)) {
+                        if (clientUtilsState.isInEditMode()) {
                             var dim1Click = function (d, i) {};
                             var dim2Click = function (d, i) {};
                             var tileClick = function (d, i) {};
@@ -644,11 +655,11 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                             return dimensionLabels[0] + ": " + d.Dim1 + "\n" +
                                 dimensionLabels[1] + ": " + d.Dim2 + "\n" +
                                 measureLabels[0] + ": " + d.Metric1Text +
-                                (d.hasOwnProperty('Metric2') ? "\n" + measureLabels[1] + ": " + (d.Metric2 ? d.Metric2Text : d.Metric2Text) : "");
+                                (d.hasOwnProperty('Metric2') ? "\n" + measureLabels[1] + ": " + d.Metric2Text : "");
                         };
 
                         // all rectangles
-                        var heatMap = svg_g_lasso.selectAll()
+                        var heat = svg_g_lasso.selectAll()
                             .data(data)
                             .enter()
                             .append("rect")
@@ -672,7 +683,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
 
                         if (showNumbers) {
                             // texts inside rectangles
-                            heatMap = svg_g_lasso.selectAll()
+                            heat = svg_g_lasso.selectAll()
                                 .data(data)
                                 .enter()
                                 .append("text")
@@ -761,7 +772,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                             .on("end", lasso_end); // lasso end function		  
                         //-----------------------------------------------------		
 
-                        if (!isEditMode(_this)) {
+                        if (!clientUtilsState.isInEditMode()) {
                             // Init the lasso on the svg:g that contains the dots	
                             svg_g_lasso.call(lasso);
                             lasso.items(d3.select("#" + id).selectAll(".bordered"));
