@@ -12,8 +12,8 @@ Author  : https://github.com/borodri
 irregular.bi takes no responsibility for any code.
 Use at your own risk. 
 */
-define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styles/bi-irregular-2dim-heatmap.css", "./scripts/irregularUtils"],
-    function ($, qlik, clientUtilsState, d3, lasso) {
+define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styles/bi-irregular-2dim-heatmap.css", "./scripts/irregularUtils"],
+    function ($, qlik, d3, lasso) {
         'use strict';
 
         return {
@@ -56,129 +56,196 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                     settings: {
                         uses: "settings",
                         items: {
-                            colors: {
-                                ref: "ColorSchema",
-                                type: "string",
-                                component: "dropdown",
-                                label: "Color and Legend",
-                                options: [
-                                    {
-                                        value: "#3C52A1, #3A82C4, #69ACDE, #9FD0F1, #CFEAFA, #EEDCC5, #F4AA73, #E67A56, #CD473E, #AE1C3E",
-                                        label: "Qlik Sense Diverging"
+
+                            options: {
+                                label: "Options",
+                                type: "items",
+                                items: {
+
+                                    colors: {
+                                        ref: "ColorSchema",
+                                        type: "string",
+                                        component: "dropdown",
+                                        label: "Color Schema",
+                                        options: [
+                                            {
+                                                value: "#3C52A1, #3A82C4, #69ACDE, #9FD0F1, #CFEAFA, #EEDCC5, #F4AA73, #E67A56, #CD473E, #AE1C3E",
+                                                label: "Qlik Sense Diverging"
 										}, {
-                                        value: "#AE1C3E, #CD473E, #E67A56, #F4AA73, #EEDCC5, #CFEAFA, #9FD0F1, #69ACDE, #3A82C4, #3C52A1",
-                                        label: "Qlik Sense Diverging (Reverse)"
+                                                value: "#AE1C3E, #CD473E, #E67A56, #F4AA73, #EEDCC5, #CFEAFA, #9FD0F1, #69ACDE, #3A82C4, #3C52A1",
+                                                label: "Qlik Sense Diverging (Reverse)"
 										}, {
-                                        value: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506",
-                                        label: "Sequencial"
+                                                value: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506",
+                                                label: "Sequencial"
 										}, {
-                                        value: "#662506, #993404, #cc4c02, #ec7014, #fe9929, #fec44f, #fee391, #fff7bc, #ffffe5",
-                                        label: "Sequencial (Reverse)"
+                                                value: "#662506, #993404, #cc4c02, #ec7014, #fe9929, #fec44f, #fee391, #fff7bc, #ffffe5",
+                                                label: "Sequencial (Reverse)"
 										}, {
-                                        value: "#d73027, #f46d43, #fdae61, #fee090, #ffffbf, #e0f3f8, #abd9e9, #74add1, #4575b4",
-                                        label: "Diverging RdYlBu"
+                                                value: "#d73027, #f46d43, #fdae61, #fee090, #ffffbf, #e0f3f8, #abd9e9, #74add1, #4575b4",
+                                                label: "Diverging RdYlBu"
 										}, {
-                                        value: "#4575b4, #74add1, #abd9e9, #e0f3f8, #ffffbf, #fee090, #fdae61, #f46d43, #d73027",
-                                        label: "Diverging BuYlRd (Reverse)"
+                                                value: "#4575b4, #74add1, #abd9e9, #e0f3f8, #ffffbf, #fee090, #fdae61, #f46d43, #d73027",
+                                                label: "Diverging BuYlRd (Reverse)"
 										}, {
-                                        value: "#d73027, #fdae61, #ffffbf, #abd9e9, #4575b4",
-                                        label: "Diverging BuYlRd 5 values"
+                                                value: "#d73027, #fdae61, #ffffbf, #abd9e9, #4575b4",
+                                                label: "Diverging BuYlRd 5 values"
 										}, {
-                                        value: "#4575b4, #abd9e9, #ffffbf, #fdae61, #d73027",
-                                        label: "Diverging BuYlRd 5 values (Reverse)"
+                                                value: "#4575b4, #abd9e9, #ffffbf, #fdae61, #d73027",
+                                                label: "Diverging BuYlRd 5 values (Reverse)"
 										}, {
-                                        value: "#f7fbff, #deebf7, #c6dbef, #9ecae1, #6baed6, #4292c6, #2171b5, #08519c, #08306b",
-                                        label: "Blues"
+                                                value: "#f7fbff, #deebf7, #c6dbef, #9ecae1, #6baed6, #4292c6, #2171b5, #08519c, #08306b",
+                                                label: "Blues"
 										}, {
-                                        value: "#fff5f0, #fee0d2, #fcbba1, #fc9272, #fb6a4a, #ef3b2c, #cb181d, #a50f15, #67000d",
-                                        label: "Reds"
+                                                value: "#fff5f0, #fee0d2, #fcbba1, #fc9272, #fb6a4a, #ef3b2c, #cb181d, #a50f15, #67000d",
+                                                label: "Reds"
 										}, {
-                                        value: "#ffffd9, #edf8b1, #c7e9b4, #7fcdbb, #41b6c4, #1d91c0, #225ea8, #253494, #081d58",
-                                        label: "YlGnBu"
+                                                value: "#ffffd9, #edf8b1, #c7e9b4, #7fcdbb, #41b6c4, #1d91c0, #225ea8, #253494, #081d58",
+                                                label: "YlGnBu"
 										}
 									],
-                                defaultValue: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506"
-                            },
-                            showLegend: {
-                                type: "boolean",
-                                component: "switch",
-                                translation: "Show Legend",
-                                ref: "showLegend",
-                                defaultValue: true,
-                                trueOption: {
-                                    value: true,
-                                    translation: "properties.on"
-                                },
-                                falseOption: {
-                                    value: false,
-                                    translation: "properties.off"
-                                },
-                                show: true
-                            },
-                            dim1LabelSize: {
-                                ref: "dim1LabelSize",
-                                type: "integer",
-                                label: "Dim1 Label Size (left)",
-                                defaultValue: 12
-                            },
-                            dim2LabelSize: {
-                                ref: "dim2LabelSize",
-                                type: "integer",
-                                label: "Dim2 Label Size (right/rotate left)",
-                                defaultValue: 2
-                            },
-                            dim2LabelRotation: {
-                                type: "boolean",
-                                component: "switch",
-                                translation: "Rotate Dim2 Labels by -90°",
-                                ref: "dim2LabelRotation",
-                                defaultValue: false,
-                                trueOption: {
-                                    value: true,
-                                    translation: "properties.on"
-                                },
-                                falseOption: {
-                                    value: false,
-                                    translation: "properties.off"
-                                },
-                                show: true
-                            },
-                            maxGridColums: {
-                                ref: "maxGridColums",
-                                type: "integer",
-                                label: "Max. Columns for Grid",
-                                defaultValue: 18,
-                                expression: "optional"
-                            },
-                            leastTiles: {
-                                ref: "leastTiles",
-                                type: "integer",
-                                label: "Least Tiles in Row",
-                                defaultValue: 1,
-                                expression: "optional"
-                            },
-                            showNumbers: {
-                                type: "boolean",
-                                component: "switch",
-                                translation: "Show Number in Tiles",
-                                ref: "showNumbers",
-                                defaultValue: false,
-                                trueOption: {
-                                    value: true,
-                                    translation: "properties.on"
-                                },
-                                falseOption: {
-                                    value: false,
-                                    translation: "properties.off"
-                                },
-                                show: true
-                            },
-                            showCondition: {
-                                ref: "showCondition",
-                                type: "integer",
-                                label: "Show Condition",
-                                defaultValue: 1,
-                                expression: "optional"
+                                        defaultValue: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506"
+                                    },
+                                    useMeanScale: {
+                                        type: "boolean",
+                                        component: "switch",
+                                        translation: "Use Mean in Scale",
+                                        ref: "useMeanScale",
+                                        defaultValue: true,
+                                        trueOption: {
+                                            value: true,
+                                            translation: "properties.on"
+                                        },
+                                        falseOption: {
+                                            value: false,
+                                            translation: "properties.off"
+                                        }
+                                    },
+                                    fixedScale: {
+                                        type: "boolean",
+                                        component: "switch",
+                                        translation: "Fixed Scale",
+                                        ref: "fixedScale",
+                                        defaultValue: false,
+                                        trueOption: {
+                                            value: true,
+                                            translation: "properties.on"
+                                        },
+                                        falseOption: {
+                                            value: false,
+                                            translation: "properties.off"
+                                        }
+                                    },
+                                    minScale: {
+                                        ref: "minScale",
+                                        type: "number",
+                                        label: "min. Scale Value",
+                                        defaultValue: 0,
+                                        expression: "optional",
+                                        show: function (layout) {
+                                            return layout.fixedScale;
+                                        }
+                                    },
+                                    maxScale: {
+                                        ref: "maxScale",
+                                        type: "number",
+                                        label: "max. Scale Value",
+                                        defaultValue: 1,
+                                        expression: "optional",
+                                        show: function (layout) {
+                                            return layout.fixedScale;
+                                        }
+                                    },
+                                    meanScale: {
+                                        ref: "meanScale",
+                                        type: "number",
+                                        label: "mean Scale Value",
+                                        defaultValue: 0,
+                                        expression: "optional",
+                                        show: function (layout) {
+                                            return layout.useMeanScale;
+                                        }
+                                    },
+                                    showLegend: {
+                                        type: "boolean",
+                                        component: "switch",
+                                        translation: "Show Legend",
+                                        ref: "showLegend",
+                                        defaultValue: true,
+                                        trueOption: {
+                                            value: true,
+                                            translation: "properties.on"
+                                        },
+                                        falseOption: {
+                                            value: false,
+                                            translation: "properties.off"
+                                        }
+                                    },
+                                    dim1LabelSize: {
+                                        ref: "dim1LabelSize",
+                                        type: "integer",
+                                        label: "Dim1 Label Size (left)",
+                                        defaultValue: 12
+                                    },
+                                    dim2LabelSize: {
+                                        ref: "dim2LabelSize",
+                                        type: "integer",
+                                        label: "Dim2 Label Size (right/rotate left)",
+                                        defaultValue: 2
+                                    },
+                                    dim2LabelRotation: {
+                                        type: "boolean",
+                                        component: "switch",
+                                        translation: "Rotate Dim2 Labels by -90°",
+                                        ref: "dim2LabelRotation",
+                                        defaultValue: false,
+                                        trueOption: {
+                                            value: true,
+                                            translation: "properties.on"
+                                        },
+                                        falseOption: {
+                                            value: false,
+                                            translation: "properties.off"
+                                        },
+                                        show: true
+                                    },
+                                    maxGridColums: {
+                                        ref: "maxGridColums",
+                                        type: "integer",
+                                        label: "Max. Columns for Grid",
+                                        defaultValue: 18,
+                                        expression: "optional"
+                                    },
+                                    leastTiles: {
+                                        ref: "leastTiles",
+                                        type: "integer",
+                                        label: "Least Tiles in Row",
+                                        defaultValue: 1,
+                                        expression: "optional"
+                                    },
+                                    showNumbers: {
+                                        type: "boolean",
+                                        component: "switch",
+                                        translation: "Show Number in Tiles",
+                                        ref: "showNumbers",
+                                        defaultValue: false,
+                                        trueOption: {
+                                            value: true,
+                                            translation: "properties.on"
+                                        },
+                                        falseOption: {
+                                            value: false,
+                                            translation: "properties.off"
+                                        },
+                                        show: true
+                                    },
+                                    showCondition: {
+                                        ref: "showCondition",
+                                        type: "integer",
+                                        label: "Show Condition",
+                                        defaultValue: 1,
+                                        expression: "optional"
+                                    }
+                                }
                             }
                         }
                     }
@@ -190,9 +257,11 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
             snapshot: {
                 canTakeSnapshot: true
             },
-            paint: function ($element, layout) {
-                console.log(layout); // Call irregularUtils to page the data for > 10000 points
-                pageExtensionData(this, $element, layout, heatMap, [qlik, d3, lasso], clientUtilsState.isInEditMode() ? 1 : 10);
+            paint: function ($element, layout) { // prevent multiple paint() calls
+                //console.log("Paint", (new Date()).getTime());
+                //console.log(layout);
+                // Call irregularUtils to page the data for > 10000 points
+                pageExtensionData(this, $element, layout, heatMap, [qlik, d3, lasso], qlik.navigation.getMode() === "analysis" ? 10 : 1);
 
                 function heatMap($element, layout, fullMatrix, _this, ref) {
 
@@ -248,7 +317,7 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
 
                     // Create a new array for our extension with a row for each row in the qMatrix
                     var data = qMatrix.map(function (d) {
-                        console.log()
+                        //console.log()
                             // for each element in the matrix, create a new object that has a property
                             // for the grouping dimension(s), and the metric(s)
                         if (d.length > 3) {
@@ -288,7 +357,17 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                         showCondition = layout.showCondition,
                         showLegend = layout.showLegend,
                         localizedNumbers = layout.localizedNumbers,
-                        showNumbers = layout.showNumbers;
+                        showNumbers = layout.showNumbers,
+                        fixedScale = layout.fixedScale,
+                        minScale = layout.minScale,
+                        maxScale = layout.maxScale,
+                        meanScale = layout.meanScale,
+                        useMeanScale = layout.useMeanScale;
+
+                    if (fixedScale) {
+                        measureMin = minScale;
+                        measureMax = maxScale;
+                    }
 
                     // Chart object width
                     var width = $element.width(); // space left for scrollbar
@@ -313,10 +392,10 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                     }
 
                     var viz2DimHeatmap = function (_this, app, id, data, qDimensionType, qDimSort, width, height, colorpalette, dimensionLabels,
-                        measureLabels, measurePercentage, measureMin, measureMax, dim1LabelSize, dim2LabelSize, dim2LabelRotation,
+                        measureLabels, measurePercentage, measureMin, measureMax, meanScale, useMeanScale, dim1LabelSize, dim2LabelSize, dim2LabelRotation,
                         maxGridColums, leastTiles, showCondition, showLegend, showNumbers) {
 
-                        console.log(data);
+                        //console.log(data);
                         var formatLegend = function (n) {
                             return n.toLocaleString();
                         }
@@ -382,13 +461,13 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                         dim2Obj = rollup_dim2.map(function (e) {
                             return {
                                 "dim2key": e.key,
-                                "dim2LabelShort": (dim2LabelRotation ? e.key.substr(0, dim2LabelSize) + (e.key.length > dim2LabelSize && dim2LabelSize > 0 ? dots : "") : e.key.substr(-dim2LabelSize)),
+                                "dim2LabelShort": (dim2LabelRotation ? (e.key.length > dim2LabelSize ? e.key.substr(0, dim2LabelSize -2) + dots : e.key) : e.key.substr(-dim2LabelSize)),
                                 "dim2Element": e.values.element,
                                 "dim2Num": e.values.num
                             };
                         });
 
-                        console.log("qDimensionType", qDimensionType);
+                        //console.log("qDimensionType", qDimensionType);
 
                         // Sorting Dim2
                         if (qDimensionType[1] == "N" || qDimensionType[1] == "T" || qDimTags[1].indexOf("$numeric") >= 0) {
@@ -445,7 +524,7 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                         dim1Obj = rollup_dim1.map(function (e) {
                             return {
                                 "dim1key": e.key,
-                                "dim1LabelShort": e.key.substr(0, dim1LabelSize) + (e.key.length > dim1LabelSize && dim1LabelSize > 0 ? dots : ""),
+                                "dim1LabelShort": e.key.length > dim1LabelSize ? e.key.substr(0, dim1LabelSize -2) + dots : e.key,
                                 "dim1Element": e.values.element
                             };
                         });
@@ -466,17 +545,27 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                         };
                         width = Math.max(150, width - 20); // space for scrollbar
 
-                        if (data.length == 1) {
-                            var colorScale = d3.scale.quantile()
-                                .domain([measureMin, measureMax])
-                                .range(colors);
-                        } else {
-                            var colorScale = d3.scale.quantile()
-                                .domain([measureMin, d3.mean(data, function (d) {
+                        var scaleDomain = [measureMin, measureMax];
+//                        if (useMeanScale && data.length > 1) {
+                        if (useMeanScale) {
+                            if (fixedScale) {                          
+                                if (meanScale == 0) {
+                                    if (measureMin < 0 && measureMax > 0) {
+                                        scaleDomain = [measureMin, 0, measureMax];
+                                    }
+                                } else {
+                                    scaleDomain = [measureMin, meanScale, measureMax];
+                                }
+                            } else {
+                                scaleDomain = [measureMin, d3.mean(data, function (d) {
                                     return +d.Metric1
-                                }), measureMax])
-                                .range(colors);
+                                }), measureMax];
+                            }
                         }
+
+                        var colorScale = d3.scale.quantile()
+                            .domain(scaleDomain)
+                            .range(colors);
 
                         gridSize = Math.floor((width - margin.left - margin.right) / gridDivider);
                         legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length + 1));
@@ -557,27 +646,35 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                                 }
                                 if (selectarray1.length > 0) _this.backendApi.selectValues(0, selectarray1, false);
                                 if (selectarray2.length > 0) _this.backendApi.selectValues(1, selectarray2, false);
+                            } else {
+                                lasso.items()
+                                    .classed({
+                                        "not_possible": false,
+                                        "selected": false
+                                    });                                
                             }
                         };
 
 
-                        if (clientUtilsState.isInEditMode()) {
-                            var dim1Click = function (d, i) {};
-                            var dim2Click = function (d, i) {};
-                            var tileClick = function (d, i) {};
-                        } else {
-                            var dim1Click = function (d, i) {
+                        var dim1Click = function (d, i) {};
+                        var dim2Click = function (d, i) {};
+                        var tileClick = function (d, i) {};
+                        if (qlik.navigation.getMode() === "analysis") {
+                            dim1Click = function (d, i) {
                                 if (dim1Elements[i] >= 0)
                                     _this.backendApi.selectValues(0, [dim1Elements[i]], true);
                             };
-                            var dim2Click = function (d, i) {
+                            dim2Click = function (d, i) {
                                 if (dim2Elements[i] >= 0)
                                     _this.backendApi.selectValues(1, [dim2Elements[i]], true);
                             };
-
-                            var tileClick = function (d, i) {
-                                if (dim1keys.length > 1 && d.Element1 >= 0) _this.backendApi.selectValues(0, [d.Element1], false);
-                                if (dim2keys.length > 1 && d.Element2 >= 0) _this.backendApi.selectValues(1, [d.Element2], false);
+                            tileClick = function (d, i) {
+                                if (dim1keys.length > 1 && d.Element1 >= 0) {
+                                    _this.backendApi.selectValues(0, [d.Element1], false);
+                                }
+                                if (dim2keys.length > 1 && d.Element2 >= 0) {
+                                    _this.backendApi.selectValues(1, [d.Element2], false);
+                                }
                             };
                         }
 
@@ -598,6 +695,14 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                                 return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-a");
                             })
                             .on("click", dim1Click)
+                            .on("mouseenter", function (d, i) {
+                                d3.selectAll('[dim1="' + i + '"]')
+                                    .attr("class", "borderedHover");
+                            })
+                            .on("mouseleave", function (d, i) {
+                                d3.selectAll('[dim1="' + i + '"]')
+                                    .attr("class", "bordered");
+                            })
                             .append("title").text(function (d, i) {
                                 return dimensionLabels[0] + ": " + dim1keys[i]
                             });
@@ -619,6 +724,14 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                                     return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
                                 })
                                 .on("click", dim2Click)
+                                .on("mouseenter", function (d, i) {
+                                    d3.selectAll('[dim2="' + i + '"]')
+                                        .attr("class", "borderedHover");
+                                })
+                                .on("mouseleave", function (d, i) {
+                                    d3.selectAll('[dim2="' + i + '"]')
+                                        .attr("class", "bordered");
+                                })
                                 .append("title").text(function (d, i) {
                                     return dimensionLabels[1] + ": " + dim2keys[i]
                                 });
@@ -639,6 +752,14 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                                     return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
                                 })
                                 .on("click", dim2Click)
+                                .on("mouseenter", function (d, i) {
+                                    d3.selectAll('[dim2="' + i + '"]')
+                                        .attr("class", "borderedHover");
+                                })
+                                .on("mouseleave", function (d, i) {
+                                    d3.selectAll('[dim2="' + i + '"]')
+                                        .attr("class", "bordered");
+                                })
                                 .append("title").text(function (d, i) {
                                     return dimensionLabels[1] + ": " + dim2keys[i]
                                 });
@@ -658,7 +779,7 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                                 (d.hasOwnProperty('Metric2') ? "\n" + measureLabels[1] + ": " + d.Metric2Text : "");
                         };
 
-                        // all rectangles
+                         // all rectangles
                         var heat = svg_g_lasso.selectAll()
                             .data(data)
                             .enter()
@@ -667,18 +788,32 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                             .attr("x", function (d) {
                                 return $.inArray(d.Dim2, dim2keys) * gridSize;
                             })
+                            .attr("dim2", function (d) {
+                                return $.inArray(d.Dim2, dim2keys);
+                            })
                             .attr("y", function (d) {
                                 return $.inArray(d.Dim1, dim1keys) * gridSize;
+                            })
+                            .attr("dim1", function (d) {
+                                return $.inArray(d.Dim1, dim1keys);
                             })
                             .attr("rx", 0)
                             .attr("ry", 0)
                             .attr("class", "bordered")
                             .attr("width", gridSize)
                             .attr("height", gridSize)
-                            .style("fill", function (d) {
-                                return colorScale(d.Metric1);
+                            .attr("fill", function (d) {
+                                return data.length > 1 || fixedScale ? colorScale(d.Metric1) : colors[0];
                             })
                             .on("click", tileClick)
+                            .on("mouseenter", function (d) {
+                                d3.select(this)
+                                    .attr("class", "borderedHover");
+                            })
+                            .on("mouseleave", function (d) {
+                                d3.select(this)
+                                    .attr("class", "bordered");
+                            })
                             .append("title").text(titleText);
 
                         if (showNumbers) {
@@ -697,9 +832,9 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                                 .style("text-anchor", "middle")
                                 .attr("transform", "translate(" + gridSize / 2 + ", 0)")
                                 .attr("class", function (d, i) {
-                                    return ("label" + (d3.hsl(colorScale(d.Metric1)).brighter(1) == "#ffffff" ? "-darker" : "-brighter") + ((gridSize < (d.Metric1Text.length * 7)) ? "-small" : ""));
+                                    return ("label" + (d3.hsl(data.length > 1 || fixedScale ? colorScale(d.Metric1) : colors[0]).brighter(1) == "#ffffff" ? "-darker" : "-brighter") + ((gridSize < (d.Metric1Text.length * 7)) ? "-small" : ""));
                                 })
-                                .on("click", tileClick)
+                                .attr("pointer-events", "none")
                                 .text(function (d) {
                                     return d.Metric1Text;
                                 })
@@ -707,45 +842,31 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                         }
 
                         if (showLegend) {
-                            if (data.length > 1) {
-                                var legend = svg_g.selectAll()
-                                    .data([measureMin].concat(colorScale.quantiles()), function (d) {
-                                        return d;
-                                    })
-                                    .enter().append("g")
-                                    .attr("class", "legend");
+                            var legend = svg_g.selectAll()
+                                .data(data.length > 1 || fixedScale ? [measureMin].concat(colorScale.quantiles()) : [measureMin], function (d) {
+                                    return d;
+                                })
+                                .enter().append("g")
+                                .attr("class", "legend");
 
-                                legend.append("rect")
-                                    .attr("x", function (d, i) {
-                                        return legendElementWidth * i;
-                                    })
-                                    .attr("y", -(38 + dim2RotationOffset)) //height
-                                    .attr("width", legendElementWidth)
-                                    .attr("height", 8)
-                                    .style("fill", function (d, i) {
-                                        return colors[i];
-                                    });
-                            } else {
-                                console.log(data);
-                                var legend = svg_g.selectAll()
-                                    .data([colorScale.quantiles()[0]], function (d) {
-                                        return d;
-                                    })
-                                    .enter().append("g")
-                                    .attr("class", "legend");
-
-                                legend.append("rect")
-                                    .attr("x", function (d, i) {
-                                        return legendElementWidth * i;
-                                    })
-                                    .attr("y", -(38 + dim2RotationOffset)) //height
-                                    .attr("width", legendElementWidth)
-                                    .attr("height", 8)
-                                    .style("fill", function (d, i) {
-                                        return colors[colors.length - 1];
-                                    });
-
-                            }
+                            legend.append("rect")
+                                .attr("x", function (d, i) {
+                                    return legendElementWidth * i;
+                                })
+                                .attr("y", -(38 + dim2RotationOffset)) //height
+                                .attr("width", legendElementWidth)
+                                .attr("height", 8)
+                                .style("fill", function (d, i) {
+                                    return colors[i];
+                                })
+                                .on("mouseenter", function (d, i) {
+                                    d3.selectAll('[fill="' + colors[i] + '"]')
+                                        .attr("class", "borderedHover");
+                                })
+                                .on("mouseleave", function (d, i) {
+                                    d3.selectAll('[fill="' + colors[i] + '"]')
+                                        .attr("class", "bordered");
+                                });
                             legend.append("text")
                                 .attr("class", "mono" + (gridSize < smallSize ? "-small" : ""))
                                 .text(function (d) {
@@ -755,7 +876,16 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                                 .attr("x", function (d, i) {
                                     return legendElementWidth * i;
                                 })
-                                .attr("y", -(40 + dim2RotationOffset)); // height + gridSize
+                                .attr("y", -(40 + dim2RotationOffset)) // height + gridSize
+                                .on("mouseenter", function (d, i) {
+                                    d3.selectAll('[fill="' + colors[i] + '"]')
+                                        .attr("class", "borderedHover");
+                                })
+                                .on("mouseleave", function (d, i) {
+                                    d3.selectAll('[fill="' + colors[i] + '"]')
+                                        .attr("class", "bordered");
+                                });
+
                         }
 
                         // Create the area where the lasso event can be triggered
@@ -772,7 +902,7 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                             .on("end", lasso_end); // lasso end function		  
                         //-----------------------------------------------------		
 
-                        if (!clientUtilsState.isInEditMode()) {
+                        if (qlik.navigation.getMode() === "analysis") {
                             // Init the lasso on the svg:g that contains the dots	
                             svg_g_lasso.call(lasso);
                             lasso.items(d3.select("#" + id).selectAll(".bordered"));
@@ -794,6 +924,8 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                         measurePercentage,
                         measureMin,
                         measureMax,
+                        meanScale,
+                        useMeanScale,
                         dim1LabelSize,
                         dim2LabelSize,
                         dim2LabelRotation,
@@ -803,9 +935,6 @@ define(["jquery", "qlik", "client.utils/state", "./scripts/d3.min", "./scripts/l
                         showLegend,
                         showNumbers
                     );
-                    if (qlik.Promise) {
-                        return qlik.Promise.resolve();
-                    }
                 }
             }
         }

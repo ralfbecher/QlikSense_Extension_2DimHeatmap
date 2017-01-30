@@ -27,16 +27,21 @@ Also, you can use a lasso to make a two-dimensional selection:
 
 ## Additional Properties:
 
-1. Color and Legend : color schema for measure visualization on tiles
-2. Show Legend : show/hide legend
-3. Dim1 Label Size (left) : max. amount characters shown of 1st dimension label (from left)
-4. Dim2 Label Size (right/rotate left) : max. amount characters shown of 2nd dimension label (from right, or from left if rotated)
-5. Rotate Dim2 Labels by -90° : rotate labels counterclockwise, better for more readable labels above small tiles
-6. Max. Columns for Grid : expression to get max. amount of values of 2nd dimension to have a more stable grid layout
-7. Least Tiles in Row : filter rows (1st dimension) with less than minimum amount of tiles (default=1; no filtering) 
-8. Localized Number Format : use a localized number format for decimal and thousands separator
-9. Show Numbers in Tiles: shows the measure number in each tile (only useful for small numbers, depending on tile sizes)
-10. Show condition : QlikView-like show condition; useful if you have a measure or selection which doesn't gives you values. If condition <> 1 at least the labels of 1st and 2nd dimension are shown but no tiles.
+1. Color Schema: color schema for measure visualization on tiles
+2. Use Mean in Scale: calculate mean of data set and use it as middle value in color scale
+3. Fixed Scale: use min/max/mean expressions to define a fixed color scale independent from data set, esp. independet from selections, means selected tiles will have consistent color
+4. min. Scale Value: expression for minimal value to define start of color scale
+5. max. Scale Value: expression for maximal value to define end of color scale
+6. mean Scale Value: expression for mean value to define middle of color scale, set to 0 when no mean should be used
+7. Show Legend: show/hide legend
+8. Dim1 Label Size (left): max. amount characters shown of 1st dimension label (from left)
+9. Dim2 Label Size (right/rotate left): max. amount characters shown of 2nd dimension label (from right, or from left if rotated)
+10. Rotate Dim2 Labels by -90°: rotate labels counterclockwise, better for more readable labels above small tiles
+11. Max. Columns for Grid: expression to get max. amount of values of 2nd dimension to have a more stable grid layout
+12. Least Tiles in Row: filter rows (1st dimension) with less than minimum amount of tiles (default=1; no filtering) 
+13. Localized Number Format: use a localized number format for decimal and thousands separator
+14. Show Numbers in Tiles: shows the measure number in each tile (only useful for small numbers, depending on tile sizes)
+15. Show condition: QlikView-like show condition; useful if you have a measure or selection which doesn't gives you values. If condition <> 1 at least the labels of 1st and 2nd dimension are shown but no tiles.
 
 ## Sample Application:
 
