@@ -803,7 +803,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                             .attr("width", gridSize)
                             .attr("height", gridSize)
                             .attr("fill", function (d) {
-                                return data.length > 1 || fixedScale ? colorScale(d.Metric1) : colors[0];
+                                return (data.length > 1 || fixedScale) ? (!isNaN(d.Metric1)) ? colorScale(d.Metric1) : 'rgba(255, 255, 255, 0)' : colors[0];
                             })
                             .on("click", tileClick)
                             .on("mouseenter", function (d) {
