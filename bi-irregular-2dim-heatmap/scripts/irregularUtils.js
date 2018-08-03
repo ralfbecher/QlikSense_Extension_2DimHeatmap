@@ -31,10 +31,12 @@ function pageExtensionData(me, $el, layout, callback, ref, maxDataPages) { //(th
     console.log(layout.qHyperCube.qSize.qcy);
     var calcHeight = Math.floor(10000 / colNums);
     //loop through the rows we have and render
+
     me.backendApi.eachDataRow(function (rownum, row) {
         //simply by looping through each page, the qHyperCube is updated and will not have more than one page
         lastrow = rownum;
     });
+
     if (me.backendApi.getRowCount() > lastrow + 1 && layout.qHyperCube.qDataPages.length < maxDataPages) { //if we're not at the last row...
         //we havent got all the rows yet, so get some more.  we first create a new page request
         var requestPage = [{

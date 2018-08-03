@@ -461,7 +461,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                         dim2Obj = rollup_dim2.map(function (e) {
                             return {
                                 "dim2key": e.key,
-                                "dim2LabelShort": (dim2LabelRotation ? (e.key.length > dim2LabelSize ? e.key.substr(0, dim2LabelSize -2) + dots : e.key) : e.key.substr(-dim2LabelSize)),
+                                "dim2LabelShort": (dim2LabelRotation ? (e.key.length > dim2LabelSize ? e.key.substr(0, dim2LabelSize -2) + (dim2LabelSize > 0 ? dots : "") : e.key) : e.key.substr(-dim2LabelSize)),
                                 "dim2Element": e.values.element,
                                 "dim2Num": e.values.num
                             };
@@ -508,7 +508,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                             return e.dim2Element;
                         });
 
-                        var dim2RotationOffset = (dim2LabelRotation ? (dim2LabelSize * 4) : 0);
+                        var dim2RotationOffset = (dim2LabelRotation ? (dim2LabelSize * 5) : 0);
                         var marginLeft = function () {
                             return (dim1LabelSize * 7) + 10;
                         };
@@ -524,7 +524,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                         dim1Obj = rollup_dim1.map(function (e) {
                             return {
                                 "dim1key": e.key,
-                                "dim1LabelShort": e.key.length > dim1LabelSize ? e.key.substr(0, dim1LabelSize -2) + dots : e.key,
+                                "dim1LabelShort": e.key.length > dim1LabelSize ? e.key.substr(0, dim1LabelSize -2) + (dim1LabelSize > 0 ? dots : "") : e.key,
                                 "dim1Element": e.values.element
                             };
                         });

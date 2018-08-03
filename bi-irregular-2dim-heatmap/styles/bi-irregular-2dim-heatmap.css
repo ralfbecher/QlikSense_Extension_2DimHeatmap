@@ -4,6 +4,12 @@
     fill-opacity: 0.92;
 }
 
+.qv-object-bi-irregular-2dim-heatmap rect.borderedHover {
+    stroke: #C4C4C4;
+    stroke-width: 2px;
+    fill-opacity: 0.6;
+}
+
 .qv-object-bi-irregular-2dim-heatmap text.label-brighter {
     font-size: 9pt;
     font-family: "QlikView Sans", sans-serif;
@@ -76,12 +82,13 @@
     fill-opacity: 0.7;
 }
 
+/*
 .qv-object-bi-irregular-2dim-heatmap .not_possible {
     fill: rgb(200, 200, 200);
 }
 
 .qv-object-bi-irregular-2dim-heatmap .possible {
-    fill: #EC888C;
+    fill: #52CC52; #EC888C;
     stroke: SlateGray;
     stroke-width: 2px;
-}
+}*/
