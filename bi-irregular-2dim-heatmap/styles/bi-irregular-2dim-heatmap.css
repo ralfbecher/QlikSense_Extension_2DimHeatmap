@@ -37,23 +37,23 @@
 .qv-object-bi-irregular-2dim-heatmap text.mono {
     font-size: 9pt;
     font-family: "QlikView Sans", sans-serif;
-    fill: #595959;
+    /* fill: #595959; */
 }
 
 .qv-object-bi-irregular-2dim-heatmap text.mono-small {
     font-size: 6pt;
     font-family: "QlikView Sans", sans-serif;
-    fill: #595959;
+    /* fill: #595959; */
 }
 
 .qv-object-bi-irregular-2dim-heatmap text.axis-dim-a {
     font-family: "QlikView Sans", sans-serif;
-    fill: #595959;
+    /* fill: #595959; */
 }
 
 .qv-object-bi-irregular-2dim-heatmap text.axis-dim-b {
     font-family: "QlikView Sans", sans-serif;
-    fill: #595959;
+    /* fill: #595959; */
 }
 
 

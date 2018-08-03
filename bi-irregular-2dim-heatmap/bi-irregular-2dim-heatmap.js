@@ -105,6 +105,17 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
 									],
                                         defaultValue: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506"
                                     },
+                                    
+                                    LabelColorPicker: {
+                                        ref: "labelColor",
+                                        label:"Label Color",
+                                        component: "color-picker",
+                                        type: "object",  
+                                        defaultValue: {
+                                            index: 0,
+                                            color: "#ffffff"
+                                        }
+                                    },
                                     useMeanScale: {
                                         type: "boolean",
                                         component: "switch",
@@ -362,7 +373,8 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                         minScale = layout.minScale,
                         maxScale = layout.maxScale,
                         meanScale = layout.meanScale,
-                        useMeanScale = layout.useMeanScale;
+                        useMeanScale = layout.useMeanScale,
+                        labelColor = layout.labelColor;
 
                     if (fixedScale) {
                         measureMin = minScale;
@@ -393,7 +405,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
 
                     var viz2DimHeatmap = function (_this, app, id, data, qDimensionType, qDimSort, width, height, colorpalette, dimensionLabels,
                         measureLabels, measurePercentage, measureMin, measureMax, meanScale, useMeanScale, dim1LabelSize, dim2LabelSize, dim2LabelRotation,
-                        maxGridColums, leastTiles, showCondition, showLegend, showNumbers) {
+                        maxGridColums, leastTiles, showCondition, showLegend, showNumbers, labelColor) {
 
                         //console.log(data);
                         var formatLegend = function (n) {
@@ -694,6 +706,10 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                             .attr("class", function (d, i) {
                                 return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-a");
                             })
+                            .style('fill', function (d, i) {
+                                console.log('palette and colors', labelColor);
+                                return labelColor.color;
+                            })
                             .on("click", dim1Click)
                             .on("mouseenter", function (d, i) {
                                 d3.selectAll('[dim1="' + i + '"]')
@@ -723,6 +739,9 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                 .attr("class", function (d, i) {
                                     return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
                                 })
+                                .style('fill', function (d, i) {
+                                    return labelColor.color;
+                                })
                                 .on("click", dim2Click)
                                 .on("mouseenter", function (d, i) {
                                     d3.selectAll('[dim2="' + i + '"]')
@@ -750,6 +769,9 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                 .attr("transform", "translate(" + gridSize / 2 + ", -6)")
                                 .attr("class", function (d, i) {
                                     return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
+                                })
+                                .style('fill', function (d, i) {
+                                    return labelColor.color;
                                 })
                                 .on("click", dim2Click)
                                 .on("mouseenter", function (d, i) {
@@ -933,7 +955,8 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                         leastTiles,
                         showCondition,
                         showLegend,
-                        showNumbers
+                        showNumbers,
+                        labelColor
                     );
                 }
             }
