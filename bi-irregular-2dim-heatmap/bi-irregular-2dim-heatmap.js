@@ -110,10 +110,11 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                         ref: "labelColor",
                                         label:"Label Color",
                                         component: "color-picker",
+                                        dualOutput: true,
                                         type: "object",  
                                         defaultValue: {
-                                            index: 0,
-                                            color: "#ffffff"
+                                            index: -1,
+                                            color: "#595959"
                                         }
                                     },
                                     useMeanScale: {
@@ -706,10 +707,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                             .attr("class", function (d, i) {
                                 return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-a");
                             })
-                            .style('fill', function (d, i) {
-                                console.log('palette and colors', labelColor);
-                                return labelColor.color;
-                            })
+                            .style('fill', labelColor.color)
                             .on("click", dim1Click)
                             .on("mouseenter", function (d, i) {
                                 d3.selectAll('[dim1="' + i + '"]')
@@ -739,9 +737,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                 .attr("class", function (d, i) {
                                     return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
                                 })
-                                .style('fill', function (d, i) {
-                                    return labelColor.color;
-                                })
+                                .style('fill', labelColor.color)
                                 .on("click", dim2Click)
                                 .on("mouseenter", function (d, i) {
                                     d3.selectAll('[dim2="' + i + '"]')
@@ -770,9 +766,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                 .attr("class", function (d, i) {
                                     return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
                                 })
-                                .style('fill', function (d, i) {
-                                    return labelColor.color;
-                                })
+                                .style('fill', labelColor.color)
                                 .on("click", dim2Click)
                                 .on("mouseenter", function (d, i) {
                                     d3.selectAll('[dim2="' + i + '"]')
@@ -895,6 +889,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                     //console.log("Legend:", d);
                                     return (gridSize < smallSize ? "" : "≥ ") + (measurePercentage ? formatLegend(Math.round(d * 1000) / 10) + "%" : formatLegend(d > 1 ? Math.round(d) : d));
                                 })
+                                .style('fill', labelColor.color)
                                 .attr("x", function (d, i) {
                                     return legendElementWidth * i;
                                 })
