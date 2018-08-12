@@ -4,6 +4,12 @@
     fill-opacity: 0.92;
 }
 
+.qv-object-bi-irregular-2dim-heatmap rect.no-border {
+    stroke: #F0F0F0;
+    stroke-width: 0px;
+    fill-opacity: 0.92;
+}
+
 .qv-object-bi-irregular-2dim-heatmap rect.borderedHover {
     stroke: #C4C4C4;
     stroke-width: 2px;
@@ -78,9 +84,9 @@
     fill-opacity: 0.7;
 }
 
-.qv-object-bi-irregular-2dim-heatmap .not_possible {
+/* .qv-object-bi-irregular-2dim-heatmap .not-possible {
     fill: rgb(200, 200, 200);
-}
+} */
 
 .qv-object-bi-irregular-2dim-heatmap .possible {
     fill: #52CC52;

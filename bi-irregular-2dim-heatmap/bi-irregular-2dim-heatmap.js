@@ -12,9 +12,19 @@ Author  : https://github.com/borodri
 irregular.bi takes no responsibility for any code.
 Use at your own risk. 
 */
-define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styles/bi-irregular-2dim-heatmap.css", "./scripts/irregularUtils"],
-    function ($, qlik, d3, lasso) {
-        'use strict';
+define([
+    "jquery", 
+    "qlik", 
+    "./scripts/d3.min", 
+    "./scripts/lasso_adj", 
+    "css!./styles/bi-irregular-2dim-heatmap.css", 
+    "./scripts/irregularUtils"
+], function ($, qlik, d3, lasso) {
+    'use strict';
+
+        var panelSliderLabel = function () {
+            return this.labelText + " (" + arguments[0][this.ref] + ")";
+        };
 
         return {
             initialProperties: {
@@ -227,12 +237,45 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                         defaultValue: 18,
                                         expression: "optional"
                                     },
+                                    heightFactor: {
+                                        ref: "heightFactor",
+                                        type: "number",
+                                        label: "Height Factor",
+                                        defaultValue: 1,
+                                        expression: "optional"
+                                    },
                                     leastTiles: {
                                         ref: "leastTiles",
                                         type: "integer",
                                         label: "Least Tiles in Row",
                                         defaultValue: 1,
                                         expression: "optional"
+                                    },
+                                    tileBorder: {
+                                        type: "boolean",
+                                        component: "switch",
+                                        translation: "Render Tiles w/ Border",
+                                        ref: "tileBorder",
+                                        defaultValue: true,
+                                        trueOption: {
+                                            value: true,
+                                            translation: "properties.on"
+                                        },
+                                        falseOption: {
+                                            value: false,
+                                            translation: "properties.off"
+                                        }
+                                    },
+                                    tileOpacity: {
+                                        ref: "tileOpacity",
+                                        type: "number",
+                                        component: "slider",
+                                        labelText: "Tile Opacity",
+                                        label: panelSliderLabel,
+                                        defaultValue: 1,
+                                        min: 0,
+                                        max: 1,
+                                        step: 0.02
                                     },
                                     showNumbers: {
                                         type: "boolean",
@@ -247,8 +290,22 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                         falseOption: {
                                             value: false,
                                             translation: "properties.off"
+                                        }
+                                    },
+                                    lassoSelection: {
+                                        type: "boolean",
+                                        component: "switch",
+                                        translation: "Lasso Selection",
+                                        ref: "lassoSelection",
+                                        defaultValue: true,
+                                        trueOption: {
+                                            value: true,
+                                            translation: "properties.on"
                                         },
-                                        show: true
+                                        falseOption: {
+                                            value: false,
+                                            translation: "properties.off"
+                                        }
                                     },
                                     showCondition: {
                                         ref: "showCondition",
@@ -277,7 +334,9 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
 
                 function heatMap($element, layout, fullMatrix, _this, ref) {
 
-                    $element.html("");
+                    //$element.html("");
+                    $element.empty();
+                    
                     var qlik = ref[0],
                         d3 = ref[1],
                         lasso = [2];
@@ -365,17 +424,20 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                         dim2LabelSize = layout.dim2LabelSize,
                         dim2LabelRotation = layout.dim2LabelRotation,
                         maxGridColums = layout.maxGridColums,
+                        heightFactor = layout.heightFactor,
                         leastTiles = layout.leastTiles,
                         showCondition = layout.showCondition,
                         showLegend = layout.showLegend,
-                        localizedNumbers = layout.localizedNumbers,
+                        tileBorder = layout.tileBorder,
+                        tileOpacity = layout.tileOpacity,
                         showNumbers = layout.showNumbers,
                         fixedScale = layout.fixedScale,
                         minScale = layout.minScale,
                         maxScale = layout.maxScale,
                         meanScale = layout.meanScale,
                         useMeanScale = layout.useMeanScale,
-                        labelColor = layout.labelColor;
+                        labelColor = layout.labelColor,
+                        lassoSelection = layout.lassoSelection;
 
                     if (fixedScale) {
                         measureMin = minScale;
@@ -406,13 +468,10 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
 
                     var viz2DimHeatmap = function (_this, app, id, data, qDimensionType, qDimSort, width, height, colorpalette, dimensionLabels,
                         measureLabels, measurePercentage, measureMin, measureMax, meanScale, useMeanScale, dim1LabelSize, dim2LabelSize, dim2LabelRotation,
-                        maxGridColums, leastTiles, showCondition, showLegend, showNumbers, labelColor) {
+                        maxGridColums, heightFactor, leastTiles, showCondition, showLegend, showNumbers, labelColor, tileBorder, tileOpacity, lassoSelection) {
 
                         //console.log(data);
                         var formatLegend = function (n) {
-                            return n.toLocaleString();
-                        }
-                        var formatTitle = function (n) {
                             return n.toLocaleString();
                         }
 
@@ -592,7 +651,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
 
                         var svg = d3.select("#" + id).append("svg:svg")
                             .attr("width", width)
-                            .attr("height", (showLegend ? 50 : 20) + dim2RotationOffset + (dim1keys.length * gridSize));
+                            .attr("height", (showLegend ? 50 : 20) + dim2RotationOffset + (dim1keys.length * gridSize * heightFactor));
 
                         var svg_g = svg.append("g")
                             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -600,12 +659,11 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                         // Adding lasso area
                         svg_g.append("rect")
                             .attr("width", dim2keys.length * gridSize)
-                            .attr("height", dim1keys.length * gridSize)
+                            .attr("height", dim1keys.length * gridSize * heightFactor)
                             .attr("class", "lassoable")
                             .style("opacity", 0);
 
-                        var svg_g_lasso = svg_g.append("g")
-                            .attr("class", "lassoable")
+                        var svg_g_lasso = svg_g.append("g");
 
                         // Lasso functions to execute while lassoing
                         var lasso_start = function () {
@@ -615,7 +673,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                             // clear all of the fills 
                             lasso.items()
                                 .classed({
-                                    "not_possible": true,
+                                    "not-possible": true,
                                     "selected": false
                                 }); // style as not possible
                         };
@@ -626,7 +684,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                     return d.possible === true
                                 })
                                 .classed({
-                                    "not_possible": false,
+                                    "not-possible": false,
                                     "possible": true
                                 });
 
@@ -635,7 +693,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                     return d.possible === false
                                 })
                                 .classed({
-                                    "not_possible": true,
+                                    "not-possible": true,
                                     "possible": false
                                 });
                         };
@@ -660,14 +718,20 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                 if (selectarray1.length > 0) _this.backendApi.selectValues(0, selectarray1, false);
                                 if (selectarray2.length > 0) _this.backendApi.selectValues(1, selectarray2, false);
                             } else {
+                                // switch tile classes back
                                 lasso.items()
                                     .classed({
-                                        "not_possible": false,
+                                        "not-possible": false,
                                         "selected": false
-                                    });                                
+                                    });
+
+                                // select element (no lasso selection) since lasso blocks click event
+                                var el = lasso.firstElement();
+                                if (el) {
+                                    el.dispatchEvent(new MouseEvent("click"));
+                                }                            
                             }
                         };
-
 
                         var dim1Click = function (d, i) {};
                         var dim2Click = function (d, i) {};
@@ -699,13 +763,13 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                             })
                             .attr("x", 0)
                             .attr("y", function (d, i) {
-                                return i * gridSize;
+                                return i * gridSize * heightFactor;
                             })
                             .attr("dy", ".35em")
                             .style("text-anchor", "end")
-                            .attr("transform", "translate(-6," + (gridSize / 2) + ")")
+                            .attr("transform", "translate(-6," + (gridSize * heightFactor/ 2) + ")")
                             .attr("class", function (d, i) {
-                                return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-a");
+                                return ("mono" + (gridSize * heightFactor < smallSize ? "-small" : "") + " axis-dim-a");
                             })
                             .style('fill', labelColor.color)
                             .on("click", dim1Click)
@@ -715,7 +779,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                             })
                             .on("mouseleave", function (d, i) {
                                 d3.selectAll('[dim1="' + i + '"]')
-                                    .attr("class", "bordered");
+                                    .attr("class", tileBorder ? "bordered" : "no-border");
                             })
                             .append("title").text(function (d, i) {
                                 return dimensionLabels[0] + ": " + dim1keys[i]
@@ -745,7 +809,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                 })
                                 .on("mouseleave", function (d, i) {
                                     d3.selectAll('[dim2="' + i + '"]')
-                                        .attr("class", "bordered");
+                                        .attr("class", tileBorder ? "bordered" : "no-border");
                                 })
                                 .append("title").text(function (d, i) {
                                     return dimensionLabels[1] + ": " + dim2keys[i]
@@ -774,7 +838,7 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                 })
                                 .on("mouseleave", function (d, i) {
                                     d3.selectAll('[dim2="' + i + '"]')
-                                        .attr("class", "bordered");
+                                        .attr("class", tileBorder ? "bordered" : "no-border");
                                 })
                                 .append("title").text(function (d, i) {
                                     return dimensionLabels[1] + ": " + dim2keys[i]
@@ -808,32 +872,34 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                 return $.inArray(d.Dim2, dim2keys);
                             })
                             .attr("y", function (d) {
-                                return $.inArray(d.Dim1, dim1keys) * gridSize;
+                                return $.inArray(d.Dim1, dim1keys) * gridSize * heightFactor;
                             })
                             .attr("dim1", function (d) {
                                 return $.inArray(d.Dim1, dim1keys);
                             })
                             .attr("rx", 0)
                             .attr("ry", 0)
-                            .attr("class", "bordered")
+                            .attr("class", tileBorder ? "bordered" : "no-border")
                             .attr("width", gridSize)
-                            .attr("height", gridSize)
+                            .attr("height", gridSize * heightFactor)
                             .attr("fill", function (d) {
                                 return (data.length > 1 || fixedScale) ? (!isNaN(d.Metric1)) ? colorScale(d.Metric1) : 'rgba(255, 255, 255, 0)' : colors[0];
                             })
-                            .on("click", tileClick)
+                            .style("opacity", tileOpacity)
+                            .on("click", tileClick) 
                             .on("mouseenter", function (d) {
                                 d3.select(this)
                                     .attr("class", "borderedHover");
                             })
                             .on("mouseleave", function (d) {
                                 d3.select(this)
-                                    .attr("class", "bordered");
+                                    .attr("class", tileBorder ? "bordered" : "no-border");
                             })
                             .append("title").text(titleText);
 
                         if (showNumbers) {
                             // texts inside rectangles
+    
                             heat = svg_g_lasso.selectAll()
                                 .data(data)
                                 .enter()
@@ -842,13 +908,14 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                     return ($.inArray(d.Dim2, dim2keys) * gridSize);
                                 })
                                 .attr("y", function (d) {
-                                    return ($.inArray(d.Dim1, dim1keys) * gridSize) + gridSize / 2;
+                                    return ($.inArray(d.Dim1, dim1keys) * gridSize * heightFactor) + gridSize * heightFactor / 2;
                                 })
                                 .attr("dy", ".35em")
                                 .style("text-anchor", "middle")
                                 .attr("transform", "translate(" + gridSize / 2 + ", 0)")
                                 .attr("class", function (d, i) {
-                                    return ("label" + (d3.hsl(data.length > 1 || fixedScale ? colorScale(d.Metric1) : colors[0]).brighter(1) == "#ffffff" ? "-darker" : "-brighter") + ((gridSize < (d.Metric1Text.length * 7)) ? "-small" : ""));
+                                    return ("label" + (d3.hsl(data.length > 1 || fixedScale ? colorScale(d.Metric1) : colors[0]).brighter(1) == "#ffffff" || tileOpacity < 0.3 
+                                        ? "-darker" : "-brighter") + ((gridSize < (d.Metric1Text.length * 7)) ? "-small" : ""));
                                 })
                                 .attr("pointer-events", "none")
                                 .text(function (d) {
@@ -875,13 +942,14 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                 .style("fill", function (d, i) {
                                     return colors[i];
                                 })
+                                .style("opacity", tileOpacity)
                                 .on("mouseenter", function (d, i) {
                                     d3.selectAll('[fill="' + colors[i] + '"]')
                                         .attr("class", "borderedHover");
                                 })
                                 .on("mouseleave", function (d, i) {
                                     d3.selectAll('[fill="' + colors[i] + '"]')
-                                        .attr("class", "bordered");
+                                        .attr("class", tileBorder ? "bordered" : "no-border");
                                 });
                             legend.append("text")
                                 .attr("class", "mono" + (gridSize < smallSize ? "-small" : ""))
@@ -900,29 +968,30 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                                 })
                                 .on("mouseleave", function (d, i) {
                                     d3.selectAll('[fill="' + colors[i] + '"]')
-                                        .attr("class", "bordered");
+                                        .attr("class", tileBorder ? "bordered" : "no-border");
                                 });
 
                         }
 
-                        // Create the area where the lasso event can be triggered
-                        var lasso_area = d3.select("#" + id).selectAll(".lassoable");
-                        //-----------------------------------------------------
-                        // Define the lasso
-                        var lasso = d3.lasso()
-                            .closePathDistance(75) // max distance for the lasso loop to be closed
-                            .closePathSelect(true) // can items be selected by closing the path?
-                            .hoverSelect(true) // can items by selected by hovering over them?
-                            .area(lasso_area) // area where the lasso can be started
-                            .on("start", lasso_start) // lasso start function
-                            .on("draw", lasso_draw) // lasso draw function
-                            .on("end", lasso_end); // lasso end function		  
-                        //-----------------------------------------------------		
+                        if (qlik.navigation.getMode() === "analysis" && lassoSelection) {
+                            // Create the area where the lasso event can be triggered
+                            var lasso_area = svg_g_lasso; //d3.select("#" + id).selectAll(".lassoable");
+                            
+                            //-----------------------------------------------------
+                            // Define the lasso
+                            var lasso = d3.lasso()
+                                .closePathDistance(75) // max distance for the lasso loop to be closed
+                                .closePathSelect(true) // can items be selected by closing the path?
+                                .hoverSelect(true) // can items by selected by hovering over them?
+                                .area(lasso_area) // area where the lasso can be started
+                                .on("start", lasso_start) // lasso start function
+                                .on("draw", lasso_draw) // lasso draw function
+                                .on("end", lasso_end); // lasso end function		  
+                            //-----------------------------------------------------		
 
-                        if (qlik.navigation.getMode() === "analysis") {
                             // Init the lasso on the svg:g that contains the dots	
+                            lasso.items(d3.select("#" + id).selectAll(tileBorder ? ".bordered" : ".no-border"));
                             svg_g_lasso.call(lasso);
-                            lasso.items(d3.select("#" + id).selectAll(".bordered"));
                         }
                     };
 
@@ -947,11 +1016,15 @@ define(["jquery", "qlik", "./scripts/d3.min", "./scripts/lasso_adj", "css!./styl
                         dim2LabelSize,
                         dim2LabelRotation,
                         maxGridColums,
+                        heightFactor,
                         leastTiles,
                         showCondition,
                         showLegend,
                         showNumbers,
-                        labelColor
+                        labelColor,
+                        tileBorder,
+                        tileOpacity,
+                        lassoSelection
                     );
                 }
             }

@@ -21,14 +21,14 @@ function flattenPages(data) { // function to flatten out the paginated qHyperCub
 }
 
 function pageExtensionData(me, $el, layout, callback, ref, maxDataPages) { //(this, extension DOM element, layout object from Sense, your callback)
-    console.log("maxDataPages:" + maxDataPages);
+    //console.log("maxDataPages:" + maxDataPages);
     maxDataPages = maxDataPages || 2;
     var lastrow = 0
         //get number of columns
     var colNums = layout.qHyperCube.qSize.qcx;
     //calculate how many rows to page. currently, you can't ask for more than 10,000 cells at a time, so the number of rows
     //needs to be 10,000 divided by number of columns
-    console.log(layout.qHyperCube.qSize.qcy);
+    //console.log(layout.qHyperCube.qSize.qcy);
     var calcHeight = Math.floor(10000 / colNums);
     //loop through the rows we have and render
 

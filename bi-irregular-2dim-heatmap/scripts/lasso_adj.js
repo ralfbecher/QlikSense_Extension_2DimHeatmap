@@ -10,6 +10,7 @@ define(["jquery", "./d3.min"], function ($, d3) {
             hoverSelect = true,
             points = [],
             area = null,
+            firstElement = null,
             on = {
                 start: function () {},
                 draw: function () {},
@@ -45,6 +46,9 @@ define(["jquery", "./d3.min"], function ($, d3) {
             area.call(drag);
 
             function dragstart() {
+                // store element for click event simulation
+                lasso.firstElement(document.elementFromPoint(d3.event.sourceEvent.clientX, d3.event.sourceEvent.clientY));
+
                 // Reset blank lasso path
                 path = "";
                 tpath = "";
@@ -75,8 +79,6 @@ define(["jquery", "./d3.min"], function ($, d3) {
                             right: 0
                         }
                     };
-
-
                 });
 
                 // if hover is on, add hover function
@@ -358,6 +360,12 @@ define(["jquery", "./d3.min"], function ($, d3) {
         lasso.area = function (_) {
             if (!arguments.length) return area;
             area = _;
+            return lasso;
+        }
+
+        lasso.firstElement = function (_) {
+            if (!arguments.length) return firstElement;
+            firstElement = _;
             return lasso;
         }
 
