@@ -2,7 +2,7 @@
 
 **Status**
 
-[![CircleCI](https://circleci.com/gh/qlik-oss/sense-images-links-extension.svg?style=svg)](https://circleci.com/gh/qlik-oss/sense-images-links-extension)
+[![CircleCI](https://circleci.com/gh/qlik-oss/QlikSense_Extension_2DimHeatmap.svg?style=svg)](https://circleci.com/gh/qlik-oss/QlikSense_Extension_2DimHeatmap)
 
 This extension shows a matrix of colored tiles by two dimensions. The 1st dimension is used for the rows (variable, scrollbar if exceeds container element), 2nd dimension is used for the columns and should have a fixed maximum fitting to the container.
 
