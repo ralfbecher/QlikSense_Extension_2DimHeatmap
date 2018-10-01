@@ -1,5 +1,9 @@
 ## Qlik Sense Extension 2 Dimensional Heatmap
 
+**Status**
+
+[![CircleCI](https://circleci.com/gh/qlik-oss/sense-images-links-extension.svg?style=svg)](https://circleci.com/gh/qlik-oss/sense-images-links-extension)
+
 This extension shows a matrix of colored tiles by two dimensions. The 1st dimension is used for the rows (variable, scrollbar if exceeds container element), 2nd dimension is used for the columns and should have a fixed maximum fitting to the container.
 
 For best adoption use a numerical dimension for the 2nd dimension (columns) with a very short label like week (label: 01..53)
