@@ -1,7 +1,7 @@
 version: 2
 
 defaults: &defaults
-  working_directory: ~/bi-irregular-2dim-heatmap
+  working_directory: ~/QlikSense_Extension_2DimHeatmap
   docker:
     - image: circleci/node:stretch
   environment:
@@ -22,7 +22,7 @@ jobs:
           environment:
             NODE_ENV: production
       - persist_to_workspace:
-          root: ~/bi-irregular-2dim-heatmap
+          root: ~/QlikSense_Extension_2DimHeatmap
           paths:
             - build
   deploy:
@@ -30,7 +30,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/bi-irregular-2dim-heatmap
+          at: ~/QlikSense_Extension_2DimHeatmap
       - run:
           name: Install ghr
           command: scripts/install-ghr.sh

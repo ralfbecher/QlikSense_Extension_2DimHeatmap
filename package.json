@@ -1,5 +1,5 @@
 {
-  "name": "bi-irregular-2dim-heatmap",
+  "name": "QlikSense_Extension_2DimHeatmap",
   "version": "0.0.1",
   "description": "Qlik Sense Extension 2 Dimensional Heatmap",
   "keywords": "2D heatmap qliksense extension",
