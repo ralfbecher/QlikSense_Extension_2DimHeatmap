@@ -1,13 +1,53 @@
 version: 2
+
+defaults: &defaults
+  working_directory: ~/bi-irregular-2dim-heatmap
+  docker:
+    - image: circleci/node:stretch
+  environment:
+    GITHUB_ORG: "qlik-oss"
+    GITHUB_REPO: "QlikSense_Extension_2DimHeatmap"
+
 jobs:
   build:
-    docker:
-      - image: debian:stretch
+    <<: *defaults
     steps:
       - checkout
       - run:
-          name: Greeting
-          command: echo Hello, world.
+          name: Install dependencies
+          command: npm install
       - run:
-          name: Print the Current Time
-          command: date
+          name: Build and package
+          command: npm run build
+          environment:
+            NODE_ENV: production
+      - persist_to_workspace:
+          root: ~/bi-irregular-2dim-heatmap
+          paths:
+            - build
+  deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/bi-irregular-2dim-heatmap
+      - run:
+          name: Install ghr
+          command: scripts/install-ghr.sh
+      - run:
+          name: Create GitHub Release
+          command: scripts/create-release.sh $GITHUB_ORG $GITHUB_REPO
+
+workflows:
+  version: 2
+  master_flow:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+                - build-pipeline
