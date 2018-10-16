@@ -19,15 +19,15 @@ The extension and example app was created during the Qonnections 2015 Hackathon 
 
 After that I've added a bit more responsiveness for the grid layout, labels, font sizes and enable scrolling.
 
-![QlikSense Extension 2DimHeatmap](Screenshot1.PNG)
+![QlikSense Extension 2DimHeatmap](resources/Screenshot1.PNG)
 
 You can make a selection by one dimension by clicking on a dimension label (row or column) or a selection by two dimensions by clicking on a tile.
 
-![QlikSense Extension 2DimHeatmap](Screenshot2.PNG)
+![QlikSense Extension 2DimHeatmap](resources/Screenshot2.PNG)
 
 Also, you can use a lasso to make a two-dimensional selection:
 
-![QlikSense Extension 2DimHeatmap](HeatmapSelection.gif)
+![QlikSense Extension 2DimHeatmap](resources/HeatmapSelection.gif)
 
 ## Additional Properties:
 
@@ -43,7 +43,7 @@ Also, you can use a lasso to make a two-dimensional selection:
 1. **Rotate Dim2 Labels by -90°**: rotate labels counterclockwise, better for more readable labels above small tiles
 1. **Max. Columns for Grid**: expression to get max. amount of values of 2nd dimension to have a more stable grid layout
 1. **Height Factor**: a multiplier to change rectangular high of tile (default=1, 100% - same size as width)
-1. **Least Tiles in Row**: filter rows (1st dimension) with less than minimum amount of tiles (default=1; no filtering) 
+1. **Least Tiles in Row**: filter rows (1st dimension) with less than minimum amount of tiles (default=1; no filtering)
 1. **Localized Number Format**: use a localized number format for decimal and thousands separator
 1. **Show Numbers in Tiles**: shows the measure number in each tile (only useful for small numbers, depending on tile sizes)
 1. **Render Tiles w/ Border**: switch tile border on/off (default=on)
@@ -57,15 +57,15 @@ Qlik Hackathon 2015 Start.qvf - Uses data from Medair to analyse Ebola Outbreak 
 
 This app uses also Qlik Sense Extension VariableButton: https://github.com/asierfer/QlikSense-Ext-VariableButton
 
-![QlikSense Extension 2DimHeatmap](Screenshot3.PNG)
+![QlikSense Extension 2DimHeatmap](resources/Screenshot3.PNG)
 
 With class() function as measure dimension you can have a awesome fast backend calculated binning!
 
-![QlikSense Extension 2DimHeatmap](Screenshot4.PNG)
+![QlikSense Extension 2DimHeatmap](resources/Screenshot4.PNG)
 
 Rotation of Dim2 Labels and proper measure formattings:
 
-![QlikSense Extension 2DimHeatmap](Screenshot5.PNG)
+![QlikSense Extension 2DimHeatmap](resources/Screenshot5.PNG)
 
 ## Author
 

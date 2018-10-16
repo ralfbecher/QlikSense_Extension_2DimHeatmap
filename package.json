@@ -1,0 +1,18 @@
+{
+  "name": "QlikSense_Extension_2DimHeatmap",
+  "version": "0.0.1",
+  "description": "Qlik Sense Extension 2 Dimensional Heatmap",
+  "keywords": "2D heatmap qliksense extension",
+  "repository": "https://github.com/ralfbecher/QlikSense_Extension_2DimHeatmap",
+  "author": "Ralf Becher <ralf.becher@web.de>",
+  "license": "MIT",
+  "scripts": {
+    "build": "gulp build"
+  },
+  "devDependencies": {
+    "del": "2.0.2",
+    "gulp": "3.9.0",
+    "gulp-zip": "3.0.2",
+    "run-sequence": "1.1.2"
+  }
+}
