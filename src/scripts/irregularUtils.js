@@ -21,17 +21,15 @@ function flattenPages(data) { // function to flatten out the paginated qHyperCub
 }
 
 function pageExtensionData(me, $el, layout, callback, ref, maxDataPages) { //(this, extension DOM element, layout object from Sense, your callback)
-  //console.log("maxDataPages:" + maxDataPages);
   maxDataPages = maxDataPages || 2;
   var lastrow = 0;
   //get number of columns
   var colNums = layout.qHyperCube.qSize.qcx;
   //calculate how many rows to page. currently, you can't ask for more than 10,000 cells at a time, so the number of rows
   //needs to be 10,000 divided by number of columns
-  //console.log(layout.qHyperCube.qSize.qcy);
   var calcHeight = Math.floor(10000 / colNums);
-  //loop through the rows we have and render
 
+  //loop through the rows we have and render
   me.backendApi.eachDataRow(function (rownum, row) {
     //simply by looping through each page, the qHyperCube is updated and will not have more than one page
     lastrow = rownum;
@@ -49,15 +47,12 @@ function pageExtensionData(me, $el, layout, callback, ref, maxDataPages) { //(th
     console.log("requestPage", requestPage);
     me.backendApi.getData(requestPage).then(function (dataPages) {
       //when we get the result run the function again
-      //console.log("dataPages", dataPages);
       pageExtensionData(me, $el, layout, callback, ref, maxDataPages);
     });
   } else { //if we are at the last row...
     var bigMatrix = [];
     //use flattenPages function to create large master qMatrix
     bigMatrix = flattenPages(layout.qHyperCube.qDataPages.slice(0, maxDataPages));
-    //console.log("maxDataPages", maxDataPages);
-    //console.log("bigMatrix", bigMatrix);
     //fire off the callback function
     callback($el, layout, bigMatrix, me, ref);
     //(DOM element, layout object, new flattened matrix, this)

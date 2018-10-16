@@ -63,9 +63,7 @@ define(["jquery", "./d3.min"], function ($, d3) {
           var cur_box = d.getBBox();
           var new_box = d.getBoundingClientRect(); // relative to body! use this instead of the other formulas that calculate offsets and what not
           d.lassoPoint = {
-            //cx: Math.round(new_box.left-offset_box.left + new_box.width/2),
             cx: Math.round(new_box.left + new_box.width / 2),
-            //cy: Math.round(new_box.top-offset_box.top + new_box.height/2),
             cy: Math.round(new_box.top + new_box.height / 2),
             edges: {
               top: 0,
@@ -94,9 +92,8 @@ define(["jquery", "./d3.min"], function ($, d3) {
 
       function dragmove() {
         // GET MOUSE POSITION WITHIN BODY / WINDOW
-        //console.log(d3.event);
-        var x = d3.event.sourceEvent.clientX; //d3.mouse(this)[0];
-        var y = d3.event.sourceEvent.clientY; //d3.mouse(this)[1];
+        var x = d3.event.sourceEvent.clientX;
+        var y = d3.event.sourceEvent.clientY;
         var tx = d3.mouse(this)[0];
         var ty = d3.mouse(this)[1];
 
@@ -242,7 +239,6 @@ define(["jquery", "./d3.min"], function ($, d3) {
           .each(function (d) {
             d.possible = true;
           });
-        //.attr("d",function(d) {return d.possible = true;});
 
         d3.selectAll(items[0].filter(function (d) {
           return !((d.loopSelected && isPathClosed) || d.hoverSelected);
@@ -250,7 +246,6 @@ define(["jquery", "./d3.min"], function ($, d3) {
           .each(function (d) {
             d.possible = false;
           });
-        //.attr("d",function(d) {return d.possible = false;});
 
         on.draw();
 
@@ -269,7 +264,6 @@ define(["jquery", "./d3.min"], function ($, d3) {
           .each(function (d) {
             d.selected = true;
           });
-        //.attr("d",function(d) {return d.selected = true;});
 
         items.filter(function (d) {
           return d.possible === false;
@@ -277,14 +271,12 @@ define(["jquery", "./d3.min"], function ($, d3) {
           .each(function (d) {
             d.selected = false;
           });
-        //.attr("d",function(d) {return d.selected = false;});
 
         // Reset possible items
         items
           .each(function (d) {
             d.possible = false;
           });
-        //.attr("d",function(d) {return d.possible = false});
 
         // Clear lasso
         dyn_path.attr("d", null);
@@ -308,7 +300,6 @@ define(["jquery", "./d3.min"], function ($, d3) {
               selected: false
             });
           } else {
-            //item.attr("d",function(e) {e.possible = false; e.selected = false; return e;});
             var e = item.datum();
             e.possible = false;
             e.selected = false;
