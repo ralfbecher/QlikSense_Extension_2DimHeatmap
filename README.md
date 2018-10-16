@@ -67,6 +67,9 @@ Rotation of Dim2 Labels and proper measure formattings:
 
 ![QlikSense Extension 2DimHeatmap](resources/Screenshot5.PNG)
 
+## Development
+Set `BUILD_PATH` to extension directory
+
 ## Author
 
 **Ralf Becher**
