@@ -1,12 +1,13 @@
 version: 2
 
 defaults: &defaults
-  working_directory: ~/QlikSense_Extension_2DimHeatmap
+  working_directory: ~/qlik-heatmap-chart
   docker:
     - image: circleci/node:stretch
   environment:
     GITHUB_ORG: "qlik-oss"
     GITHUB_REPO: "QlikSense_Extension_2DimHeatmap"
+    PACKAGE_NAME: "qlik-heatmap-chart"
 
 jobs:
   build:
@@ -22,7 +23,7 @@ jobs:
           environment:
             NODE_ENV: production
       - persist_to_workspace:
-          root: ~/QlikSense_Extension_2DimHeatmap
+          root: ~/qlik-heatmap-chart
           paths:
             - build
   deploy:
@@ -30,13 +31,13 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/QlikSense_Extension_2DimHeatmap
+          at: ~/qlik-heatmap-chart
       - run:
           name: Install ghr
           command: scripts/install-ghr.sh
       - run:
           name: Create GitHub Release
-          command: scripts/create-release.sh $GITHUB_ORG $GITHUB_REPO
+          command: scripts/create-release.sh $GITHUB_ORG $GITHUB_REPO $PACKAGE_NAME
 
 workflows:
   version: 2

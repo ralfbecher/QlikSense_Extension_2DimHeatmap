@@ -1,5 +1,5 @@
 {
-  "name": "QlikSense_Extension_2DimHeatmap",
+  "name": "qlik-heatmap-chart",
   "version": "0.0.1",
   "description": "Qlik Sense Extension 2 Dimensional Heatmap",
   "keywords": "2D heatmap qliksense extension",

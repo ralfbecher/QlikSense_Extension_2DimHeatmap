@@ -1,0 +1,16 @@
+{
+  "name": "Heatmap chart",
+  "description": "A 2 dimensional heatmap",
+  "type" : "visualization",
+  "version": "X.Y.Z",
+  "icon" : "puzzle",
+  "preview": "preview.png",
+  "keywords": "qlik-sense, visualization",
+  "author": "brz, rabe"
+  "homepage": "",
+  "license": "MIT",
+  "repository": "",
+  "dependencies": {
+      "qlik-sense": ">=5.5.x"
+  }
+}

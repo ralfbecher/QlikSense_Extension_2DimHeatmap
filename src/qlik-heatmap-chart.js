@@ -10,14 +10,14 @@ GitHub  : https://github.com/borodri/Sense_d3calendarheatmap
 Author  : https://github.com/borodri
 
 irregular.bi takes no responsibility for any code.
-Use at your own risk. 
+Use at your own risk.
 */
 define([
-    "jquery", 
-    "qlik", 
-    "./scripts/d3.min", 
-    "./scripts/lasso_adj", 
-    "css!./styles/bi-irregular-2dim-heatmap.css", 
+    "jquery",
+    "qlik",
+    "./scripts/d3.min",
+    "./scripts/lasso_adj",
+    "css!./styles/qlik-heatmap-chart.css",
     "./scripts/irregularUtils"
 ], function ($, qlik, d3, lasso) {
     'use strict';
@@ -115,13 +115,13 @@ define([
 									],
                                         defaultValue: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506"
                                     },
-                                    
+
                                     LabelColorPicker: {
                                         ref: "labelColor",
                                         label:"Label Color",
                                         component: "color-picker",
                                         dualOutput: true,
-                                        type: "object",  
+                                        type: "object",
                                         defaultValue: {
                                             index: -1,
                                             color: "#595959"
@@ -336,7 +336,7 @@ define([
 
                     //$element.html("");
                     $element.empty();
-                    
+
                     var qlik = ref[0],
                         d3 = ref[1],
                         lasso = [2];
@@ -502,7 +502,7 @@ define([
 
                         var dim1Lookup = [];
                         if (leastTiles > 1 && rollup_dim2.length >= leastTiles) {
-                            // Filter rows with too few tiles:	
+                            // Filter rows with too few tiles:
                             rollup_dim1 = rollup_dim1.filter(function (e) {
                                 return e.values.count >= leastTiles;
                             });
@@ -620,7 +620,7 @@ define([
                         var scaleDomain = [measureMin, measureMax];
 //                        if (useMeanScale && data.length > 1) {
                         if (useMeanScale) {
-                            if (fixedScale) {                          
+                            if (fixedScale) {
                                 if (meanScale == 0) {
                                     if (measureMin < 0 && measureMax > 0) {
                                         scaleDomain = [measureMin, 0, measureMax];
@@ -670,7 +670,7 @@ define([
                             // keep mouse cursor arrow instead of text select (auto)
                             $("#" + id).css('cursor', 'default');
 
-                            // clear all of the fills 
+                            // clear all of the fills
                             lasso.items()
                                 .classed({
                                     "not-possible": true,
@@ -729,7 +729,7 @@ define([
                                 var el = lasso.firstElement();
                                 if (el) {
                                     el.dispatchEvent(new MouseEvent("click"));
-                                }                            
+                                }
                             }
                         };
 
@@ -886,7 +886,7 @@ define([
                                 return (data.length > 1 || fixedScale) ? (!isNaN(d.Metric1)) ? colorScale(d.Metric1) : 'rgba(255, 255, 255, 0)' : colors[0];
                             })
                             .style("opacity", tileOpacity)
-                            .on("click", tileClick) 
+                            .on("click", tileClick)
                             .on("mouseenter", function (d) {
                                 d3.select(this)
                                     .attr("class", "borderedHover");
@@ -899,7 +899,7 @@ define([
 
                         if (showNumbers) {
                             // texts inside rectangles
-    
+
                             heat = svg_g_lasso.selectAll()
                                 .data(data)
                                 .enter()
@@ -914,7 +914,7 @@ define([
                                 .style("text-anchor", "middle")
                                 .attr("transform", "translate(" + gridSize / 2 + ", 0)")
                                 .attr("class", function (d, i) {
-                                    return ("label" + (d3.hsl(data.length > 1 || fixedScale ? colorScale(d.Metric1) : colors[0]).brighter(1) == "#ffffff" || tileOpacity < 0.3 
+                                    return ("label" + (d3.hsl(data.length > 1 || fixedScale ? colorScale(d.Metric1) : colors[0]).brighter(1) == "#ffffff" || tileOpacity < 0.3
                                         ? "-darker" : "-brighter") + ((gridSize < (d.Metric1Text.length * 7)) ? "-small" : ""));
                                 })
                                 .attr("pointer-events", "none")
@@ -976,7 +976,7 @@ define([
                         if (qlik.navigation.getMode() === "analysis" && lassoSelection) {
                             // Create the area where the lasso event can be triggered
                             var lasso_area = svg_g_lasso; //d3.select("#" + id).selectAll(".lassoable");
-                            
+
                             //-----------------------------------------------------
                             // Define the lasso
                             var lasso = d3.lasso()
@@ -986,10 +986,10 @@ define([
                                 .area(lasso_area) // area where the lasso can be started
                                 .on("start", lasso_start) // lasso start function
                                 .on("draw", lasso_draw) // lasso draw function
-                                .on("end", lasso_end); // lasso end function		  
-                            //-----------------------------------------------------		
+                                .on("end", lasso_end); // lasso end function
+                            //-----------------------------------------------------
 
-                            // Init the lasso on the svg:g that contains the dots	
+                            // Init the lasso on the svg:g that contains the dots
                             lasso.items(d3.select("#" + id).selectAll(tileBorder ? ".bordered" : ".no-border"));
                             svg_g_lasso.call(lasso);
                         }

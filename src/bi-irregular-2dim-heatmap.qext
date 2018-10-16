@@ -1,8 +1,0 @@
-{
-    "name": "2 Dimensional Heatmap",
-    "description": "2 Dimensional Heatmap",
-    "icon": "extension",
-    "type": "visualization",
-    "version": "1.0",
-    "author": "brz, rabe"
-}
