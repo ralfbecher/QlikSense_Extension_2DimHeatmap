@@ -14,7 +14,7 @@
   "devDependencies": {
     "del": "2.0.2",
     "eslint": "5.7.0",
-    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp": "4.0.0",
     "gulp-zip": "3.0.2"
   }
 }

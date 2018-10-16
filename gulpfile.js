@@ -8,7 +8,7 @@ var srcFiles = path.resolve('./src/**/*.*');
 var name = require('./package.json').name;
 
 gulp.task('remove-build-folder', function(){
-  return del([buildDest]);
+  return del([buildDest], { force: true });
 });
 
 gulp.task('zip-build', function(){
