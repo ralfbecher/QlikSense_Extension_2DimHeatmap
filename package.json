@@ -7,10 +7,13 @@
   "author": "Ralf Becher <ralf.becher@web.de>",
   "license": "MIT",
   "scripts": {
-    "build": "gulp build"
+    "build": "gulp build",
+    "eslint": "eslint src",
+    "eslint:fix": "eslint --fix src"
   },
   "devDependencies": {
     "del": "2.0.2",
+    "eslint": "5.7.0",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-zip": "3.0.2"
   }
