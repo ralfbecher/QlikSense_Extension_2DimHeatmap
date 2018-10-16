@@ -3,7 +3,7 @@
   "description": "A 2 dimensional heatmap",
   "type" : "visualization",
   "version": "X.Y.Z",
-  "icon" : "puzzle",
+  "icon" : "high-resolution",
   "preview": "preview.png",
   "keywords": "qlik-sense, visualization",
   "author": "brz, rabe"
