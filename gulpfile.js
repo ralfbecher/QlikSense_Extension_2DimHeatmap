@@ -2,7 +2,7 @@ var gulp = require('gulp');
 var zip = require('gulp-zip');
 var del = require('del');
 var path = require('path');
-var buildDest = path.resolve("./build");
+var buildDest = process.env.BUILD_PATH || path.resolve("./build");
 
 var srcFiles = path.resolve('./src/**/*.*');
 var name = require('./package.json').name;
