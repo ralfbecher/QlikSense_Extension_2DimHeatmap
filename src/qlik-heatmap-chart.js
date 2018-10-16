@@ -15,7 +15,7 @@ Use at your own risk.
 define([
   "./definition",
   "./paint",
-  "css!./styles/bi-irregular-2dim-heatmap.css",
+  "css!./styles/qlik-heatmap-chart.css",
 ], function (definition, paint) {
   'use strict';
 
