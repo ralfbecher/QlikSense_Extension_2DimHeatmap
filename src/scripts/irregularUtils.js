@@ -20,7 +20,8 @@ function flattenPages(data) { // function to flatten out the paginated qHyperCub
   return flat;
 }
 
-function pageExtensionData(me, $el, layout, callback, ref, maxDataPages) { //(this, extension DOM element, layout object from Sense, your callback)
+// (this, extension DOM element, layout object from Sense, your callback)
+export function pageExtensionData(me, $el, layout, callback, ref, maxDataPages) {
   maxDataPages = maxDataPages || 2;
   var lastrow = 0;
   //get number of columns

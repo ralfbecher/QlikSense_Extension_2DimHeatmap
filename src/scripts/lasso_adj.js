@@ -1,6 +1,6 @@
-define(["jquery", "./d3.min"], function ($, d3) {
-  'use strict';
+import d3 from './d3.min';
 
+function setupLasso ({ $ }) {
   d3.lasso = function () {
     var items = null,
       closePathDistance = 75,
@@ -363,4 +363,6 @@ define(["jquery", "./d3.min"], function ($, d3) {
 
     return lasso;
   };
-});
+}
+
+export default setupLasso;
