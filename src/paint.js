@@ -1,22 +1,20 @@
-define([
-  "jquery",
-  "qlik",
-  "./scripts/d3.min",
-  "./scripts/lasso_adj",
-  "./scripts/irregularUtils"
-], function($, qlik, d3, lasso) {
-  'use strict';
+import d3 from './scripts/d3.min';
+import setupPageExtensionData from './pageExtensionData';
+import './extendD3WithLasso';
+
+function setupPaint({ $, qlik }) {
+  const pageExtensionData = setupPageExtensionData({ $ });
 
   return function ($element, layout) {
     // Call irregularUtils to page the data for > 10000 points
-    pageExtensionData(this, $element, layout, heatMap, [qlik, d3, lasso], qlik.navigation.getMode() === "analysis" ? 10 : 1);
+    const maxPages = qlik.navigation.getMode() === "analysis" ? 10 : 1;
+    pageExtensionData(this, $element, layout, heatMap, [qlik, d3], maxPages);
 
     function heatMap($element, layout, fullMatrix, _this, ref) {
       $element.empty();
 
       var qlik = ref[0],
-        d3 = ref[1],
-        lasso = [2];
+        d3 = ref[1];
       var app = qlik.currApp();
 
       // get qMatrix data array
@@ -690,4 +688,6 @@ define([
       );
     }
   };
-});
+}
+
+export default setupPaint;

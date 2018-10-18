@@ -7,8 +7,10 @@ module.exports = {
     },
     sourceType: "module"
   },
-  // parser: "babel-eslint",
+  parser: "babel-eslint",
   env: {
+    browser: true,
+    es6: true,
     node: true
   },
   globals: {
@@ -18,9 +20,9 @@ module.exports = {
     require: false
   },
   rules: {
-    "indent": ["warn", 2, { "SwitchCase": 1 }],
-    "linebreak-style": ["warn", "unix"],
-    "object-curly-spacing": ["warn", "always"],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "linebreak-style": ["error", "unix"],
+    "object-curly-spacing": ["error", "always"],
     "max-lines": ["warn", 300],
     "max-len": ["warn", 120],
     "no-console": ["warn"],
@@ -32,15 +34,22 @@ module.exports = {
       ],
       "allowSamePrecedence": true
     }],
-    "no-multi-spaces": ["warn"],
+    "no-multi-spaces": ["error"],
+    "no-cond-assign": ["warn"],
+    "no-fallthrough": ["warn"],
+    "no-undef": ["warn"],
+    "no-unused-vars": ["warn"],
     "no-use-before-define": ["warn", { "functions": false, "classes": false, "variables": false }],
+    "no-useless-escape": ["warn"],
     "no-useless-return": ["warn"],
     "no-underscore-dangle": ["warn", { "allow": ["_id"] }],
+    "no-redeclare": ["warn"],
     "no-restricted-syntax": ["warn"],
     "operator-linebreak": ["warn", "before"],
     "prefer-promise-reject-errors": ["warn"],
     "padded-blocks": ["warn", { "blocks": "never", "switches": "never", "classes": "never" }],
-    "semi": ["warn", "always"]
+    "semi": ["error", "always"],
+    "valid-typeof": ["warn"]
   },
   extends: [
     "eslint:recommended"

@@ -1,94 +1,94 @@
-.qv-object-bi-irregular-2dim-heatmap rect.bordered {
+.qv-object-qlik-heatmap-chart rect.bordered {
     stroke: #F0F0F0;
     stroke-width: .4px;
     fill-opacity: 0.92;
 }
 
-.qv-object-bi-irregular-2dim-heatmap rect.no-border {
+.qv-object-qlik-heatmap-chart rect.no-border {
     stroke: #F0F0F0;
     stroke-width: 0px;
     fill-opacity: 0.92;
 }
 
-.qv-object-bi-irregular-2dim-heatmap rect.borderedHover {
+.qv-object-qlik-heatmap-chart rect.borderedHover {
     stroke: #C4C4C4;
     stroke-width: 2px;
     fill-opacity: 0.6;
 }
 
-.qv-object-bi-irregular-2dim-heatmap text.label-brighter {
+.qv-object-qlik-heatmap-chart text.label-brighter {
     font-size: 9pt;
     font-family: "QlikView Sans", sans-serif;
     fill: #F0F0F0;
 }
 
-.qv-object-bi-irregular-2dim-heatmap text.label-brighter-small {
+.qv-object-qlik-heatmap-chart text.label-brighter-small {
     font-size: 6pt;
     font-family: "QlikView Sans", sans-serif;
     fill: #F0F0F0;
 }
 
-.qv-object-bi-irregular-2dim-heatmap text.label-darker {
+.qv-object-qlik-heatmap-chart text.label-darker {
     font-size: 9pt;
     font-family: "QlikView Sans", sans-serif;
     fill: #A0A0A0;
 }
 
-.qv-object-bi-irregular-2dim-heatmap text.label-darker-small {
+.qv-object-qlik-heatmap-chart text.label-darker-small {
     font-size: 6pt;
     font-family: "QlikView Sans", sans-serif;
     fill: #A0A0A0;
 }
 
-.qv-object-bi-irregular-2dim-heatmap text.mono {
+.qv-object-qlik-heatmap-chart text.mono {
     font-size: 9pt;
     font-family: "QlikView Sans", sans-serif;
 }
 
-.qv-object-bi-irregular-2dim-heatmap text.mono-small {
+.qv-object-qlik-heatmap-chart text.mono-small {
     font-size: 6pt;
     font-family: "QlikView Sans", sans-serif;
 }
 
-.qv-object-bi-irregular-2dim-heatmap text.axis-dim-a {
+.qv-object-qlik-heatmap-chart text.axis-dim-a {
     font-family: "QlikView Sans", sans-serif;
 }
 
-.qv-object-bi-irregular-2dim-heatmap text.axis-dim-b {
+.qv-object-qlik-heatmap-chart text.axis-dim-b {
     font-family: "QlikView Sans", sans-serif;
 }
 
 
 /* Code for Lasso from here */
 
-.qv-object-bi-irregular-2dim-heatmap .dot {
+.qv-object-qlik-heatmap-chart .dot {
     stroke: #000;
 }
 
-.qv-object-bi-irregular-2dim-heatmap .lasso path {
+.qv-object-qlik-heatmap-chart .lasso path {
     stroke: rgb(80, 80, 80);
     stroke-width: 2px;
 }
 
-.qv-object-bi-irregular-2dim-heatmap .lasso .drawn {
+.qv-object-qlik-heatmap-chart .lasso .drawn {
     fill-opacity: .05;
 }
 
-.qv-object-bi-irregular-2dim-heatmap .lasso .loop_close {
+.qv-object-qlik-heatmap-chart .lasso .loop_close {
     fill: none;
     stroke-dasharray: 4, 4;
 }
 
-.qv-object-bi-irregular-2dim-heatmap .lasso .origin {
+.qv-object-qlik-heatmap-chart .lasso .origin {
     fill: #4DC04E;
     fill-opacity: 0.7;
 }
 
-/* .qv-object-bi-irregular-2dim-heatmap .not-possible {
+/* .qv-object-qlik-heatmap-chart .not-possible {
     fill: rgb(200, 200, 200);
 } */
 
-.qv-object-bi-irregular-2dim-heatmap .possible {
+.qv-object-qlik-heatmap-chart .possible {
     fill: #52CC52;
     stroke: SlateGray;
     stroke-width: 2px;

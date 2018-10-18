@@ -12,12 +12,36 @@ Author  : https://github.com/borodri
 irregular.bi takes no responsibility for any code.
 Use at your own risk.
 */
-define([
-  "./definition",
-  "./paint",
-  "css!./styles/qlik-heatmap-chart.css",
-], function (definition, paint) {
+
+const global = window;
+const defined = global.requirejs && global.requirejs.defined;
+const define = (global && global.define) || define;
+
+import definition from './definition';
+import paintSetup from './paint';
+import './styles/qlik-heatmap-chart.css';
+
+const dependencies = [
+  'module',
+  'qlik',
+  'jquery'
+].map(dependency => {
+  const isDefined = defined(dependency) || dependency === 'module';
+  if (isDefined) {
+    return dependency;
+  } else {
+    if(dependency === 'qlik' && defined('js/qlik')) {
+      return 'js/qlik';
+    } else {
+      return null;
+    }
+  }
+});
+
+define(dependencies, function (module, qlik, $) {
   'use strict';
+
+  const paint = paintSetup({ $, qlik });
 
   return {
     initialProperties: {
