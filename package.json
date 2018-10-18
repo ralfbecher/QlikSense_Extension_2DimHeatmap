@@ -26,11 +26,12 @@
     "gulp": "4.0.0",
     "gulp-zip": "3.0.2",
     "style-loader": "0.23.1",
+    "stylelint": "8.4.0",
     "stylelint-webpack-plugin": "0.10.5",
     "webpack": "4.20.2",
     "webpack-cli": "3.1.2"
   },
   "dependencies": {
-    "stylelint": "8.4.0"
+    "d3": "3.5.12"
   }
 }
