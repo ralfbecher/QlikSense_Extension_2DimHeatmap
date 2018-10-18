@@ -18,7 +18,6 @@ const defined = global.requirejs && global.requirejs.defined;
 const define = (global && global.define) || define;
 
 import definition from './definition';
-import lassoSetup from './scripts/lasso_adj';
 import paintSetup from './paint';
 import './styles/qlik-heatmap-chart.css';
 
@@ -42,8 +41,7 @@ const dependencies = [
 define(dependencies, function (module, qlik, $) {
   'use strict';
 
-  const lasso = lassoSetup({ $ });
-  const paint = paintSetup({ $, qlik, lasso });
+  const paint = paintSetup({ $, qlik });
 
   return {
     initialProperties: {
