@@ -17,7 +17,7 @@ module.exports = {
       {
         enforce: "pre",
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: /(node_modules|d3.min.js)/,
         loader: "eslint-loader",
         options: {
           failOnError: true
