@@ -37,7 +37,7 @@ const definition = {
             useMeanScale: {
               type: "boolean",
               component: "switch",
-              translation: "Use Mean in Scale",
+              translation: "Use Mean in scale",
               ref: "useMeanScale",
               defaultValue: true,
               trueOption: {
