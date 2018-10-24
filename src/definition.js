@@ -6,15 +6,21 @@ const definition = {
   type: "items",
   component: "accordion",
   items: {
-    dimensions: {
-      uses: "dimensions",
-      min: 2,
-      max: 2
-    },
-    measures: {
-      uses: "measures",
-      min: 1,
-      max: 2
+    data:{
+      uses: "data",
+      type: "items",
+      items:{
+        dimensions: {
+          uses: "dimensions",
+          min: 2,
+          max: 2
+        },
+        measures: {
+          uses: "measures",
+          min: 1,
+          max: 2
+        }
+      }
     },
     sorting: {
       uses: "sorting"
@@ -37,7 +43,7 @@ const definition = {
             useMeanScale: {
               type: "boolean",
               component: "switch",
-              translation: "Use Mean in scale",
+              translation: "Use Mean in Scale",
               ref: "useMeanScale",
               defaultValue: true,
               trueOption: {
