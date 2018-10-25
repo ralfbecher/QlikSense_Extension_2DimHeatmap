@@ -4,9 +4,11 @@ const settings = require('./settings');
 
 console.log('Webpack mode:', settings.mode); // eslint-disable-line no-console
 
-module.exports = {
+const config = {
   devtool: 'source-map',
-  entry: './src/' + settings.name + '.js',
+  entry: [
+    './src/' + settings.name + '.js'
+  ],
   mode: settings.mode,
   output: {
     path: settings.buildDestination,
@@ -47,3 +49,9 @@ module.exports = {
     new StyleLintPlugin()
   ]
 };
+
+if (process.env.NODE_ENV !== 'production') {
+  config.entry.unshift('webpack-dev-server/client?http://localhost:' + settings.port);
+}
+
+module.exports = config;
