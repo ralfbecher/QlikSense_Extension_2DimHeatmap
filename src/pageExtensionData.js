@@ -10,7 +10,7 @@ function setupPageExtensionData ({ $ }) {
   }
 
   // (this, extension DOM element, layout object from Sense, your callback)
-  return function pageExtensionData(me, $el, layout, callback, ref, maxDataPages) {
+  return function pageExtensionData(me, $el, layout, callback, maxDataPages) {
     maxDataPages = maxDataPages || 2;
     var lastrow = 0;
     //get number of columns
@@ -37,14 +37,14 @@ function setupPageExtensionData ({ $ }) {
       }];
       me.backendApi.getData(requestPage).then(function () {
         //when we get the result run the function again
-        pageExtensionData(me, $el, layout, callback, ref, maxDataPages);
+        pageExtensionData(me, $el, layout, callback, maxDataPages);
       });
     } else { //if we are at the last row...
       var bigMatrix = [];
       //use flattenPages function to create large master qMatrix
       bigMatrix = flattenPages(layout.qHyperCube.qDataPages.slice(0, maxDataPages));
       //fire off the callback function
-      callback($el, layout, bigMatrix, me, ref);
+      callback($el, layout, bigMatrix, me);
       //(DOM element, layout object, new flattened matrix, this)
     }
   };

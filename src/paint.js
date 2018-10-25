@@ -1,6 +1,7 @@
 import d3 from './scripts/d3.min';
 import setupPageExtensionData from './pageExtensionData';
 import './extendD3WithLasso';
+import { getThresholdClasses } from './thresholds';
 
 function setupPaint({ $, qlik }) {
   const pageExtensionData = setupPageExtensionData({ $ });
@@ -8,13 +9,11 @@ function setupPaint({ $, qlik }) {
   return function ($element, layout) {
     // Call irregularUtils to page the data for > 10000 points
     const maxPages = qlik.navigation.getMode() === "analysis" ? 10 : 1;
-    pageExtensionData(this, $element, layout, heatMap, [qlik, d3], maxPages);
+    pageExtensionData(this, $element, layout, heatMap, maxPages);
 
-    function heatMap($element, layout, fullMatrix, _this, ref) {
+    function heatMap($element, layout, fullMatrix, _this) {
       $element.empty();
 
-      var qlik = ref[0],
-        d3 = ref[1];
       var app = qlik.currApp();
 
       // get qMatrix data array
@@ -653,6 +652,9 @@ function setupPaint({ $, qlik }) {
           lasso.items(d3.select("#" + id).selectAll(tileBorder ? ".bordered" : ".no-border"));
           svg_g_lasso.call(lasso);
         }
+
+        const thresholdClasses = getThresholdClasses(gridSize);
+        $element.addClass(thresholdClasses);
       };
 
       viz2DimHeatmap(
