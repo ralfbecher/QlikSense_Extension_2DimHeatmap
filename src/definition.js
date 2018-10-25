@@ -8,19 +8,6 @@ const definition = {
   items: {
     data:{
       uses: "data",
-      type: "items",
-      items:{
-        dimensions: {
-          uses: "dimensions",
-          min: 2,
-          max: 2
-        },
-        measures: {
-          uses: "measures",
-          min: 1,
-          max: 2
-        }
-      }
     },
     sorting: {
       uses: "sorting"

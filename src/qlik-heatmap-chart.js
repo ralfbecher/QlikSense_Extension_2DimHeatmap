@@ -55,6 +55,18 @@ define(dependencies, function (module, qlik, $) {
         }]
       }
     },
+    data:{
+      dimensions: {
+        uses: "dimensions",
+        min: 2,
+        max: 2
+      },
+      measures: {
+        uses: "measures",
+        min: 1,
+        max: 2
+      }
+    },
     definition: definition,
     support: {
       export: true
