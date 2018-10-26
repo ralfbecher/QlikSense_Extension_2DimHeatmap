@@ -1,7 +1,8 @@
 const thresholds = {
   medium: 60,
   small: 45,
-  tiny: 15
+  tiny: 25,
+  tiniest: 15
 };
 
 const thresholdLookup = Object.keys(thresholds).reduce((result, key) => {
