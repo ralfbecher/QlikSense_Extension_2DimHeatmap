@@ -93,3 +93,6 @@
     stroke: SlateGray;
     stroke-width: 2px;
 }
+.mono.axis-dim-b{
+  transform: rotate(-90deg);
+}

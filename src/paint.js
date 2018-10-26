@@ -201,7 +201,7 @@ function setupPaint({ $, qlik }) {
         dim2Obj = rollup_dim2.map(function (e) {
           return {
             "dim2key": e.key,
-            "dim2LabelShort": (dim2LabelRotation ? (e.key.length > dim2LabelSize ? e.key.substr(0, dim2LabelSize -2) + (dim2LabelSize > 0 ? dots : "") : e.key) : e.key.substr(-dim2LabelSize)),
+            "dim2LabelShort": e.key.length > dim2LabelSize ? e.key.substr(0, dim2LabelSize ) + (e.key.length - dim2LabelSize > 0 ? dots : "") : e.key,
             "dim2Element": e.values.element,
             "dim2Num": e.values.num
           };
@@ -304,6 +304,8 @@ function setupPaint({ $, qlik }) {
           .range(colors);
 
         gridSize = Math.floor((width - margin.left - margin.right) / gridDivider);
+        console.log(gridSize);
+
         legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length + 1));
 
         if (gridSize < smallSize && dim2LabelRotation) {
@@ -448,65 +450,65 @@ function setupPaint({ $, qlik }) {
             return dimensionLabels[0] + ": " + dim1keys[i];
           });
 
-        if (dim2LabelRotation) {
-          var dim2Labels = svg_g.selectAll()
-            .data(dim2LabelsShort)
-            .enter().append("text")
-            .text(function (d) {
-              return d;
-            })
-            .attr("x", 0)
-            .attr("y", function (d, i) {
-              return i * gridSize;
-            })
-            .style("text-anchor", "left")
-            .attr("transform", "rotate(-90) translate(6, " + (4 + (gridSize / 2)) + ")")
-            .attr("class", function (d, i) {
-              return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
-            })
-            .style('fill', labelColor.color)
-            .on("click", dim2Click)
-            .on("mouseenter", function (d, i) {
-              d3.selectAll('[dim2="' + i + '"]')
-                .attr("class", "borderedHover");
-            })
-            .on("mouseleave", function (d, i) {
-              d3.selectAll('[dim2="' + i + '"]')
-                .attr("class", tileBorder ? "bordered" : "no-border");
-            })
-            .append("title").text(function (d, i) {
-              return dimensionLabels[1] + ": " + dim2keys[i];
-            });
-        } else {
-          var dim2Labels = svg_g.selectAll()
-            .data(dim2LabelsShort)
-            .enter().append("text")
-            .text(function (d) {
-              return d;
-            })
-            .attr("x", function (d, i) {
-              return i * gridSize;
-            })
-            .attr("y", 0)
-            .style("text-anchor", "middle")
-            .attr("transform", "translate(" + gridSize / 2 + ", -6)")
-            .attr("class", function (d, i) {
-              return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
-            })
-            .style('fill', labelColor.color)
-            .on("click", dim2Click)
-            .on("mouseenter", function (d, i) {
-              d3.selectAll('[dim2="' + i + '"]')
-                .attr("class", "borderedHover");
-            })
-            .on("mouseleave", function (d, i) {
-              d3.selectAll('[dim2="' + i + '"]')
-                .attr("class", tileBorder ? "bordered" : "no-border");
-            })
-            .append("title").text(function (d, i) {
-              return dimensionLabels[1] + ": " + dim2keys[i];
-            });
-        }
+        // if (dim2LabelRotation) {
+        var dim2Labels = svg_g.selectAll()
+          .data(dim2LabelsShort)
+          .enter().append("text")
+          .text(function (d) {
+            return d;
+          })
+          .attr("x", 4)
+          .attr("y", function (d, i) {
+            return i * gridSize +35;
+          })
+          .style("text-anchor", "left")
+          .attr("transform", "translate(6, " + (4 + (gridSize / 2)) + ")")
+          .attr("class", function (d, i) {
+            return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
+          })
+          .style('fill', labelColor.color)
+          .on("click", dim2Click)
+          .on("mouseenter", function (d, i) {
+            d3.selectAll('[dim2="' + i + '"]')
+              .attr("class", "borderedHover");
+          })
+          .on("mouseleave", function (d, i) {
+            d3.selectAll('[dim2="' + i + '"]')
+              .attr("class", tileBorder ? "bordered" : "no-border");
+          })
+          .append("title").text(function (d, i) {
+            return dimensionLabels[1] + ": " + dim2keys[i];
+          });
+        // } else {
+        //   var dim2Labels = svg_g.selectAll()
+        //     .data(dim2LabelsShort)
+        //     .enter().append("text")
+        //     .text(function (d) {
+        //       return d;
+        //     })
+        //     .attr("x", function (d, i) {
+        //       return i * gridSize;
+        //     })
+        //     .attr("y", 0)
+        //     .style("text-anchor", "middle")
+        //     .attr("transform", "translate(" + gridSize / 2 + ", -6)")
+        //     .attr("class", function (d, i) {
+        //       return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
+        //     })
+        //     .style('fill', labelColor.color)
+        //     .on("click", dim2Click)
+        //     .on("mouseenter", function (d, i) {
+        //       d3.selectAll('[dim2="' + i + '"]')
+        //         .attr("class", "borderedHover");
+        //     })
+        //     .on("mouseleave", function (d, i) {
+        //       d3.selectAll('[dim2="' + i + '"]')
+        //         .attr("class", tileBorder ? "bordered" : "no-border");
+        //     })
+        //     .append("title").text(function (d, i) {
+        //       return dimensionLabels[1] + ": " + dim2keys[i];
+        //     });
+        // }
         if (showCondition == 0) {
           if (qlik.Promise) {
             return qlik.Promise.resolve();
