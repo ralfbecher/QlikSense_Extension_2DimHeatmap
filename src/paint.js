@@ -558,32 +558,30 @@ function setupPaint({ $, qlik }) {
           })
           .append("title").text(titleText);
 
-        if (showNumbers) {
-          // texts inside rectangles
+        // texts inside rectangles
 
-          heat = svg_g_lasso.selectAll()
-            .data(data)
-            .enter()
-            .append("text")
-            .attr("x", function (d) {
-              return ($.inArray(d.Dim2, dim2keys) * gridSize);
-            })
-            .attr("y", function (d) {
-              return ($.inArray(d.Dim1, dim1keys) * gridSize * heightFactor) + gridSize * heightFactor / 2;
-            })
-            .attr("dy", ".35em")
-            .style("text-anchor", "middle")
-            .attr("transform", "translate(" + gridSize / 2 + ", 0)")
-            .attr("class", function (d, i) {
-              return ("label" + (d3.hsl(data.length > 1 || fixedScale ? colorScale(d.Metric1) : colors[0]).brighter(1) == "#ffffff" || tileOpacity < 0.3
-                ? "-darker" : "-brighter") + ((gridSize < (d.Metric1Text.length * 7)) ? "-small" : ""));
-            })
-            .attr("pointer-events", "none")
-            .text(function (d) {
-              return d.Metric1Text;
-            })
-            .append("title").text(titleText);
-        }
+        heat = svg_g_lasso.selectAll()
+          .data(data)
+          .enter()
+          .append("text")
+          .attr("x", function (d) {
+            return ($.inArray(d.Dim2, dim2keys) * gridSize);
+          })
+          .attr("y", function (d) {
+            return ($.inArray(d.Dim1, dim1keys) * gridSize * heightFactor) + gridSize * heightFactor / 2;
+          })
+          .attr("dy", ".35em")
+          .style("text-anchor", "middle")
+          .attr("transform", "translate(" + gridSize / 2 + ", 0)")
+          .attr("class", function (d, i) {
+            return ("label" + (d3.hsl(data.length > 1 || fixedScale ? colorScale(d.Metric1) : colors[0]).brighter(1) == "#ffffff" || tileOpacity < 0.3
+              ? "-darker" : "-brighter") + ((gridSize < (d.Metric1Text.length * 7)) ? "-small" : ""));
+          })
+          .attr("pointer-events", "none")
+          .text(function (d) {
+            return d.Metric1Text;
+          })
+          .append("title").text(titleText);
 
         if (showLegend) {
           var legend = svg_g.selectAll()
