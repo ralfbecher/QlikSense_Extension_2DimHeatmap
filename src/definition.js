@@ -239,21 +239,7 @@ const definition = {
               max: 1,
               step: 0.02
             },
-            showNumbers: {
-              type: "boolean",
-              component: "switch",
-              translation: "Show Number in Tiles",
-              ref: "showNumbers",
-              defaultValue: false,
-              trueOption: {
-                value: true,
-                translation: "properties.on"
-              },
-              falseOption: {
-                value: false,
-                translation: "properties.off"
-              }
-            },
+
             lassoSelection: {
               type: "boolean",
               component: "switch",
