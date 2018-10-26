@@ -654,7 +654,7 @@ function setupPaint({ $, qlik }) {
         }
 
         const thresholdClasses = getThresholdClasses(gridSize);
-        $element.addClass(thresholdClasses);
+        $element.removeClass().addClass('ng-scope '+thresholdClasses);
       };
 
       viz2DimHeatmap(
