@@ -5,6 +5,7 @@ var path = require('path');
 var settings = require('./settings');
 var webpackConfig = require('./webpack.config');
 var webpack = require('webpack');
+var WebpackDevServer = require('webpack-dev-server');
 
 var buildDest = settings.buildDestination;
 var srcFiles = path.resolve('./src/**/*.*');
@@ -47,3 +48,24 @@ gulp.task('build',
 gulp.task('default',
   gulp.series('build')
 );
+
+gulp.task('watch', () => new Promise((resolve, reject) => {
+  const compiler = webpack(webpackConfig);
+  const originalOutputFileSystem = compiler.outputFileSystem;
+  const devServer = new WebpackDevServer(compiler, {
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    },
+  }).listen(settings.port, 'localhost', error => {
+    compiler.outputFileSystem = originalOutputFileSystem;
+    if (error) {
+      console.error(error); // eslint-disable-line no-console
+      return reject(error);
+    }
+
+    // eslint-disable-next-line no-console
+    console.log('Listening at localhost:' + settings.port);
+
+    resolve(null, devServer);
+  });
+}));

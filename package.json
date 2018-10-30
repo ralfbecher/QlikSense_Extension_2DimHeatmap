@@ -10,7 +10,7 @@
     "build": "gulp build",
     "eslint": "eslint src",
     "eslint:fix": "eslint --fix src",
-    "watch": "webpack --watch",
+    "watch": "gulp watch",
     "webpack": "webpack"
   },
   "devDependencies": {
@@ -30,7 +30,8 @@
     "style-loader": "0.23.1",
     "stylelint-webpack-plugin": "0.10.5",
     "webpack": "4.20.2",
-    "webpack-cli": "3.1.2"
+    "webpack-cli": "3.1.2",
+    "webpack-dev-server": "3.1.10"
   },
   "dependencies": {
     "stylelint": "8.4.0"
