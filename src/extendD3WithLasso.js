@@ -1,4 +1,4 @@
-import d3 from './scripts/d3.min';
+import * as d3 from 'd3';
 
 d3.lasso = function () {
   var items = null,
