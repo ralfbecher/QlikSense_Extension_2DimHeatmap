@@ -411,11 +411,14 @@ function setupPaint({ $, qlik }) {
               _this.backendApi.selectValues(1, [dim2Elements[i]], true);
           };
           tileClick = function (d, i) {
-            if (dim1keys.length > 1 && d.Element1 >= 0) {
-              _this.backendApi.selectValues(0, [d.Element1], false);
-            }
-            if (dim2keys.length > 1 && d.Element2 >= 0) {
-              _this.backendApi.selectValues(1, [d.Element2], false);
+            console.log(window.event);
+            if(window.event.button === 0){
+              if (dim1keys.length > 1 && d.Element1 >= 0) {
+                _this.backendApi.selectValues(0, [d.Element1], false);
+              }
+              if (dim2keys.length > 1 && d.Element2 >= 0) {
+                _this.backendApi.selectValues(1, [d.Element2], false);
+              }
             }
           };
         }
@@ -550,7 +553,7 @@ function setupPaint({ $, qlik }) {
             return (data.length > 1 || fixedScale) ? (!isNaN(d.Metric1)) ? colorScale(d.Metric1) : 'rgba(255, 255, 255, 0)' : colors[0];
           })
           .style("opacity", tileOpacity)
-          .on("click", tileClick)
+          .on("mousedown", tileClick)
           .on("mouseenter", function (d) {
             d3.select(this)
               .attr("class", "borderedHover");
