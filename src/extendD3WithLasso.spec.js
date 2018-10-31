@@ -1,4 +1,4 @@
-import * as d3 from './scripts/d3.min';
+import * as d3 from 'd3';
 import './extendD3WithLasso';
 
 describe('extendD3WithLasso', () => {
