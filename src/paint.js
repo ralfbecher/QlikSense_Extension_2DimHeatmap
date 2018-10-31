@@ -313,7 +313,7 @@ function setupPaint({ $, qlik }) {
         $("#" + id).css('cursor', 'default');
 
         var svg = d3.select("#" + id).append("svg:svg")
-          .attr("width", width)
+        // .attr("width", width)
           .attr("height", (showLegend ? 50 : 20) + dim2RotationOffset + (dim1keys.length * gridSize * heightFactor));
 
         var svg_g = svg.append("g")
@@ -447,6 +447,7 @@ function setupPaint({ $, qlik }) {
             return dimensionLabels[0] + ": " + dim1keys[i];
           });
 
+        svg.attr("width", $('svg > g ')[0].getBoundingClientRect().width + 5);
         if (dim2LabelRotation) {
           var dim2Labels = svg_g.selectAll()
             .data(dim2LabelsShort)
