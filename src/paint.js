@@ -304,7 +304,6 @@ function setupPaint({ $, qlik }) {
           .range(colors);
 
         gridSize = Math.floor((width - margin.left - margin.right) / gridDivider);
-        console.log(gridSize);
 
         legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length + 1));
 
@@ -450,7 +449,6 @@ function setupPaint({ $, qlik }) {
             return dimensionLabels[0] + ": " + dim1keys[i];
           });
 
-        // if (dim2LabelRotation) {
         var dim2Labels = svg_g.selectAll()
           .data(dim2LabelsShort)
           .enter().append("text")
@@ -479,36 +477,7 @@ function setupPaint({ $, qlik }) {
           .append("title").text(function (d, i) {
             return dimensionLabels[1] + ": " + dim2keys[i];
           });
-        // } else {
-        //   var dim2Labels = svg_g.selectAll()
-        //     .data(dim2LabelsShort)
-        //     .enter().append("text")
-        //     .text(function (d) {
-        //       return d;
-        //     })
-        //     .attr("x", function (d, i) {
-        //       return i * gridSize;
-        //     })
-        //     .attr("y", 0)
-        //     .style("text-anchor", "middle")
-        //     .attr("transform", "translate(" + gridSize / 2 + ", -6)")
-        //     .attr("class", function (d, i) {
-        //       return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
-        //     })
-        //     .style('fill', labelColor.color)
-        //     .on("click", dim2Click)
-        //     .on("mouseenter", function (d, i) {
-        //       d3.selectAll('[dim2="' + i + '"]')
-        //         .attr("class", "borderedHover");
-        //     })
-        //     .on("mouseleave", function (d, i) {
-        //       d3.selectAll('[dim2="' + i + '"]')
-        //         .attr("class", tileBorder ? "bordered" : "no-border");
-        //     })
-        //     .append("title").text(function (d, i) {
-        //       return dimensionLabels[1] + ": " + dim2keys[i];
-        //     });
-        // }
+
         if (showCondition == 0) {
           if (qlik.Promise) {
             return qlik.Promise.resolve();
