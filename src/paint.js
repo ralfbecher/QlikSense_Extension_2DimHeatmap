@@ -553,7 +553,7 @@ function setupPaint({ $, qlik }) {
             return (data.length > 1 || fixedScale) ? (!isNaN(d.Metric1)) ? colorScale(d.Metric1) : 'rgba(255, 255, 255, 0)' : colors[0];
           })
           .style("opacity", tileOpacity)
-          // .on("click", tileClick)
+          .on("click", tileClick)
           .on("mouseenter", function (d) {
             d3.select(this)
               .attr("class", "borderedHover");
@@ -565,17 +565,6 @@ function setupPaint({ $, qlik }) {
           .append("title").text(titleText);
 
         // texts inside rectangles
-
-        var rect = document.getElementsByClassName('bordered');
-        console.log(rect);
-
-        // rect.map(e => e.addEventListener('click', e => console.log("CLICK", e)));
-        // rect.map(e => e.addEventListener('contextmenu', e => console.log("RIGHT CLICK", e)));
-
-        for (var i = 0 ; i < rect.length ; i++){
-          rect[i].addEventListener('click', e => console.log("CLICK", e));
-          rect[i].addEventListener('contextmenu', e => console.log("RIGHT CLICK", e));
-        }
 
         heat = svg_g_lasso.selectAll()
           .data(data)

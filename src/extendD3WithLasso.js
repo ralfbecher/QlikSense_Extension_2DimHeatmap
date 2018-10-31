@@ -45,6 +45,9 @@ d3.lasso = function () {
 
     function dragstart() {
       // store element for click event simulation
+      if(window.event.which === 3){
+        return false;
+      }
       lasso.firstElement(document.elementFromPoint(d3.event.sourceEvent.clientX, d3.event.sourceEvent.clientY));
 
       // Reset blank lasso path
@@ -90,6 +93,9 @@ d3.lasso = function () {
     }
 
     function dragmove() {
+      if(window.event.which === 3){
+        return false;
+      }
       // GET MOUSE POSITION WITHIN BODY / WINDOW
       var x = d3.event.sourceEvent.clientX;
       var y = d3.event.sourceEvent.clientY;
