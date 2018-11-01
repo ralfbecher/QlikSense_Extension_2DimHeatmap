@@ -313,7 +313,6 @@ function setupPaint({ $, qlik }) {
         $("#" + id).css('cursor', 'default');
 
         var svg = d3.select("#" + id).append("svg:svg")
-        // .attr("width", width)
           .attr("height", (showLegend ? 50 : 20) + dim2RotationOffset + (dim1keys.length * gridSize * heightFactor));
 
         var svg_g = svg.append("g")
