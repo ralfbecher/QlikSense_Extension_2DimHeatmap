@@ -456,10 +456,10 @@ function setupPaint({ $, qlik }) {
           })
           .attr("x", 4)
           .attr("y", function (d, i) {
-            return i * gridSize +35;
+            return i * gridSize + gridSize/2 ;
           })
           .style("text-anchor", "left")
-          .attr("transform", "translate(6, " + (4 + (gridSize / 2)) + ")")
+          .attr("transform", "rotate(-90deg) translate(6, " + (4 + (gridSize / 2)) + ")")
           .attr("class", function (d, i) {
             return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
           })
