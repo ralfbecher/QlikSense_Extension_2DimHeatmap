@@ -212,22 +212,6 @@ const definition = {
               label: "Dim2 Label Size (right/rotate left)",
               defaultValue: 2
             },
-            dim2LabelRotation: {
-              type: "boolean",
-              component: "switch",
-              translation: "Rotate Dim2 Labels by -90°",
-              ref: "dim2LabelRotation",
-              defaultValue: false,
-              trueOption: {
-                value: true,
-                translation: "properties.on"
-              },
-              falseOption: {
-                value: false,
-                translation: "properties.off"
-              },
-              show: true
-            },
             tileOpacity: {
               ref: "tileOpacity",
               type: "number",
@@ -239,7 +223,6 @@ const definition = {
               max: 1,
               step: 0.02
             },
-
             lassoSelection: {
               type: "boolean",
               component: "switch",
