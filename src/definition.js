@@ -228,21 +228,6 @@ const definition = {
               },
               show: true
             },
-            tileBorder: {
-              type: "boolean",
-              component: "switch",
-              translation: "Render Tiles w/ Border",
-              ref: "tileBorder",
-              defaultValue: true,
-              trueOption: {
-                value: true,
-                translation: "properties.on"
-              },
-              falseOption: {
-                value: false,
-                translation: "properties.off"
-              }
-            },
             tileOpacity: {
               ref: "tileOpacity",
               type: "number",
