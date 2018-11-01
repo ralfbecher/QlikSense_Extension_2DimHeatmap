@@ -301,9 +301,13 @@ function setupPaint({ $, qlik }) {
         var colorScale = d3.scale.quantile()
           .domain(scaleDomain)
           .range(colors);
+        var thresholdClasses = getThresholdClasses(gridSize);
 
         gridSize = Math.floor((width - margin.left - margin.right) / gridDivider);
 
+        if (thresholdClasses === "minimum" || gridSize <= thresholds.minimum){
+          gridSize = thresholds.minimum;
+        }
         legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length + 1));
 
         margin.top = (showLegend ? 50 : 20) + dim2RotationOffset;
@@ -413,49 +417,11 @@ function setupPaint({ $, qlik }) {
             }
           };
         }
-        try {
-          var thresholdClasses = getThresholdClasses(gridSize);
-        } catch (error) {
-          console.log(error);
-        }
 
         if(thresholdClasses === "medium-cells" || thresholdClasses === "small-cells"){
+
           var dim1Labels = svg_g.selectAll()
             .data(dim1LabelsShort)
-        var dim1Labels = svg_g.selectAll()
-          .data(dim1LabelsShort)
-          .enter().append("text")
-          .text(function (d) {
-            return d;
-          })
-          .attr("x", 0)
-          .attr("y", function (d, i) {
-            return i * gridSize * heightFactor;
-          })
-          .attr("dy", ".35em")
-          .style("text-anchor", "end")
-          .attr("transform", "translate(-6," + (gridSize * heightFactor/ 2) + ")")
-          .attr("class", function (d, i) {
-            return ("mono" + (gridSize * heightFactor < smallSize ? "-small" : "") + " axis-dim-a");
-          })
-          .style('fill', labelColor.color)
-          .on("click", dim1Click)
-          .on("mouseenter", function (d, i) {
-            d3.selectAll('[dim1="' + i + '"]')
-              .attr("class", "borderedHover");
-          })
-          .on("mouseleave", function (d, i) {
-            d3.selectAll('[dim1="' + i + '"]')
-              .attr("class", tileBorder ? "bordered" : "no-border");
-          })
-          .append("title").text(function (d, i) {
-            return dimensionLabels[0] + ": " + dim1keys[i];
-          });
-
-        svg.attr("width", $('svg > g ')[0].getBoundingClientRect().width + 5);
-        if (dim2LabelRotation) {
-          var dim2Labels = svg_g.selectAll()
-            .data(dim2LabelsShort)
             .enter().append("text")
             .text(function (d) {
               return d;
