@@ -124,13 +124,6 @@ const definition = {
                 value: false,
                 translation: "properties.off"
               }
-            },
-            showCondition: {
-              ref: "showCondition",
-              type: "integer",
-              label: "Show Condition",
-              defaultValue: 1,
-              expression: "optional"
             }
           }
         },
@@ -276,13 +269,6 @@ const definition = {
                 value: false,
                 translation: "properties.off"
               }
-            },
-            showCondition: {
-              ref: "showCondition",
-              type: "integer",
-              label: "Show Condition",
-              defaultValue: 1,
-              expression: "optional"
             }
           }
         }

@@ -91,15 +91,12 @@ function setupPaint({ $, qlik }) {
       var colorpalette = layout.ColorSchema.split(", "),
         dim1LabelSize = layout.dim1LabelSize,
         dim2LabelSize = layout.dim2LabelSize,
-        dim2LabelRotation = layout.dim2LabelRotation,
         maxGridColums = layout.maxGridColums,
         heightFactor = layout.heightFactor,
         leastTiles = layout.leastTiles,
-        showCondition = layout.showCondition,
         showLegend = layout.showLegend,
         tileBorder = layout.tileBorder,
         tileOpacity = layout.tileOpacity,
-        showNumbers = layout.showNumbers,
         fixedScale = layout.fixedScale,
         minScale = layout.minScale,
         maxScale = layout.maxScale,
@@ -136,8 +133,8 @@ function setupPaint({ $, qlik }) {
       }
 
       var viz2DimHeatmap = function (_this, app, id, data, qDimensionType, qDimSort, width, height, colorpalette, dimensionLabels,
-        measureLabels, measurePercentage, measureMin, measureMax, meanScale, useMeanScale, dim1LabelSize, dim2LabelSize, dim2LabelRotation,
-        maxGridColums, heightFactor, leastTiles, showCondition, showLegend, showNumbers, labelColor, tileBorder, tileOpacity, lassoSelection) {
+        measureLabels, measurePercentage, measureMin, measureMax, meanScale, useMeanScale, dim1LabelSize, dim2LabelSize,
+        maxGridColums, heightFactor, leastTiles, showLegend, labelColor, tileBorder, tileOpacity, lassoSelection) {
         var formatLegend = function (n) {
           return n.toLocaleString();
         };
@@ -410,11 +407,14 @@ function setupPaint({ $, qlik }) {
               _this.backendApi.selectValues(1, [dim2Elements[i]], true);
           };
           tileClick = function (d, i) {
-            if (dim1keys.length > 1 && d.Element1 >= 0) {
-              _this.backendApi.selectValues(0, [d.Element1], false);
-            }
-            if (dim2keys.length > 1 && d.Element2 >= 0) {
-              _this.backendApi.selectValues(1, [d.Element2], false);
+
+            if(window.event.button === 0){
+              if (dim1keys.length > 1 && d.Element1 >= 0) {
+                _this.backendApi.selectValues(0, [d.Element1], false);
+              }
+              if (dim2keys.length > 1 && d.Element2 >= 0) {
+                _this.backendApi.selectValues(1, [d.Element2], false);
+              }
             }
           };
         }
@@ -531,8 +531,10 @@ function setupPaint({ $, qlik }) {
           .on("mouseleave", function (d) {
             d3.select(this)
               .attr("class", tileBorder ? "bordered" : "no-border");
-          })
-          .append("title").text(titleText);
+          });
+        if(!_this.inEditState()){
+          heat.append("title").text(titleText);
+        }
 
         svg.attr("width", $('svg > g > rect')[0].getBoundingClientRect().width + margin.left);
         // texts inside rectangles
@@ -653,13 +655,10 @@ function setupPaint({ $, qlik }) {
         useMeanScale,
         dim1LabelSize,
         dim2LabelSize,
-        dim2LabelRotation,
         maxGridColums,
         heightFactor,
         leastTiles,
-        showCondition,
         showLegend,
-        showNumbers,
         labelColor,
         tileBorder,
         tileOpacity,
