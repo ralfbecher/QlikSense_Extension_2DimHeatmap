@@ -91,15 +91,12 @@ function setupPaint({ $, qlik }) {
       var colorpalette = layout.ColorSchema.split(", "),
         dim1LabelSize = layout.dim1LabelSize,
         dim2LabelSize = layout.dim2LabelSize,
-        dim2LabelRotation = layout.dim2LabelRotation,
         maxGridColums = layout.maxGridColums,
         heightFactor = layout.heightFactor,
         leastTiles = layout.leastTiles,
-        showCondition = layout.showCondition,
         showLegend = layout.showLegend,
         tileBorder = layout.tileBorder,
         tileOpacity = layout.tileOpacity,
-        showNumbers = layout.showNumbers,
         fixedScale = layout.fixedScale,
         minScale = layout.minScale,
         maxScale = layout.maxScale,
@@ -136,8 +133,8 @@ function setupPaint({ $, qlik }) {
       }
 
       var viz2DimHeatmap = function (_this, app, id, data, qDimensionType, qDimSort, width, height, colorpalette, dimensionLabels,
-        measureLabels, measurePercentage, measureMin, measureMax, meanScale, useMeanScale, dim1LabelSize, dim2LabelSize, dim2LabelRotation,
-        maxGridColums, heightFactor, leastTiles, showCondition, showLegend, showNumbers, labelColor, tileBorder, tileOpacity, lassoSelection) {
+        measureLabels, measurePercentage, measureMin, measureMax, meanScale, useMeanScale, dim1LabelSize, dim2LabelSize,
+        maxGridColums, heightFactor, leastTiles, showLegend, labelColor, tileBorder, tileOpacity, lassoSelection) {
         var formatLegend = function (n) {
           return n.toLocaleString();
         };
@@ -477,14 +474,6 @@ function setupPaint({ $, qlik }) {
             return dimensionLabels[1] + ": " + dim2keys[i];
           });
 
-        if (showCondition == 0) {
-          if (qlik.Promise) {
-            return qlik.Promise.resolve();
-          } else {
-            return;
-          }
-        }
-
         var titleText = function (d) {
           return dimensionLabels[0] + ": " + d.Dim1 + "\n"
                               + dimensionLabels[1] + ": " + d.Dim2 + "\n"
@@ -647,13 +636,10 @@ function setupPaint({ $, qlik }) {
         useMeanScale,
         dim1LabelSize,
         dim2LabelSize,
-        dim2LabelRotation,
         maxGridColums,
         heightFactor,
         leastTiles,
-        showCondition,
         showLegend,
-        showNumbers,
         labelColor,
         tileBorder,
         tileOpacity,
