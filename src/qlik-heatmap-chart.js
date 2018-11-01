@@ -19,7 +19,7 @@ const define = (global && global.define) || define;
 
 import definition from './definition';
 import paintSetup from './paint';
-import './styles/qlik-heatmap-chart.css';
+import './styles/qlik-heatmap-chart.less';
 
 const dependencies = [
   'module',

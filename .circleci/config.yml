@@ -26,6 +26,9 @@ jobs:
           root: ~/qlik-heatmap-chart
           paths:
             - build
+      - store_artifacts:
+          path: build/qlik-heatmap-chart.zip
+          destination: qlik-heatmap-chart.zip
   deploy:
     <<: *defaults
     steps:

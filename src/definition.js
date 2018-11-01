@@ -261,16 +261,28 @@ const definition = {
               max: 1,
               step: 0.02
             },
-            showNumbers: {
+
+            lassoSelection: {
               type: "boolean",
               component: "switch",
-              translation: "Show Number in Tiles",
-              ref: "showNumbers",
-              defaultValue: false,
+              translation: "Lasso Selection",
+              ref: "lassoSelection",
+              defaultValue: true,
               trueOption: {
                 value: true,
                 translation: "properties.on"
               },
+              falseOption: {
+                value: false,
+                translation: "properties.off"
+              }
+            },
+            showCondition: {
+              ref: "showCondition",
+              type: "integer",
+              label: "Show Condition",
+              defaultValue: 1,
+              expression: "optional"
             }
           }
         }

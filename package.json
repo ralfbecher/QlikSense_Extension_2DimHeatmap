@@ -25,6 +25,8 @@
     "eslint-loader": "2.1.1",
     "gulp": "4.0.0",
     "gulp-zip": "3.0.2",
+    "less": "3.8.1",
+    "less-loader": "4.1.0",
     "style-loader": "0.23.1",
     "stylelint-webpack-plugin": "0.10.5",
     "webpack": "4.20.2",
