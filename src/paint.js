@@ -305,7 +305,7 @@ function setupPaint({ $, qlik }) {
 
         gridSize = Math.floor((width - margin.left - margin.right) / gridDivider);
         if (thresholdClasses === "minimum" || gridSize <= thresholds.minimum){
-          gridSize = 5;
+          gridSize = thresholds.minimum;
         }
         legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length + 1));
 
