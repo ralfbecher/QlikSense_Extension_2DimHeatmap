@@ -298,13 +298,11 @@ function setupPaint({ $, qlik }) {
         var colorScale = d3.scale.quantile()
           .domain(scaleDomain)
           .range(colors);
+        const thresholdClasses = getThresholdClasses(gridSize);
 
         gridSize = Math.floor((width - margin.left - margin.right) / gridDivider);
-
-        var thresholdClasses = getThresholdClasses(gridSize);
-
-        if (thresholdClasses === "tiniest" || gridSize <= thresholds.tiniest){
-          gridSize = thresholds.tiniest;
+        if (thresholdClasses === "minimum" || gridSize <= thresholds.minimum){
+          gridSize = thresholds.minimum;
         }
         legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length + 1));
 

@@ -31,14 +31,7 @@ const config = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: [
-              [
-                "@babel/preset-env",
-                {
-                  "useBuiltIns": "entry"
-                }
-              ]
-            ]
+            presets: ['@babel/preset-env']
           }
         }
       },
