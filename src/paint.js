@@ -244,7 +244,7 @@ function setupPaint({ $, qlik }) {
           return e.dim2Element;
         });
 
-        var dim2RotationOffset = (dim2LabelRotation ? (dim2LabelSize * 5) : 0);
+        var dim2RotationOffset = dim2LabelSize * 5;
         var marginLeft = function () {
           return (dim1LabelSize * 7) + 10;
         };
@@ -306,9 +306,6 @@ function setupPaint({ $, qlik }) {
 
         legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length + 1));
 
-        if (gridSize < smallSize && dim2LabelRotation) {
-          dim2RotationOffset = (dim2LabelSize * 2);
-        }
         margin.top = (showLegend ? 50 : 20) + dim2RotationOffset;
 
         $("#" + id).css('cursor', 'default');
@@ -459,7 +456,7 @@ function setupPaint({ $, qlik }) {
             return i * gridSize + gridSize/2 ;
           })
           .style("text-anchor", "left")
-          .attr("transform", "rotate(-90deg) translate(6, " + (4 + (gridSize / 2)) + ")")
+          .attr("transform", "translate(6, " + (4 + (gridSize / 2)) + ")")
           .attr("class", function (d, i) {
             return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-b");
           })
