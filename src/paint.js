@@ -92,7 +92,6 @@ function setupPaint({ $, qlik }) {
         dim1LabelSize = layout.dim1LabelSize,
         dim2LabelSize = layout.dim2LabelSize,
         maxGridColums = layout.maxGridColums,
-        heightFactor = layout.heightFactor,
         showLegend = layout.showLegend,
         tileBorder = layout.tileBorder,
         tileOpacity = layout.tileOpacity,
@@ -133,7 +132,7 @@ function setupPaint({ $, qlik }) {
 
       var viz2DimHeatmap = function (_this, app, id, data, qDimensionType, qDimSort, width, height, colorpalette, dimensionLabels,
         measureLabels, measurePercentage, measureMin, measureMax, meanScale, useMeanScale, dim1LabelSize, dim2LabelSize,
-        maxGridColums, heightFactor, showLegend, labelColor, tileBorder, tileOpacity, lassoSelection) {
+        maxGridColums, heightFactor, showLegend, labelColor, tileOpacity, lassoSelection) {
         var formatLegend = function (n) {
           return n.toLocaleString();
         };
@@ -308,7 +307,7 @@ function setupPaint({ $, qlik }) {
         $("#" + id).css('cursor', 'default');
 
         var svg = d3.select("#" + id).append("svg:svg")
-          .attr("height", (showLegend ? 50 : 20) + dim2RotationOffset + (dim1keys.length * gridSize * heightFactor));
+          .attr("height", (showLegend ? 50 : 20) + dim2RotationOffset + (dim1keys.length * gridSize));
 
         var svg_g = svg.append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -316,7 +315,7 @@ function setupPaint({ $, qlik }) {
         // Adding lasso area
         svg_g.append("rect")
           .attr("width", dim2keys.length * gridSize)
-          .attr("height", dim1keys.length * gridSize * heightFactor)
+          .attr("height", dim1keys.length * gridSize)
           .attr("class", "lassoable")
           .style("opacity", 0);
 
@@ -414,8 +413,7 @@ function setupPaint({ $, qlik }) {
           };
         }
 
-        if(thresholdClasses === "medium-cells" || thresholdClasses === "small-cells" || thresholdClasses === ""){
-
+        if(thresholdClasses === "medium-cells" || thresholdClasses === "small-cells" || thresholdClasses === "") {
           var dim1Labels = svg_g.selectAll()
             .data(dim1LabelsShort)
             .enter().append("text")
@@ -424,13 +422,13 @@ function setupPaint({ $, qlik }) {
             })
             .attr("x", 0)
             .attr("y", function (d, i) {
-              return i * gridSize * heightFactor;
+              return i * gridSize;
             })
             .attr("dy", ".35em")
             .style("text-anchor", "end")
-            .attr("transform", "translate(-6," + (gridSize * heightFactor/ 2) + ")")
+            .attr("transform", "translate(-6," + (gridSize / 2) + ")")
             .attr("class", function (d, i) {
-              return ("mono" + (gridSize * heightFactor < smallSize ? "-small" : "") + " axis-dim-a");
+              return ("mono" + (gridSize < smallSize ? "-small" : "") + " axis-dim-a");
             })
             .style('fill', labelColor.color)
             .on("click", dim1Click)
@@ -497,7 +495,7 @@ function setupPaint({ $, qlik }) {
             return $.inArray(d.Dim2, dim2keys);
           })
           .attr("y", function (d) {
-            return $.inArray(d.Dim1, dim1keys) * gridSize * heightFactor;
+            return $.inArray(d.Dim1, dim1keys) * gridSize;
           })
           .attr("dim1", function (d) {
             return $.inArray(d.Dim1, dim1keys);
@@ -506,7 +504,7 @@ function setupPaint({ $, qlik }) {
           .attr("ry", 0)
           .attr("class", tileBorder ? "bordered" : "no-border")
           .attr("width", gridSize)
-          .attr("height", gridSize * heightFactor)
+          .attr("height", gridSize)
           .attr("fill", function (d) {
             return (data.length > 1 || fixedScale) ? (!isNaN(d.Metric1)) ? colorScale(d.Metric1) : 'rgba(255, 255, 255, 0)' : colors[0];
           })
@@ -536,7 +534,7 @@ function setupPaint({ $, qlik }) {
               return ($.inArray(d.Dim2, dim2keys) * gridSize);
             })
             .attr("y", function (d) {
-              return ($.inArray(d.Dim1, dim1keys) * gridSize * heightFactor) + gridSize * heightFactor / 2;
+              return ($.inArray(d.Dim1, dim1keys) * gridSize) + gridSize / 2;
             })
             .attr("dy", ".35em")
             .style("text-anchor", "middle")
@@ -644,7 +642,6 @@ function setupPaint({ $, qlik }) {
         dim1LabelSize,
         dim2LabelSize,
         maxGridColums,
-        heightFactor,
         showLegend,
         labelColor,
         tileBorder,
