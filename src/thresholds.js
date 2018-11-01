@@ -1,7 +1,8 @@
-const thresholds = {
+export const thresholds = {
   medium: 60,
   small: 45,
-  tiny: 15
+  tiny: 15,
+  minimum: 5
 };
 
 const thresholdLookup = Object.keys(thresholds).reduce((result, key) => {

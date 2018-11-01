@@ -1,7 +1,7 @@
 import d3 from './scripts/d3.min';
 import setupPageExtensionData from './pageExtensionData';
 import './extendD3WithLasso';
-import { getThresholdClasses } from './thresholds';
+import { getThresholdClasses, thresholds } from './thresholds';
 
 function setupPaint({ $, qlik }) {
   const pageExtensionData = setupPageExtensionData({ $ });
@@ -301,9 +301,10 @@ function setupPaint({ $, qlik }) {
         var colorScale = d3.scale.quantile()
           .domain(scaleDomain)
           .range(colors);
+        const thresholdClasses = getThresholdClasses(gridSize);
 
         gridSize = Math.floor((width - margin.left - margin.right) / gridDivider);
-        if (gridSize < 5){
+        if (thresholdClasses === "minimum" || gridSize <= thresholds.minimum){
           gridSize = 5;
         }
         legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length + 1));
@@ -654,7 +655,6 @@ function setupPaint({ $, qlik }) {
           svg_g_lasso.call(lasso);
         }
 
-        const thresholdClasses = getThresholdClasses(gridSize);
         $element.removeClass().addClass('ng-scope '+thresholdClasses);
       };
 
