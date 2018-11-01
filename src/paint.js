@@ -419,7 +419,7 @@ function setupPaint({ $, qlik }) {
           };
         }
 
-        if(thresholdClasses === "medium-cells" || thresholdClasses === "small-cells"){
+        if(thresholdClasses === "medium-cells" || thresholdClasses === "small-cells" || thresholdClasses === ""){
 
           var dim1Labels = svg_g.selectAll()
             .data(dim1LabelsShort)
@@ -451,9 +451,8 @@ function setupPaint({ $, qlik }) {
               return dimensionLabels[0] + ": " + dim1keys[i];
             });
         }
-        svg.attr("width", $('svg > g ')[0].getBoundingClientRect().width + 5);
 
-        if(thresholdClasses === "medium-cells" || thresholdClasses === "small-cells"){
+        if(thresholdClasses === "medium-cells" || thresholdClasses === "small-cells" || thresholdClasses === ""){
           var dim2Labels = svg_g.selectAll()
             .data(dim2LabelsShort)
             .enter().append("text")
@@ -535,9 +534,10 @@ function setupPaint({ $, qlik }) {
           })
           .append("title").text(titleText);
 
+        svg.attr("width", $('svg > g > rect')[0].getBoundingClientRect().width + margin.left);
         // texts inside rectangles
 
-        if(thresholdClasses === "medium-cells"){
+        if(thresholdClasses === "medium-cells" || thresholdClasses === ""){
           heat = svg_g_lasso.selectAll()
             .data(data)
             .enter()
