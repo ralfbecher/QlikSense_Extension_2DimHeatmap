@@ -482,13 +482,6 @@ function setupPaint({ $, qlik }) {
               return dimensionLabels[1] + ": " + dim2keys[i];
             });
         }
-        if (showCondition == 0) {
-          if (qlik.Promise) {
-            return qlik.Promise.resolve();
-          } else {
-            return;
-          }
-        }
 
         var titleText = function (d) {
           return dimensionLabels[0] + ": " + d.Dim1 + "\n"
