@@ -74,6 +74,6 @@ define(dependencies, function (module, qlik, $) {
     snapshot: {
       canTakeSnapshot: true
     },
-    paint: paint,
+    paint: paint
   };
 });
