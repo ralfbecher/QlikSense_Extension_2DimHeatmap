@@ -6,15 +6,8 @@ const definition = {
   type: "items",
   component: "accordion",
   items: {
-    dimensions: {
-      uses: "dimensions",
-      min: 2,
-      max: 2
-    },
-    measures: {
-      uses: "measures",
-      min: 1,
-      max: 2
+    data:{
+      uses: "data",
     },
     sorting: {
       uses: "sorting"
@@ -34,61 +27,6 @@ const definition = {
           label: "Options",
           type: "items",
           items: {
-            colors: {
-              ref: "ColorSchema",
-              type: "string",
-              component: "dropdown",
-              label: "Color Schema",
-              options: [
-                {
-                  value: "#3C52A1, #3A82C4, #69ACDE, #9FD0F1, #CFEAFA, #EEDCC5, #F4AA73, #E67A56, #CD473E, #AE1C3E",
-                  label: "Qlik Sense Diverging"
-                }, {
-                  value: "#AE1C3E, #CD473E, #E67A56, #F4AA73, #EEDCC5, #CFEAFA, #9FD0F1, #69ACDE, #3A82C4, #3C52A1",
-                  label: "Qlik Sense Diverging (Reverse)"
-                }, {
-                  value: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506",
-                  label: "Sequencial"
-                }, {
-                  value: "#662506, #993404, #cc4c02, #ec7014, #fe9929, #fec44f, #fee391, #fff7bc, #ffffe5",
-                  label: "Sequencial (Reverse)"
-                }, {
-                  value: "#d73027, #f46d43, #fdae61, #fee090, #ffffbf, #e0f3f8, #abd9e9, #74add1, #4575b4",
-                  label: "Diverging RdYlBu"
-                }, {
-                  value: "#4575b4, #74add1, #abd9e9, #e0f3f8, #ffffbf, #fee090, #fdae61, #f46d43, #d73027",
-                  label: "Diverging BuYlRd (Reverse)"
-                }, {
-                  value: "#d73027, #fdae61, #ffffbf, #abd9e9, #4575b4",
-                  label: "Diverging BuYlRd 5 values"
-                }, {
-                  value: "#4575b4, #abd9e9, #ffffbf, #fdae61, #d73027",
-                  label: "Diverging BuYlRd 5 values (Reverse)"
-                }, {
-                  value: "#f7fbff, #deebf7, #c6dbef, #9ecae1, #6baed6, #4292c6, #2171b5, #08519c, #08306b",
-                  label: "Blues"
-                }, {
-                  value: "#fff5f0, #fee0d2, #fcbba1, #fc9272, #fb6a4a, #ef3b2c, #cb181d, #a50f15, #67000d",
-                  label: "Reds"
-                }, {
-                  value: "#ffffd9, #edf8b1, #c7e9b4, #7fcdbb, #41b6c4, #1d91c0, #225ea8, #253494, #081d58",
-                  label: "YlGnBu"
-                }
-              ],
-              defaultValue: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506"
-            },
-
-            LabelColorPicker: {
-              ref: "labelColor",
-              label:"Label Color",
-              component: "color-picker",
-              dualOutput: true,
-              type: "object",
-              defaultValue: {
-                index: -1,
-                color: "#595959"
-              }
-            },
             useMeanScale: {
               type: "boolean",
               component: "switch",
@@ -149,6 +87,104 @@ const definition = {
                 return layout.useMeanScale;
               }
             },
+
+            maxGridColums: {
+              ref: "maxGridColums",
+              type: "integer",
+              label: "Max. Columns for Grid",
+              defaultValue: 18,
+              expression: "optional"
+            },
+            heightFactor: {
+              ref: "heightFactor",
+              type: "number",
+              label: "Height Factor",
+              defaultValue: 1,
+              expression: "optional"
+            },
+            leastTiles: {
+              ref: "leastTiles",
+              type: "integer",
+              label: "Least Tiles in Row",
+              defaultValue: 1,
+              expression: "optional"
+            },
+
+            lassoSelection: {
+              type: "boolean",
+              component: "switch",
+              translation: "Lasso Selection",
+              ref: "lassoSelection",
+              defaultValue: true,
+              trueOption: {
+                value: true,
+                translation: "properties.on"
+              },
+              falseOption: {
+                value: false,
+                translation: "properties.off"
+              }
+            }
+          }
+        },
+        design:{
+          label: "Design",
+          type: "items",
+          items:{
+            colors: {
+              ref: "ColorSchema",
+              type: "string",
+              component: "dropdown",
+              label: "Color Schema",
+              options: [
+                {
+                  value: "#3C52A1, #3A82C4, #69ACDE, #9FD0F1, #CFEAFA, #EEDCC5, #F4AA73, #E67A56, #CD473E, #AE1C3E",
+                  label: "Qlik Sense Diverging"
+                }, {
+                  value: "#AE1C3E, #CD473E, #E67A56, #F4AA73, #EEDCC5, #CFEAFA, #9FD0F1, #69ACDE, #3A82C4, #3C52A1",
+                  label: "Qlik Sense Diverging (Reverse)"
+                }, {
+                  value: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506",
+                  label: "Sequencial"
+                }, {
+                  value: "#662506, #993404, #cc4c02, #ec7014, #fe9929, #fec44f, #fee391, #fff7bc, #ffffe5",
+                  label: "Sequencial (Reverse)"
+                }, {
+                  value: "#d73027, #f46d43, #fdae61, #fee090, #ffffbf, #e0f3f8, #abd9e9, #74add1, #4575b4",
+                  label: "Diverging RdYlBu"
+                }, {
+                  value: "#4575b4, #74add1, #abd9e9, #e0f3f8, #ffffbf, #fee090, #fdae61, #f46d43, #d73027",
+                  label: "Diverging BuYlRd (Reverse)"
+                }, {
+                  value: "#d73027, #fdae61, #ffffbf, #abd9e9, #4575b4",
+                  label: "Diverging BuYlRd 5 values"
+                }, {
+                  value: "#4575b4, #abd9e9, #ffffbf, #fdae61, #d73027",
+                  label: "Diverging BuYlRd 5 values (Reverse)"
+                }, {
+                  value: "#f7fbff, #deebf7, #c6dbef, #9ecae1, #6baed6, #4292c6, #2171b5, #08519c, #08306b",
+                  label: "Blues"
+                }, {
+                  value: "#fff5f0, #fee0d2, #fcbba1, #fc9272, #fb6a4a, #ef3b2c, #cb181d, #a50f15, #67000d",
+                  label: "Reds"
+                }, {
+                  value: "#ffffd9, #edf8b1, #c7e9b4, #7fcdbb, #41b6c4, #1d91c0, #225ea8, #253494, #081d58",
+                  label: "YlGnBu"
+                }
+              ],
+              defaultValue: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506"
+            },
+            LabelColorPicker: {
+              ref: "labelColor",
+              label:"Label Color",
+              component: "color-picker",
+              dualOutput: true,
+              type: "object",
+              defaultValue: {
+                index: -1,
+                color: "#595959"
+              }
+            },
             showLegend: {
               type: "boolean",
               component: "switch",
@@ -192,27 +228,6 @@ const definition = {
               },
               show: true
             },
-            maxGridColums: {
-              ref: "maxGridColums",
-              type: "integer",
-              label: "Max. Columns for Grid",
-              defaultValue: 18,
-              expression: "optional"
-            },
-            heightFactor: {
-              ref: "heightFactor",
-              type: "number",
-              label: "Height Factor",
-              defaultValue: 1,
-              expression: "optional"
-            },
-            leastTiles: {
-              ref: "leastTiles",
-              type: "integer",
-              label: "Least Tiles in Row",
-              defaultValue: 1,
-              expression: "optional"
-            },
             tileBorder: {
               type: "boolean",
               component: "switch",
@@ -254,19 +269,13 @@ const definition = {
                 value: false,
                 translation: "properties.off"
               }
-            },
-            showCondition: {
-              ref: "showCondition",
-              type: "integer",
-              label: "Show Condition",
-              defaultValue: 1,
-              expression: "optional"
             }
           }
         }
       }
     }
   }
+
 };
 
 export default definition;

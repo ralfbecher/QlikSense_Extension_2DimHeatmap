@@ -82,6 +82,7 @@
 .qv-object-qlik-heatmap-chart .lasso .origin {
     fill: #4DC04E;
     fill-opacity: 0.7;
+    pointer-events: none;
 }
 
 /* .qv-object-qlik-heatmap-chart .not-possible {
@@ -93,23 +94,6 @@
     stroke: SlateGray;
     stroke-width: 2px;
 }
-
-.ng-scope.small-cells, .ng-scope.tiny-cells{
-  & text.label-darker-small,& text.label-darker, & text.label-brighter-small, & text.label-brighter{
-    font-size: 0;
-  }
-  & text.axis-dim-b{
-    font-size: 0;
-  }
-}
-.ng-scope.tiniest-cells{
-  & text.axis-dim-a{
-    font-size: 0;
-  }
-  & text.label-darker-small,& text.label-darker, & text.label-brighter-small, & text.label-brighter{
-    font-size: 0;
-  }
-  & text.axis-dim-b{
-    font-size: 0;
-  }
+.axis-dim-b{
+  transform: rotate(-90deg);
 }
