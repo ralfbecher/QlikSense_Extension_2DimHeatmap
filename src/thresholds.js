@@ -1,4 +1,4 @@
-const thresholds = {
+export const thresholds = {
   medium: 60,
   small: 45,
   tiny: 25,
