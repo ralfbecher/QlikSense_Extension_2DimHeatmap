@@ -132,47 +132,55 @@ const definition = {
           type: "items",
           items:{
             colors: {
+              label: 'Color Schema',
               ref: "ColorSchema",
               type: "string",
-              component: "dropdown",
-              label: "Color Schema",
-              options: [
+              component: "item-selection-list",
+              defaultValue: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506",
+              items: [
                 {
-                  value: "#3C52A1, #3A82C4, #69ACDE, #9FD0F1, #CFEAFA, #EEDCC5, #F4AA73, #E67A56, #CD473E, #AE1C3E",
-                  label: "Qlik Sense Diverging"
-                }, {
-                  value: "#AE1C3E, #CD473E, #E67A56, #F4AA73, #EEDCC5, #CFEAFA, #9FD0F1, #69ACDE, #3A82C4, #3C52A1",
-                  label: "Qlik Sense Diverging (Reverse)"
-                }, {
+                  label: 'Sequential',
+                  component: "color-scale",
                   value: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506",
-                  label: "Sequencial"
-                }, {
-                  value: "#662506, #993404, #cc4c02, #ec7014, #fe9929, #fec44f, #fee391, #fff7bc, #ffffe5",
-                  label: "Sequencial (Reverse)"
-                }, {
+                  colors: ["#ffffe5", "#fff7bc", "#fee391", "#fec44f", "#fe9929", "#ec7014", "#cc4c02", "#993404", "#662506"]
+                },
+                {
+                  label: "Qlik Sense Diverging",
+                  component: "color-scale",
+                  value: "#3C52A1, #3A82C4, #69ACDE, #9FD0F1, #CFEAFA, #EEDCC5, #F4AA73, #E67A56, #CD473E, #AE1C3E",
+                  colors: ["#3C52A1", "#3A82C4", "#69ACDE", "#9FD0F1", "#CFEAFA", "#EEDCC5", "#F4AA73", "#E67A56", "#CD473E", "#AE1C3E"]
+                },
+                {
+                  label: "Diverging RdYlBu",
+                  component: "color-scale",
                   value: "#d73027, #f46d43, #fdae61, #fee090, #ffffbf, #e0f3f8, #abd9e9, #74add1, #4575b4",
-                  label: "Diverging RdYlBu"
-                }, {
-                  value: "#4575b4, #74add1, #abd9e9, #e0f3f8, #ffffbf, #fee090, #fdae61, #f46d43, #d73027",
-                  label: "Diverging BuYlRd (Reverse)"
-                }, {
+                  colors: ["#d73027", "#f46d43", "#fdae61", "#fee090", "#ffffbf", "#e0f3f8", "#abd9e9", "#74add1", "#4575b4"]
+                },
+                {
+                  label: "Diverging BuYlRd 5 values",
+                  component: "color-scale",
                   value: "#d73027, #fdae61, #ffffbf, #abd9e9, #4575b4",
-                  label: "Diverging BuYlRd 5 values"
-                }, {
-                  value: "#4575b4, #abd9e9, #ffffbf, #fdae61, #d73027",
-                  label: "Diverging BuYlRd 5 values (Reverse)"
-                }, {
+                  colors: ["#d73027", "#fdae61", "#ffffbf", "#abd9e9", "#4575b4"]
+                },
+                {
+                  label: "Blues",
+                  component: "color-scale",
                   value: "#f7fbff, #deebf7, #c6dbef, #9ecae1, #6baed6, #4292c6, #2171b5, #08519c, #08306b",
-                  label: "Blues"
-                }, {
+                  colors: ["#f7fbff", "#deebf7", "#c6dbef", "#9ecae1", "#6baed6", "#4292c6", "#2171b5", "#08519c", "#08306b"]
+                },
+                {
+                  label: "Reds",
+                  component: "color-scale",
                   value: "#fff5f0, #fee0d2, #fcbba1, #fc9272, #fb6a4a, #ef3b2c, #cb181d, #a50f15, #67000d",
-                  label: "Reds"
-                }, {
+                  colors: ["#fff5f0", "#fee0d2", "#fcbba1", "#fc9272", "#fb6a4a", "#ef3b2c", "#cb181d", "#a50f15", "#67000d"]
+                },
+                {
+                  label: "YlGnBu",
+                  component: "color-scale",
                   value: "#ffffd9, #edf8b1, #c7e9b4, #7fcdbb, #41b6c4, #1d91c0, #225ea8, #253494, #081d58",
-                  label: "YlGnBu"
+                  colors: ["#ffffd9", "#edf8b1", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#253494", "#081d58",]
                 }
-              ],
-              defaultValue: "#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506"
+              ]
             },
             LabelColorPicker: {
               ref: "labelColor",

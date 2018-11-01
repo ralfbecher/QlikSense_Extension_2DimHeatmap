@@ -20,6 +20,7 @@ const define = (global && global.define) || define;
 import definition from './definition';
 import paintSetup from './paint';
 import './styles/qlik-heatmap-chart.less';
+import "@babel/polyfill";
 
 const dependencies = [
   'module',
@@ -74,6 +75,6 @@ define(dependencies, function (module, qlik, $) {
     snapshot: {
       canTakeSnapshot: true
     },
-    paint: paint,
+    paint: paint
   };
 });
