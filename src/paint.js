@@ -523,8 +523,10 @@ function setupPaint({ $, qlik }) {
           .on("mouseleave", function (d) {
             d3.select(this)
               .attr("class", tileBorder ? "bordered" : "no-border");
-          })
-          .append("title").text(titleText);
+          });
+        if(!_this.inEditState()){
+          heat.append("title").text(titleText);
+        }
 
         // texts inside rectangles
 
