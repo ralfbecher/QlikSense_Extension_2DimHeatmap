@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import setupPageExtensionData from './pageExtensionData';
 import './extendD3WithLasso';
-import { getThresholdClasses } from './thresholds';
+import { getThresholdClasses, thresholds } from './thresholds';
 
 function setupPaint({ $, qlik }) {
   const pageExtensionData = setupPageExtensionData({ $ });
@@ -301,12 +301,13 @@ function setupPaint({ $, qlik }) {
         var colorScale = d3.scale.quantile()
           .domain(scaleDomain)
           .range(colors);
-        var thresholdClasses = getThresholdClasses(gridSize);
 
         gridSize = Math.floor((width - margin.left - margin.right) / gridDivider);
 
-        if (thresholdClasses === "minimum" || gridSize <= thresholds.minimum){
-          gridSize = thresholds.minimum;
+        var thresholdClasses = getThresholdClasses(gridSize);
+
+        if (thresholdClasses === "tiniest" || gridSize <= thresholds.tiniest){
+          gridSize = thresholds.tiniest;
         }
         legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length + 1));
 
