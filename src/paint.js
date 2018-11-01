@@ -303,9 +303,7 @@ function setupPaint({ $, qlik }) {
           .range(colors);
 
         gridSize = Math.floor((width - margin.left - margin.right) / gridDivider);
-        if (gridSize < 5){
-          gridSize = 5;
-        }
+
         legendElementWidth = Math.floor((gridSize * gridDivider) / (colorScale.quantiles().length + 1));
 
         if (gridSize < smallSize && dim2LabelRotation) {
