@@ -406,11 +406,14 @@ function setupPaint({ $, qlik }) {
               _this.backendApi.selectValues(1, [dim2Elements[i]], true);
           };
           tileClick = function (d, i) {
-            if (dim1keys.length > 1 && d.Element1 >= 0) {
-              _this.backendApi.selectValues(0, [d.Element1], false);
-            }
-            if (dim2keys.length > 1 && d.Element2 >= 0) {
-              _this.backendApi.selectValues(1, [d.Element2], false);
+
+            if(window.event.button === 0){
+              if (dim1keys.length > 1 && d.Element1 >= 0) {
+                _this.backendApi.selectValues(0, [d.Element1], false);
+              }
+              if (dim2keys.length > 1 && d.Element2 >= 0) {
+                _this.backendApi.selectValues(1, [d.Element2], false);
+              }
             }
           };
         }
