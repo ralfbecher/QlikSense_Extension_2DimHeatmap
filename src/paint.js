@@ -94,7 +94,6 @@ function setupPaint({ $, qlik }) {
         maxGridColums = layout.maxGridColums,
         heightFactor = layout.heightFactor,
         showLegend = layout.showLegend,
-        tileBorder = layout.tileBorder,
         tileOpacity = layout.tileOpacity,
         fixedScale = layout.fixedScale,
         minScale = layout.minScale,
@@ -133,7 +132,7 @@ function setupPaint({ $, qlik }) {
 
       var viz2DimHeatmap = function (_this, app, id, data, qDimensionType, qDimSort, width, height, colorpalette, dimensionLabels,
         measureLabels, measurePercentage, measureMin, measureMax, meanScale, useMeanScale, dim1LabelSize, dim2LabelSize,
-        maxGridColums, heightFactor, showLegend, labelColor, tileBorder, tileOpacity, lassoSelection) {
+        maxGridColums, heightFactor, showLegend, labelColor, tileOpacity, lassoSelection) {
         var formatLegend = function (n) {
           return n.toLocaleString();
         };
@@ -440,7 +439,7 @@ function setupPaint({ $, qlik }) {
             })
             .on("mouseleave", function (d, i) {
               d3.selectAll('[dim1="' + i + '"]')
-                .attr("class", tileBorder ? "bordered" : "no-border");
+                .attr("class", "bordered");
             })
             .append("title").text(function (d, i) {
               return dimensionLabels[0] + ": " + dim1keys[i];
@@ -471,7 +470,7 @@ function setupPaint({ $, qlik }) {
             })
             .on("mouseleave", function (d, i) {
               d3.selectAll('[dim2="' + i + '"]')
-                .attr("class", tileBorder ? "bordered" : "no-border");
+                .attr("class", "bordered");
             })
             .append("title").text(function (d, i) {
               return dimensionLabels[1] + ": " + dim2keys[i];
@@ -504,7 +503,7 @@ function setupPaint({ $, qlik }) {
           })
           .attr("rx", 0)
           .attr("ry", 0)
-          .attr("class", tileBorder ? "bordered" : "no-border")
+          .attr("class", "bordered")
           .attr("width", gridSize)
           .attr("height", gridSize * heightFactor)
           .attr("fill", function (d) {
@@ -518,7 +517,7 @@ function setupPaint({ $, qlik }) {
           })
           .on("mouseleave", function (d) {
             d3.select(this)
-              .attr("class", tileBorder ? "bordered" : "no-border");
+              .attr("class", "bordered");
           });
         if(!_this.inEditState()){
           heat.append("title").text(titleText);
@@ -577,7 +576,7 @@ function setupPaint({ $, qlik }) {
             })
             .on("mouseleave", function (d, i) {
               d3.selectAll('[fill="' + colors[i] + '"]')
-                .attr("class", tileBorder ? "bordered" : "no-border");
+                .attr("class", "bordered");
             });
           legend.append("text")
             .attr("class", "mono" + (gridSize < smallSize ? "-small" : ""))
@@ -595,7 +594,7 @@ function setupPaint({ $, qlik }) {
             })
             .on("mouseleave", function (d, i) {
               d3.selectAll('[fill="' + colors[i] + '"]')
-                .attr("class", tileBorder ? "bordered" : "no-border");
+                .attr("class", "bordered");
             });
         }
 
@@ -616,7 +615,7 @@ function setupPaint({ $, qlik }) {
           //-----------------------------------------------------
 
           // Init the lasso on the svg:g that contains the dots
-          lasso.items(d3.select("#" + id).selectAll(tileBorder ? ".bordered" : ".no-border"));
+          lasso.items(d3.select("#" + id).selectAll(".bordered"));
           svg_g_lasso.call(lasso);
         }
 
@@ -647,7 +646,6 @@ function setupPaint({ $, qlik }) {
         heightFactor,
         showLegend,
         labelColor,
-        tileBorder,
         tileOpacity,
         lassoSelection
       );
