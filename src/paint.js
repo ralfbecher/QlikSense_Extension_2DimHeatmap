@@ -93,7 +93,6 @@ function setupPaint({ $, qlik }) {
         dim2LabelSize = layout.dim2LabelSize,
         maxGridColums = layout.maxGridColums,
         heightFactor = layout.heightFactor,
-        leastTiles = layout.leastTiles,
         showLegend = layout.showLegend,
         tileBorder = layout.tileBorder,
         tileOpacity = layout.tileOpacity,
@@ -134,7 +133,7 @@ function setupPaint({ $, qlik }) {
 
       var viz2DimHeatmap = function (_this, app, id, data, qDimensionType, qDimSort, width, height, colorpalette, dimensionLabels,
         measureLabels, measurePercentage, measureMin, measureMax, meanScale, useMeanScale, dim1LabelSize, dim2LabelSize,
-        maxGridColums, heightFactor, leastTiles, showLegend, labelColor, tileBorder, tileOpacity, lassoSelection) {
+        maxGridColums, heightFactor, showLegend, labelColor, tileBorder, tileOpacity, lassoSelection) {
         var formatLegend = function (n) {
           return n.toLocaleString();
         };
@@ -165,18 +164,16 @@ function setupPaint({ $, qlik }) {
           .entries(data);
 
         var dim1Lookup = [];
-        if (leastTiles > 1 && rollup_dim2.length >= leastTiles) {
-          // Filter rows with too few tiles:
-          rollup_dim1 = rollup_dim1.filter(function (e) {
-            return e.values.count >= leastTiles;
-          });
-          dim1Lookup = rollup_dim1.map(function (e) {
-            return e.key;
-          });
-          data = data.filter(function (e) {
-            return $.inArray(e.Dim1, dim1Lookup) != -1;
-          });
-        }
+        // Filter rows with too few tiles:
+        rollup_dim1 = rollup_dim1.filter(function (e) {
+          return e.values.count;
+        });
+        dim1Lookup = rollup_dim1.map(function (e) {
+          return e.key;
+        });
+        data = data.filter(function (e) {
+          return $.inArray(e.Dim1, dim1Lookup) != -1;
+        });
 
         var gridSize = -1,
           legendElementWidth = -1,
@@ -648,7 +645,6 @@ function setupPaint({ $, qlik }) {
         dim2LabelSize,
         maxGridColums,
         heightFactor,
-        leastTiles,
         showLegend,
         labelColor,
         tileBorder,
