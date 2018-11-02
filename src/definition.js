@@ -102,14 +102,6 @@ const definition = {
               defaultValue: 1,
               expression: "optional"
             },
-            leastTiles: {
-              ref: "leastTiles",
-              type: "integer",
-              label: "Least Tiles in Row",
-              defaultValue: 1,
-              expression: "optional"
-            },
-
             lassoSelection: {
               type: "boolean",
               component: "switch",
