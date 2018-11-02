@@ -87,19 +87,11 @@ const definition = {
                 return layout.useMeanScale;
               }
             },
-
             maxGridColums: {
               ref: "maxGridColums",
               type: "integer",
               label: "Max. Columns for Grid",
               defaultValue: 18,
-              expression: "optional"
-            },
-            heightFactor: {
-              ref: "heightFactor",
-              type: "number",
-              label: "Height Factor",
-              defaultValue: 1,
               expression: "optional"
             },
             lassoSelection: {
