@@ -1,19 +1,32 @@
-## Qlik Sense Extension 2 Dimensional Heatmap
-
-**Status**
+# Qlik Heatmap Chart
 
 [![CircleCI](https://circleci.com/gh/qlik-oss/QlikSense_Extension_2DimHeatmap.svg?style=svg)](https://circleci.com/gh/qlik-oss/QlikSense_Extension_2DimHeatmap)
 
 This extension shows a matrix of colored tiles by two dimensions. The 1st dimension is used for the rows (variable, scrollbar if exceeds container element), 2nd dimension is used for the columns and should have a fixed maximum fitting to the container.
 
+---
+
+- [Getting started](#getting-started)
+- [Developing the extension](#developing-the-extension)
+- [Limitations](#limitations)
+- [Original author](#original-author)
+
+---
+
+# Getting Started
+
+## Installation
+
+1. Download the extension zip, `qlik-heatmap-chart.zip`, from the latest release(https://github.com/qlik-oss/QlikSense_Extension_2DimHeatmap/releases/latest)
+2. Install the extension:
+
+   a. **Qlik Sense Desktop**: unzip to a directory under [My Documents]/Qlik/Sense/Extensions.
+
+   b. **Qlik Sense Server**: import the zip file in the QMC.
+
+## Introduction
+
 For best adoption use a numerical dimension for the 2nd dimension (columns) with a very short label like week (label: 01..53)
-
-Based on: d3 day/hour heatmap for Qlik Sense
-Source  : http://branch.qlik.com/projects/showthread.php?348-d3-day-hour-heatmap-for-Qlik-Sense
-
-GitHub  : https://github.com/borodri/Sense_d3calendarheatmap
-
-Author  : https://github.com/borodri
 
 The extension and example app was created during the Qonnections 2015 Hackathon (Team Sixth Sense: Torben Seebach, Matthieu Burel, Ralf Becher)
 
@@ -67,21 +80,30 @@ Rotation of Dim2 Labels and proper measure formattings:
 
 ![QlikSense Extension 2DimHeatmap](resources/Screenshot5.PNG)
 
-## Development
-Set `BUILD_PATH` to extension directory
+# Developing the extension
 
-## Author
+If you want to do code changes to the extension follow these simple steps to get going.
+
+1. Get Qlik Sense Desktop
+1. Create a new app and add the extension to a sheet.
+2. Clone the repository
+3. Run `npm install`
+4. Set the environment variable `BUILD_PATH` to your extensions directory. It will be something like `C:/Users/<user>/Documents/Qlik/Sense/Extensions/<extension_name>`.
+5. You now have two options. Either run the watch task or the build task. They are explained below. Both of them default to development mode but can be run in production by setting `NODE_ENV=production` before running the npm task.
+
+   a. **Watch**: `npm run watch`. This will start a watcher which will rebuild the extension and output all needed files to the `buildFolder` for each code change you make. See your changes directly in your Qlik Sense app.
+
+   b. **Build**: `npm run build`. If you want to build the extension package. The output zip-file can be found in the `buildFolder`.
+
+# Limitations
+See [Limitations](docs/LIMITATIONS.md)
+
+# Original Author
 
 **Ralf Becher**
 
 + [irregular.bi](http://irregular.bi)
 * [twitter/irregularbi](http://twitter.com/irregularbi)
 * [github.com/ralfbecher](http://github.com/ralfbecher)
-
-## License
-
-Copyright © 2015 Ralf Becher
-
-Released under the MIT license.
 
 ***

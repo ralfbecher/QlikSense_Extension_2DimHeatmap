@@ -2,9 +2,8 @@
   "name": "qlik-heatmap-chart",
   "version": "0.0.1",
   "description": "Qlik Sense Extension 2 Dimensional Heatmap",
-  "keywords": "2D heatmap qliksense extension",
-  "repository": "https://github.com/ralfbecher/QlikSense_Extension_2DimHeatmap",
-  "author": "Ralf Becher <ralf.becher@web.de>",
+  "keywords": "2D heatmap qliksense extension", 
+  "repository": "https://github.com/qlik-oss/QlikSense_Extension_2DimHeatmap",
   "license": "MIT",
   "scripts": {
     "build": "gulp build",
