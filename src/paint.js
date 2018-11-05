@@ -131,7 +131,7 @@ function setupPaint({ $, qlik }) {
 
       var viz2DimHeatmap = function (_this, app, id, data, qDimensionType, qDimSort, width, height, colorpalette, dimensionLabels,
         measureLabels, measurePercentage, measureMin, measureMax, meanScale, useMeanScale, dim1LabelSize, dim2LabelSize,
-        maxGridColums, heightFactor, showLegend, labelColor, tileOpacity, lassoSelection) {
+        maxGridColums, showLegend, labelColor, tileOpacity, lassoSelection) {
         var formatLegend = function (n) {
           return n.toLocaleString();
         };
