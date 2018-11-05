@@ -88,7 +88,7 @@ If you want to do code changes to the extension follow these simple steps to get
 1. Create a new app and add the extension to a sheet.
 2. Clone the repository
 3. Run `npm install`
-4. Change the `buildFolder`in `server.config.json` to be your local extensions folder..
+4. Set the environment variable `BUILD_PATH` to your extensions directory. It will be something like `C:/Users/<user>/Documents/Qlik/Sense/Extensions/<extension_name>`.
 5. You now have two options. Either run the watch task or the build task. They are explained below. Both of them default to development mode but can be run in production by setting `NODE_ENV=production` before running the npm task.
 
    a. **Watch**: `npm run watch`. This will start a watcher which will rebuild the extension and output all needed files to the `buildFolder` for each code change you make. See your changes directly in your Qlik Sense app.
