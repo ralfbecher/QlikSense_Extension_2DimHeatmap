@@ -2,7 +2,7 @@
   "name": "qlik-heatmap-chart",
   "version": "0.0.1",
   "description": "Qlik Sense Extension 2 Dimensional Heatmap",
-  "keywords": "2D heatmap qliksense extension", 
+  "keywords": "2D heatmap qliksense extension",
   "repository": "https://github.com/qlik-oss/QlikSense_Extension_2DimHeatmap",
   "license": "MIT",
   "scripts": {
@@ -25,6 +25,7 @@
     "eslint": "5.7.0",
     "eslint-loader": "2.1.1",
     "gulp": "4.0.0",
+    "gulp-json-editor": "2.4.2",
     "gulp-zip": "3.0.2",
     "jasmine-core": "3.2.1",
     "karma": "3.0.0",

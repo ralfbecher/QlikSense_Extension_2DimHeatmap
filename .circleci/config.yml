@@ -31,7 +31,10 @@ jobs:
           command: npm install
       - run:
           name: Build and package
-          command: npm run build
+          command: |
+            export VERSION=$(scripts/get-latest-version.sh $GITHUB_ORG $GITHUB_REPO)
+            echo "Version: ${VERSION}"
+            npm run build
           environment:
             NODE_ENV: production
       - persist_to_workspace:
