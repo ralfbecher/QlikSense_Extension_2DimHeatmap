@@ -400,8 +400,8 @@ function setupPaint({ $, qlik }) {
               _this.backendApi.selectValues(1, [dim2Elements[i]], true);
           };
           tileClick = function (d, i) {
-
-            if(window.event.button === 0){
+            const selectedTiles = lasso.items().filter(i => i.selected);
+            if(window.event.button === 0 && selectedTiles === 0) {
               if (dim1keys.length > 1 && d.Element1 >= 0) {
                 _this.backendApi.selectValues(0, [d.Element1], false);
               }
@@ -433,11 +433,17 @@ function setupPaint({ $, qlik }) {
             .on("click", dim1Click)
             .on("mouseenter", function (d, i) {
               d3.selectAll('[dim1="' + i + '"]')
-                .attr("class", "borderedHover");
+                .classed({
+                  "bordered": false,
+                  "borderedHover": true
+                });
             })
             .on("mouseleave", function (d, i) {
               d3.selectAll('[dim1="' + i + '"]')
-                .attr("class", "bordered");
+                .classed({
+                  "bordered": true,
+                  "borderedHover": false
+                });
             })
             .append("title").text(function (d, i) {
               return dimensionLabels[0] + ": " + dim1keys[i];
@@ -464,11 +470,17 @@ function setupPaint({ $, qlik }) {
             .on("click", dim2Click)
             .on("mouseenter", function (d, i) {
               d3.selectAll('[dim2="' + i + '"]')
-                .attr("class", "borderedHover");
+                .classed({
+                  "bordered": false,
+                  "borderedHover": true
+                });
             })
             .on("mouseleave", function (d, i) {
               d3.selectAll('[dim2="' + i + '"]')
-                .attr("class", "bordered");
+                .classed({
+                  "bordered": true,
+                  "borderedHover": false
+                });
             })
             .append("title").text(function (d, i) {
               return dimensionLabels[1] + ": " + dim2keys[i];
@@ -509,13 +521,19 @@ function setupPaint({ $, qlik }) {
           })
           .style("opacity", tileOpacity)
           .on("click", tileClick)
-          .on("mouseenter", function (d) {
+          .on("mouseenter", function () {
             d3.select(this)
-              .attr("class", "borderedHover");
+              .classed({
+                "bordered": false,
+                "borderedHover": true
+              });
           })
-          .on("mouseleave", function (d) {
+          .on("mouseleave", function () {
             d3.select(this)
-              .attr("class", "bordered");
+              .classed({
+                "bordered": true,
+                "borderedHover": false
+              });
           });
         if(!_this.inEditState()){
           heat.append("title").text(titleText);
