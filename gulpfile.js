@@ -19,7 +19,7 @@ gulp.task('remove-build-folder', function(){
 
 gulp.task('zip-build', function(){
   return gulp.src(buildDest + '/**/*')
-    .pipe(zip(name + '_v' + version + '.zip'))
+    .pipe(zip(name + '_' + version + '.zip'))
     .pipe(gulp.dest(buildDest));
 });
 
