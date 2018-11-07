@@ -16,7 +16,7 @@ ARRAY_VERSION[1]=$((ARRAY_VERSION[1]+1))
 
 # join into string
 NEW_VERSION=$(join_by . ${ARRAY_VERSION[@]})
-echo "$NEW_VERSION"
+echo "$NEW_VERSION" >> BUMPED_VERSION
 
 
 # Usage

@@ -22,17 +22,31 @@ jobs:
           name: Run tests
           command: npm run test-once
 
+  bump-version:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Bump version
+          command: scripts/bump-version.sh $GITHUB_ORG $GITHUB_REPO
+      - persist_to_workspace:
+          root: ~/qlik-heatmap-chart
+          paths:
+            - BUMPED_VERSION
+
   build:
     <<: *defaults
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/qlik-heatmap-chart
       - run:
           name: Install dependencies
           command: npm install
       - run:
           name: Build and package
           command: |
-            export VERSION=$(scripts/get-latest-version.sh $GITHUB_ORG $GITHUB_REPO)
+            export VERSION=$(scripts/get-bumped-version.sh)
             echo "Version: ${VERSION}"
             npm run build
           environment:
@@ -42,8 +56,9 @@ jobs:
           paths:
             - build
       - store_artifacts:
-          path: build/qlik-heatmap-chart.zip
-          destination: qlik-heatmap-chart.zip
+          path: build
+          destination: build
+
   deploy:
     <<: *defaults
     steps:
@@ -55,16 +70,22 @@ jobs:
           command: scripts/install-ghr.sh
       - run:
           name: Create GitHub Release
-          command: scripts/create-release.sh $GITHUB_ORG $GITHUB_REPO $PACKAGE_NAME
+          command: |
+            export VERSION=$(scripts/get-bumped-version.sh)
+            echo "Version: ${VERSION}"
+            scripts/create-release.sh $GITHUB_ORG $GITHUB_REPO $PACKAGE_NAME $VERSION
 
 workflows:
   version: 2
   master_flow:
     jobs:
       - test
-      - build:
+      - bump-version:
           requires:
             - test
+      - build:
+          requires:
+            - bump-version
       - deploy:
           requires:
             - build
