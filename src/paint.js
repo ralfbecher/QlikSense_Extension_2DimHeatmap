@@ -400,8 +400,8 @@ function setupPaint({ $, qlik }) {
               _this.backendApi.selectValues(1, [dim2Elements[i]], true);
           };
           tileClick = function (d, i) {
-            const selectedTiles = lasso.items().filter(i => i.selected);
-            if(window.event.button === 0 && selectedTiles === 0) {
+            const getSelectedTiles = () => lasso.items().filter(i => i.selected);
+            if(window.event.button === 0 && getSelectedTiles() <= 1) {
               if (dim1keys.length > 1 && d.Element1 >= 0) {
                 _this.backendApi.selectValues(0, [d.Element1], false);
               }
