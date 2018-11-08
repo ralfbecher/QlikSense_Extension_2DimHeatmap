@@ -6,7 +6,6 @@ d3.lasso = function () {
     closePathSelect = true,
     isPathClosed = false,
     hoverSelect = true,
-    points = [],
     area = null,
     firstElement = null,
     on = {
@@ -17,8 +16,6 @@ d3.lasso = function () {
 
   function lasso() {
     var _this = d3.select(this[0][0]);
-    var body = d3.select('body');
-    var svg = d3.select('svg');
     var g = _this.append("g")
       .attr("class", "lasso");
     var dyn_path = g.append("path")
@@ -57,13 +54,12 @@ d3.lasso = function () {
       close_path.attr("d", null);
       // Set path length start
       path_length_start = 0;
-      var offset_box = _this[0][0].getBoundingClientRect();
       // Set every item to have a false selection and reset their center point and counters
       items[0].forEach(function (d) {
         d.hoverSelected = false;
         d.loopSelected = false;
-        var cur_box = d.getBBox();
-        var new_box = d.getBoundingClientRect(); // relative to body! use this instead of the other formulas that calculate offsets and what not
+        // relative to body! use this instead of the other formulas that calculate offsets and what not
+        var new_box = d.getBoundingClientRect();
         d.lassoPoint = {
           cx: Math.round(new_box.left + new_box.width / 2),
           cy: Math.round(new_box.top + new_box.height / 2),
@@ -86,6 +82,7 @@ d3.lasso = function () {
           // if hovered, change lasso selection attribute to true
           d3.select(this)[0][0].hoverSelected = true;
         });
+        d3.select(firstElement)[0][0].hoverSelected = true;
       }
 
       // Run user defined start function
@@ -155,7 +152,6 @@ d3.lasso = function () {
       // get path length
       var path_node = calc_path.node();
       var path_length_end = path_node.getTotalLength();
-      var last_pos = path_node.getPointAtLength(path_length_start - 1);
 
       for (var i = path_length_start; i <= path_length_end; i++) {
         var cur_pos = path_node.getPointAtLength(i);
@@ -204,10 +200,6 @@ d3.lasso = function () {
         close_path.attr("d", close_draw_path);
         var close_path_node = close_path.node();
         var close_path_length = close_path_node.getTotalLength();
-        var close_path_edges = {
-          left: 0,
-          right: 0
-        };
         for (var i = 0; i <= close_path_length; i++) {
           var cur_pos = close_path_node.getPointAtLength(i);
           var prior_pos = close_path_node.getPointAtLength(i - 1);
