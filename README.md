@@ -17,7 +17,7 @@ This extension shows a matrix of colored tiles by two dimensions. The 1st dimens
 
 ## Installation
 
-1. Download the extension zip, `qlik-heatmap-chart.zip`, from the latest release(https://github.com/qlik-oss/QlikSense_Extension_2DimHeatmap/releases/latest)
+1. Download the extension zip, `qlik-heatmap-chart_<version>.zip`, from the latest release(https://github.com/qlik-oss/QlikSense_Extension_2DimHeatmap/releases/latest)
 2. Install the extension:
 
    a. **Qlik Sense Desktop**: unzip to a directory under [My Documents]/Qlik/Sense/Extensions.

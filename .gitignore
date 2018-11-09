@@ -20,6 +20,7 @@ $RECYCLE.BIN/
 # Temporary build files
 node_modules/
 build/
+BUMPED_VERSION
 
 # =========================
 # Operating System Files

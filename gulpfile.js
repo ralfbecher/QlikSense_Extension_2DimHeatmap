@@ -1,28 +1,20 @@
 var gulp = require('gulp');
 var zip = require('gulp-zip');
 var del = require('del');
-var path = require('path');
 var settings = require('./settings');
 var webpackConfig = require('./webpack.config');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
-
-var buildDest = settings.buildDestination;
-var srcFiles = path.resolve('./src/**/*.*');
-var name = settings.name;
+var jeditor = require("gulp-json-editor");
 
 gulp.task('remove-build-folder', function(){
-  return del([buildDest], { force: true });
+  return del([settings.buildDestination], { force: true });
 });
 
 gulp.task('zip-build', function(){
-  return gulp.src(buildDest + '/**/*')
-    .pipe(zip(name + '.zip'))
-    .pipe(gulp.dest(buildDest));
-});
-
-gulp.task('add-src', function(){
-  return gulp.src(srcFiles).pipe(gulp.dest(buildDest));
+  return gulp.src(settings.buildDestination + '/**/*')
+    .pipe(zip(`${settings.name}_${settings.version}.zip`))
+    .pipe(gulp.dest(settings.buildDestination));
 });
 
 gulp.task('webpack-build', done => {
@@ -41,8 +33,16 @@ gulp.task('webpack-build', done => {
   });
 });
 
+gulp.task('update-qext-version', function () {
+  return gulp.src(`${settings.buildDestination}/${settings.name}.qext`)
+    .pipe(jeditor({
+      'version': settings.version
+    }))
+    .pipe(gulp.dest(settings.buildDestination));
+});
+
 gulp.task('build',
-  gulp.series('remove-build-folder', 'webpack-build', 'zip-build')
+  gulp.series('remove-build-folder', 'webpack-build', 'update-qext-version', 'zip-build')
 );
 
 gulp.task('default',
