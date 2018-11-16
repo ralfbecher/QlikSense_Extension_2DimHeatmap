@@ -8,6 +8,14 @@ const definition = {
   items: {
     data:{
       uses: "data",
+      items:{
+        dimensions:{
+          disabledRef: ""
+        },
+        measures: {
+          disabledRef: ""
+        }
+      }
     },
     sorting: {
       uses: "sorting"
