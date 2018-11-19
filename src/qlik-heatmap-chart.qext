@@ -1,10 +1,10 @@
 {
   "name": "Heatmap chart",
-  "description": "A 2 dimensional heatmap",
+  "description": "Show a matrix of color values with two dimensions and a measure.",
   "type" : "visualization",
   "version": "X.Y.Z",
   "icon" : "high-resolution",
-  "preview": "preview.png",
+  "preview": "heatmap.png",
   "keywords": "qlik-sense, visualization",
   "author": "brz, rabe",
   "homepage": "",

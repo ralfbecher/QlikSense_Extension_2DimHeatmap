@@ -11,6 +11,10 @@ gulp.task('remove-build-folder', function(){
   return del([settings.buildDestination], { force: true });
 });
 
+gulp.task('add-assets', function(){
+  return gulp.src("./assets/**/*").pipe(gulp.dest(settings.buildDestination));
+});
+
 gulp.task('zip-build', function(){
   return gulp.src(settings.buildDestination + '/**/*')
     .pipe(zip(`${settings.name}_${settings.version}.zip`))
@@ -42,7 +46,7 @@ gulp.task('update-qext-version', function () {
 });
 
 gulp.task('build',
-  gulp.series('remove-build-folder', 'webpack-build', 'update-qext-version', 'zip-build')
+  gulp.series('remove-build-folder', 'webpack-build', 'update-qext-version', 'add-assets', 'zip-build')
 );
 
 gulp.task('default',

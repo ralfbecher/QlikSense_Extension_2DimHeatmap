@@ -1,7 +1,7 @@
 {
   "name": "qlik-heatmap-chart",
   "version": "0.0.1",
-  "description": "Qlik Sense Extension 2 Dimensional Heatmap",
+  "description": "Show a matrix of color values with two dimensions and a measure.",
   "keywords": "2D heatmap qliksense extension",
   "repository": "https://github.com/qlik-oss/QlikSense_Extension_2DimHeatmap",
   "license": "MIT",
