@@ -222,21 +222,6 @@ const definition = {
               min: 0,
               max: 1,
               step: 0.02
-            },
-            lassoSelection: {
-              type: "boolean",
-              component: "switch",
-              translation: "Lasso Selection",
-              ref: "lassoSelection",
-              defaultValue: true,
-              trueOption: {
-                value: true,
-                translation: "properties.on"
-              },
-              falseOption: {
-                value: false,
-                translation: "properties.off"
-              }
             }
           }
         }
