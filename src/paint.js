@@ -99,8 +99,7 @@ function setupPaint({ $, qlik }) {
         maxScale = layout.maxScale,
         meanScale = layout.meanScale,
         useMeanScale = layout.useMeanScale,
-        labelColor = layout.labelColor,
-        lassoSelection = layout.lassoSelection;
+        labelColor = layout.labelColor;
 
       if (fixedScale) {
         measureMin = minScale;
@@ -131,7 +130,7 @@ function setupPaint({ $, qlik }) {
 
       var viz2DimHeatmap = function (_this, app, id, data, qDimensionType, qDimSort, width, height, colorpalette, dimensionLabels,
         measureLabels, measurePercentage, measureMin, measureMax, meanScale, useMeanScale, dim1LabelSize, dim2LabelSize,
-        maxGridColums, showLegend, labelColor, tileOpacity, lassoSelection) {
+        maxGridColums, showLegend, labelColor, tileOpacity) {
         var formatLegend = function (n) {
           return n.toLocaleString();
         };
@@ -615,7 +614,7 @@ function setupPaint({ $, qlik }) {
             });
         }
 
-        if (qlik.navigation.getMode() === "analysis" && lassoSelection) {
+        if (qlik.navigation.getMode() === "analysis") {
           // Create the area where the lasso event can be triggered
           var lasso_area = svg_g_lasso;
 
@@ -663,7 +662,6 @@ function setupPaint({ $, qlik }) {
         showLegend,
         labelColor,
         tileOpacity,
-        lassoSelection
       );
     }
   };

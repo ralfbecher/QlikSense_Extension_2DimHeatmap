@@ -102,21 +102,6 @@ const definition = {
               defaultValue: 18,
               expression: "optional"
             },
-            lassoSelection: {
-              type: "boolean",
-              component: "switch",
-              translation: "Lasso Selection",
-              ref: "lassoSelection",
-              defaultValue: true,
-              trueOption: {
-                value: true,
-                translation: "properties.on"
-              },
-              falseOption: {
-                value: false,
-                translation: "properties.off"
-              }
-            }
           }
         },
         design:{
